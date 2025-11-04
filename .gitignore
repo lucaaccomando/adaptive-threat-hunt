@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+env/
+*.sqlite
+*.db
+
+# OS
+.DS_Store
+
+# Data and models
+data/*.pcap
+data/*.pcapng
+data/*.csv
+models/*.pkl

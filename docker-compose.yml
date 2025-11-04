@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  dashboard:
+    build: .
+    command: python -m dashboard.app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/app
+    working_dir: /app
+    environment:
+      - FLASK_ENV=development
