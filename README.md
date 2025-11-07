@@ -112,14 +112,6 @@ python dashboard/app.py
 
 ---
 
-## 📊 Demo (Screenshots)
-*(Add these later)*  
-- Dashboard interface  
-- Traffic summary table  
-- Anomaly visualization  
-
----
-
 ## 🧱 Docker Compose (Optional)
 You can also use Docker Compose for a single-command launch:
 
