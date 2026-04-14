@@ -1,0 +1,45 @@
+{
+  "dataset": "NSL-KDD (KDDTrain+ / KDDTest+)",
+  "train_samples": 125973,
+  "test_samples": 22544,
+  "n_features": 38,
+  "contamination": 0.1,
+  "models": {
+    "Isolation Forest": {
+      "precision": 0.9535,
+      "recall": 0.2924,
+      "f1": 0.4476,
+      "accuracy": 0.5891,
+      "tp": 3753,
+      "tn": 9528,
+      "fp": 183,
+      "fn": 9080,
+      "roc_auc": 0.8701,
+      "train_time_s": 1.409
+    },
+    "Local Outlier Factor": {
+      "precision": 0.7464,
+      "recall": 0.5369,
+      "f1": 0.6245,
+      "accuracy": 0.6325,
+      "tp": 6890,
+      "tn": 7370,
+      "fp": 2341,
+      "fn": 5943,
+      "roc_auc": 0.6834,
+      "train_time_s": 16.689
+    },
+    "One-Class SVM": {
+      "precision": 0.8276,
+      "recall": 0.2806,
+      "f1": 0.4191,
+      "accuracy": 0.5572,
+      "tp": 3601,
+      "tn": 8961,
+      "fp": 750,
+      "fn": 9232,
+      "roc_auc": 0.7764,
+      "train_time_s": 1.689
+    }
+  }
+}
