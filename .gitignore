@@ -7,7 +7,7 @@ venv/
 env/
 *.sqlite
 *.db
-
+.gitignore
 # OS
 .DS_Store
 
@@ -16,3 +16,5 @@ data/*.pcap
 data/*.pcapng
 data/*.csv
 models/*.pkl
+.claude/
+CLAUDE.MD
