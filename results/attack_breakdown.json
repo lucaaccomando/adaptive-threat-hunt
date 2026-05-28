@@ -1,0 +1,32 @@
+{
+  "DoS": {
+    "total": 7458,
+    "detected": 7337,
+    "missed": 121,
+    "detection_rate_pct": 98.38
+  },
+  "Probe": {
+    "total": 2421,
+    "detected": 2417,
+    "missed": 4,
+    "detection_rate_pct": 99.83
+  },
+  "R2L": {
+    "total": 2885,
+    "detected": 1701,
+    "missed": 1184,
+    "detection_rate_pct": 58.96
+  },
+  "U2R": {
+    "total": 67,
+    "detected": 67,
+    "missed": 0,
+    "detection_rate_pct": 100.0
+  },
+  "normal": {
+    "total": 9711,
+    "correctly_classified": 6543,
+    "false_positives": 3168,
+    "false_positive_rate_pct": 32.62
+  }
+}

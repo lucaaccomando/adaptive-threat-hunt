@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Adaptive Threat Hunt — Dashboard</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b1120;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: #020617;
+      border-radius: 12px;
+      border: 1px solid #1f2933;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.4);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.8rem;
+    }
+    p {
+      color: #9ca3af;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      box-shadow: 0 10px 20px rgba(37,99,235,0.4);
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(37,99,235,0.55);
+    }
+    .btn-secondary {
+      background: #111827;
+      color: #e5e7eb;
+      border: 1px solid #374151;
+    }
+    .btn-secondary:hover {
+      background: #1f2937;
+      transform: translateY(-1px);
+    }
+    .btn-live {
+      background: #059669;
+      color: white;
+      box-shadow: 0 10px 20px rgba(5,150,105,0.4);
+    }
+    .btn-live:hover {
+      background: #047857;
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(5,150,105,0.55);
+    }
+    .btn-stop {
+      background: #b91c1c;
+      color: #fee2e2;
+      border: 1px solid #ef4444;
+    }
+    .btn-stop:hover {
+      background: #991b1b;
+      transform: translateY(-1px);
+    }
+    .status {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .status-card {
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      background: #020617;
+      border: 1px solid #1f2937;
+      font-size: 0.9rem;
+    }
+    .status-label {
+      color: #9ca3af;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .status-value-ok {
+      color: #4ade80;
+      font-weight: 600;
+    }
+    .status-value-missing {
+      color: #f97373;
+      font-weight: 600;
+    }
+    .link-muted {
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+    a.link-muted {
+      text-decoration: none;
+    }
+    a.link-muted:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Adaptive Threat Hunt — Starter Dashboard</h1>
+    <p>Use this page to generate demo features, train an Isolation Forest model, score flows, and inspect anomalies.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="{{ url_for('generate') }}">Generate demo features</a>
+      <a class="btn btn-primary" href="{{ url_for('train') }}">Train model</a>
+      <a class="btn btn-primary" href="{{ url_for('score') }}">Score flows</a>
+      {% if have_scored %}
+        <a class="btn btn-secondary" href="{{ url_for('anomalies') }}">View anomalies</a>
+        <a class="btn btn-secondary" href="{{ url_for('stats') }}">View stats</a>
+      {% endif %}
+      <a class="btn btn-live" href="{{ url_for('live_capture') }}">Live capture + retrain</a>
+      {% if have_capture_running %}
+        <a class="btn btn-stop" href="{{ url_for('stop_capture') }}">Stop live capture</a>
+      {% endif %}
+    </div>
+
+    <div class="status">
+      <div class="status-card">
+        <div class="status-label">Data directory</div>
+        <div>{{ data_dir }}</div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Features CSV</div>
+        <div class="{{ 'status-value-ok' if have_features else 'status-value-missing' }}">
+          {{ 'present (data/features.csv)' if have_features else 'missing' }}
+        </div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Model</div>
+        <div class="{{ 'status-value-ok' if have_model else 'status-value-missing' }}">
+          {{ 'present (models/model.pkl)' if have_model else 'missing' }}
+        </div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Scored flows</div>
+        <div class="{{ 'status-value-ok' if have_scored else 'status-value-missing' }}">
+          {{ 'present (data/scored.csv)' if have_scored else 'missing' }}
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:1.5rem;" class="link-muted">
+      Tip: run the buttons above in order — Generate → Train → Score → View anomalies.
+      <br>
+      For real traffic, start a <strong>Live capture</strong>, generate some traffic, then hit <strong>Stop live capture</strong> to extract features and retrain.
+    </p>
+  </div>
+</body>
+</html>

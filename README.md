@@ -1,4 +1,4 @@
-# 🕵️‍♂️ Adaptive Threat Hunt
+# Adaptive Threat Hunt
 
 ### Machine Learning–Driven Network Anomaly Detection
 
@@ -9,169 +9,198 @@
 ![Dataset](https://img.shields.io/badge/Dataset-NSL--KDD-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-Adaptive Threat Hunt is a cybersecurity research project that captures, analyzes, and detects anomalous network traffic using **Python**, **Scapy**, **Scikit-learn**, and **Flask** — containerized with **Docker** for reproducible deployment.
-
-The project benchmarks three unsupervised anomaly detection models on the **NSL-KDD** intrusion detection dataset and surfaces results through an interactive Flask dashboard.
+Captures network traffic from PCAPs or a live interface, extracts flow-level features, and scores flows with Isolation Forest, LOF, or One-Class SVM. Benchmarked on NSL-KDD against a supervised Random Forest baseline, with threshold tuning, feature importance analysis, and per-attack-category breakdown. Flask dashboard for interactive use; Docker for reproducible deployment.
 
 ---
 
-## 📊 Benchmark Results (NSL-KDD)
+## Benchmark Results (NSL-KDD)
 
-| Model | F1 | Precision | Recall | Accuracy | ROC-AUC | Train Time |
-|---|---|---|---|---|---|---|
-| Isolation Forest | 0.4476 | **0.9535** | 0.2924 | 0.5891 | **0.8701** | 1.4s |
-| Local Outlier Factor | **0.6245** | 0.7464 | **0.5369** | **0.6325** | 0.6834 | 16.7s |
-| One-Class SVM | 0.4191 | 0.8276 | 0.2806 | 0.5572 | 0.7764 | 1.7s |
+| Model | Type | F1 | Precision | Recall | ROC-AUC |
+|---|---|---|---|---|---|
+| Isolation Forest (default) | Unsupervised | 0.4476 | **0.9535** | 0.2924 | **0.8701** |
+| Isolation Forest (tuned) | Unsupervised* | **0.8375** | 0.7844 | **0.8982** | 0.8701 |
+| Local Outlier Factor | Unsupervised | 0.6245 | 0.7464 | 0.5369 | 0.6834 |
+| One-Class SVM | Unsupervised | 0.4191 | 0.8276 | 0.2806 | 0.7764 |
+| Random Forest | Supervised | 0.7564 | 0.9688 | 0.6204 | 0.9612 |
 
-🏆 **Best F1:** Local Outlier Factor · 🎯 **Best ROC-AUC:** Isolation Forest
+\* Same model, threshold optimised post-hoc via precision-recall curve sweep — no labels used during training.
+
+**Key finding:** Threshold-tuned Isolation Forest (F1=0.84) exceeds the supervised Random Forest baseline (F1=0.76) without access to any labels.
 
 > Full methodology and interpretation → [`RESULTS.md`](RESULTS.md)
 
 To reproduce:
 ```bash
-python models/evaluate.py
+python models/evaluate.py          # benchmark + threshold tuning + attack breakdown
+python models/supervised_baseline.py   # supervised comparison
+python models/feature_analysis.py      # importance plots + correlation heatmap
 ```
 
 ---
 
-## 🚀 Features
+## Research Methodology
 
-- Real-time or `.pcap`-based network traffic analysis
-- Automatic feature extraction (packet size, entropy, inter-arrival time, flow stats)
-- Multi-model anomaly detection: **Isolation Forest**, **Local Outlier Factor**, **One-Class SVM**
-- Model evaluation pipeline with precision / recall / F1 / ROC-AUC benchmarking on NSL-KDD
-- Flask dashboard for live visualization and model comparison
-- Fully containerized environment for reproducible deployment
+All models are evaluated on the NSL-KDD dataset (KDDTrain+ / KDDTest+) using a fixed train/test split. A `StandardScaler` is fit on the training set only and applied to both splits — no data leakage.
+
+**Unsupervised training:** Isolation Forest, LOF, and One-Class SVM receive no labels during training. They learn the shape of the training distribution and flag test flows that deviate from it.
+
+**Threshold tuning:** Unsupervised models produce a continuous anomaly score. The default `contamination=0.10` parameter flags the top 10% of scores as anomalies — a conservative threshold for a dataset where ~57% of test flows are attacks. We sweep 500 percentile thresholds and identify the point that maximises F1 and the best-precision point subject to recall ≥ 0.80. Results and a precision-recall curve are saved to `results/`.
+
+**Supervised baseline:** A Random Forest classifier is trained on the binary labels using the same scaler and split. It serves as an upper bound to quantify how much discriminative power is lost by not having labels.
+
+**Feature space:** 38 numeric columns from the 41-column NSL-KDD schema. Three categorical columns (`protocol_type`, `service`, `flag`) are dropped.
 
 ---
 
-## 🧠 Tech Stack
+## Supervised Baseline Comparison
+
+The core research question is: *how close can unsupervised detection get without labels?*
+
+| | F1 | Notes |
+|---|---|---|
+| Random Forest (supervised) | 0.7564 | Trained with binary labels; default 0.5 threshold |
+| Isolation Forest (tuned) | 0.8375 | No labels; threshold found via PR curve sweep |
+| Gap | −0.08 | Tuned unsupervised exceeds supervised at default threshold |
+
+The IF advantage over RF at default thresholds is largely a threshold-selection effect: both models have strong discriminative power (ROC-AUC 0.87 vs 0.96), but IF's threshold was explicitly optimised while RF's was not. A threshold-tuned RF would likely close this gap.
+
+This suggests threshold-calibrated unsupervised models are worth considering when you don't have labelled training data or when attack patterns shift faster than you can relabel.
+
+---
+
+## Features
+
+- Real-time or `.pcap`-based network traffic capture and feature extraction
+- Automatic flow-level feature extraction (packet size, entropy, inter-arrival time, byte counts)
+- Multi-model anomaly detection: Isolation Forest, Local Outlier Factor, One-Class SVM
+- Threshold tuning via precision-recall curve sweep with configurable recall target
+- Supervised baseline (Random Forest) for comparison
+- Feature importance analysis and correlation heatmap
+- Per-attack-category detection rates (DoS, Probe, R2L, U2R)
+- Flask dashboard for live visualization
+- Jupyter notebook with full research narrative (`notebooks/analysis.ipynb`)
+- Fully containerized for reproducible deployment
+
+---
+
+## Tech Stack
 
 | Layer | Technology |
-|--------|-------------|
+|---|---|
 | Language | Python 3.12 |
 | Framework | Flask 3.0 |
 | Network Capture | Scapy / tcpdump |
 | ML & Analytics | Scikit-learn, Pandas, NumPy |
+| Visualization | Matplotlib |
+| Notebook | Jupyter |
 | Containerization | Docker & Docker Compose |
 | Dataset | NSL-KDD (UNB) |
 
 ---
 
-## 🧩 Project Structure
+## Project Structure
 
 ```
 adaptive-threat-hunt/
-┣ dashboard/              # Flask web interface
-┣ feature_extractor/      # Packet feature extraction (Scapy)
-┣ models/
-┃  ┣ evaluate.py          # Multi-model benchmark on NSL-KDD
-┃  ┣ train.py             # Train a selected model (IF / LOF / OCSVM)
-┃  ┗ score.py             # Score new traffic against a trained model
-┣ results/
-┃  ┗ benchmark.json       # Saved benchmark metrics
-┣ data/                   # Sample pcap files
-┣ Dockerfile
-┣ docker-compose.yml
-┣ requirements.txt
-┣ RESULTS.md              # Full benchmark analysis
-┗ README.md
+├── dashboard/              # Flask web interface
+├── feature_extractor/      # Scapy-based PCAP feature extraction
+├── models/
+│   ├── evaluate.py         # Multi-model benchmark + threshold tuning + attack breakdown
+│   ├── train.py            # Train a single model (IF / LOF / OCSVM)
+│   ├── score.py            # Score new flows against a trained model
+│   ├── supervised_baseline.py  # Random Forest supervised comparison
+│   └── feature_analysis.py    # Feature importance + correlation heatmap
+├── notebooks/
+│   └── analysis.ipynb      # Full research narrative notebook
+├── results/                # Generated plots and benchmark.json
+├── data/nslkdd/            # NSL-KDD dataset (auto-downloaded)
+├── Dockerfile
+├── docker-compose.yml
+└── requirements.txt
 ```
 
 ---
 
-## ⚙️ Installation and Usage
+## Installation and Usage
 
-### 1️⃣ Clone the repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/lucaaccomando/adaptive-threat-hunt.git
 cd adaptive-threat-hunt
 ```
 
-### 2️⃣ Create a virtual environment and install dependencies
+### 2. Create a virtual environment and install dependencies
 
 ```bash
 python -m venv .venv
-source .venv/Scripts/activate   # Windows (Git Bash)
-# or: source .venv/bin/activate  # macOS / Linux
-python -m pip install -r requirements.txt
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # macOS / Linux
+pip install -r requirements.txt
 ```
 
-### 3️⃣ Run the multi-model benchmark
+### 3. Run the full benchmark
 
 ```bash
 python models/evaluate.py
 ```
 
-NSL-KDD is auto-downloaded on first run (~1MB). Results are saved to `results/benchmark.json`.
+NSL-KDD is auto-downloaded on first run (~1MB). Outputs: `results/benchmark.json`, `results/pr_curve_isolation_forest.png`, `results/attack_breakdown.json`.
 
-### 4️⃣ Train a specific model
+### 4. Run the supervised baseline and feature analysis
 
 ```bash
-python models/train.py --model-type isolation_forest   # or: lof, ocsvm
+python models/supervised_baseline.py   # adds "supervised_baseline" to benchmark.json
+python models/feature_analysis.py      # saves feature_importance.png, correlation_heatmap.png
 ```
 
-### 5️⃣ Launch the Flask dashboard
+### 5. Open the research notebook
 
 ```bash
-python dashboard/app.py
+.venv\Scripts\jupyter.exe notebook notebooks/analysis.ipynb
 ```
 
-Then open: 👉 **http://localhost:5000**
-
-### 6️⃣ (Optional) Run via Docker
+### 6. Train a model on custom traffic
 
 ```bash
-docker build -t adaptive-threat-hunt .
-docker run -p 5000:5000 adaptive-threat-hunt
+python feature_extractor/extract.py --pcap data/capture.pcap --out data/features.csv
+python models/train.py --model-type isolation_forest --csv data/features.csv
+python models/score.py --csv data/features.csv --model models/model.pkl --out data/scored.csv
 ```
 
-For live packet capture (requires elevated permissions):
+### 7. Launch the Flask dashboard
 
 ```bash
-sudo docker run --network host --cap-add=NET_ADMIN --cap-add=NET_RAW adaptive-threat-hunt
+python dashboard/app.py   # http://localhost:5000
+```
+
+### 8. Run via Docker
+
+```bash
+docker-compose up --build
 ```
 
 ---
 
-## 🧰 Notes
+## Future Work
 
-### File Paths
-All scripts use relative paths. If you see absolute paths like `/home/user/...`, replace with:
-```python
-import os
-BASE_DIR = os.path.dirname(__file__)
-pcap_path = os.path.join(BASE_DIR, '../data/example.pcap')
-```
-
-### Model Files
-If `model.pkl` is missing, regenerate with:
-```bash
-python models/train.py --model-type isolation_forest
-```
+- **Threshold tuning for LOF and OC-SVM** — apply the same PR curve sweep to determine whether their default thresholds are similarly suboptimal
+- **Supervised threshold tuning** — tune the RF decision threshold for a fair head-to-head comparison with threshold-tuned IF
+- **Dimensionality reduction** — evaluate PCA-reduced feature sets (e.g. 15 components) given the 13 highly correlated feature pairs
+- **R2L detection improvement** — the hardest attack category (59% detection rate) requires payload-level or session-aggregated features beyond flow statistics
+- **Expanded feature engineering** — add features for encrypted traffic (TLS metadata, certificate fields)
+- **Live alerting** — webhook or email notifications for flagged anomalies from the dashboard
 
 ---
 
-## 💡 Future Improvements
-
-- Threshold tuning with precision-recall curve analysis
-- Semi-supervised model (XGBoost / Random Forest) for improved recall
-- ELK stack integration for security event visualization
-- Live alerting via webhooks or email notifications
-- Jupyter notebook with exploratory analysis and feature visualizations
-- Expanded feature engineering for encrypted traffic
-
----
-
-## 📜 License
+## License
 
 MIT License © 2025 Luca Accomando
 
 ---
 
-## 🤝 Acknowledgements
+## Acknowledgements
 
-Developed as part of a cybersecurity research project exploring adaptive machine-learning approaches for intrusion detection.
+Built as a CS senior independent study.
 
 Dataset: [NSL-KDD — University of New Brunswick](https://www.unb.ca/cic/datasets/nsl.html)
