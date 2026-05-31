@@ -23,7 +23,7 @@ Captures network traffic from PCAPs or a live interface, extracts flow-level fea
 | One-Class SVM | Unsupervised | 0.4191 | 0.8276 | 0.2806 | 0.7764 |
 | Random Forest | Supervised | 0.7564 | 0.9688 | 0.6204 | 0.9612 |
 
-\* Same model, threshold optimised post-hoc via precision-recall curve sweep — no labels used during training.
+\* Same model, threshold optimised post-hoc via precision-recall curve sweep. No labels used during training.
 
 **Key finding:** Threshold-tuned Isolation Forest (F1=0.84) exceeds the supervised Random Forest baseline (F1=0.76) without access to any labels.
 
@@ -44,7 +44,7 @@ All models are evaluated on the NSL-KDD dataset (KDDTrain+ / KDDTest+) using a f
 
 **Unsupervised training:** Isolation Forest, LOF, and One-Class SVM receive no labels during training. They learn the shape of the training distribution and flag test flows that deviate from it.
 
-**Threshold tuning:** Unsupervised models produce a continuous anomaly score. The default `contamination=0.10` parameter flags the top 10% of scores as anomalies — a conservative threshold for a dataset where ~57% of test flows are attacks. We sweep 500 percentile thresholds and identify the point that maximises F1 and the best-precision point subject to recall ≥ 0.80. Results and a precision-recall curve are saved to `results/`.
+**Threshold tuning:** Unsupervised models produce a continuous anomaly score. The default `contamination=0.10` parameter flags the top 10% of scores as anomalies: a conservative threshold for a dataset where ~57% of test flows are attacks. We sweep 500 percentile thresholds and identify the point that maximises F1 and the best-precision point subject to recall ≥ 0.80. Results and a precision-recall curve are saved to `results/`.
 
 **Supervised baseline:** A Random Forest classifier is trained on the binary labels using the same scaler and split. It serves as an upper bound to quantify how much discriminative power is lost by not having labels.
 
