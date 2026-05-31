@@ -14,10 +14,33 @@ import pandas as pd
 
 try:
     from scapy.all import rdpcap, IP, TCP, UDP, Raw
+    from scapy.utils import PcapNgReader
+except ImportError:
+    try:
+        from scapy.all import rdpcap, IP, TCP, UDP, Raw
+        PcapNgReader = None
+    except Exception as e:
+        rdpcap = None
+        PcapNgReader = None
+        IP = TCP = UDP = Raw = object
+        print(f"warning: scapy not available ({e}), will use demo data instead")
 except Exception as e:
     rdpcap = None
+    PcapNgReader = None
     IP = TCP = UDP = Raw = object
     print(f"warning: scapy not available ({e}), will use demo data instead")
+
+
+_PCAPNG_MAGIC = b"\x0a\x0d\x0d\x0a"
+
+
+def _read_packets(pcap_path: Path):
+    with open(pcap_path, "rb") as f:
+        magic = f.read(4)
+    if magic == _PCAPNG_MAGIC and PcapNgReader is not None:
+        with PcapNgReader(str(pcap_path)) as reader:
+            return reader.read_all()
+    return rdpcap(str(pcap_path))
 
 
 def entropy_bytes(b: bytes) -> float:
@@ -47,7 +70,12 @@ def extract_from_pcap(pcap_path: Path) -> pd.DataFrame:
     if rdpcap is None:
         return demo_features()
 
-    pkts = rdpcap(str(pcap_path))
+    try:
+        pkts = _read_packets(pcap_path)
+    except Exception as e:
+        print(f"warning: failed to read {pcap_path} ({e}), using demo data")
+        return demo_features()
+
     if not pkts:
         return demo_features()
 

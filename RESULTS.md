@@ -14,7 +14,7 @@ python models/feature_analysis.py
 
 ## 1. Model Comparison (Default Thresholds)
 
-All unsupervised models use `contamination=0.10` — the model flags the top 10% of anomaly scores as attacks. The NSL-KDD test set is ~57% attacks, so this threshold is deliberately conservative.
+All unsupervised models use `contamination=0.10`: the model flags the top 10% of anomaly scores as attacks. The NSL-KDD test set is ~57% attacks, so this threshold is deliberately conservative.
 
 | Model | F1 | Precision | Recall | Accuracy | ROC-AUC | Train Time |
 |---|---|---|---|---|---|---|
@@ -22,7 +22,7 @@ All unsupervised models use `contamination=0.10` — the model flags the top 10%
 | Local Outlier Factor | **0.6245** | 0.7464 | **0.5369** | **0.6325** | 0.6834 | ~10s |
 | One-Class SVM | 0.4191 | 0.8276 | 0.2806 | 0.5572 | 0.7764 | ~1.6s |
 
-IF has the best ROC-AUC (0.87) but the worst recall — `contamination=0.10` is too conservative for a test set that's ~57% attacks. LOF is the most balanced at defaults (F1=0.62, recall=0.54) but runs ~10s vs ~1s for IF. OC-SVM underperforms both and needed 15k-row subsampling to finish in reasonable time; not worth it on this dataset.
+IF has the best ROC-AUC (0.87) but the worst recall: `contamination=0.10` is too conservative for a test set that's ~57% attacks. LOF is the most balanced at defaults (F1=0.62, recall=0.54) but runs ~10s vs ~1s for IF. OC-SVM underperforms both and needed 15k-row subsampling to finish in reasonable time; not worth it on this dataset.
 
 ---
 
@@ -61,7 +61,7 @@ A Random Forest classifier trained with binary labels provides an upper bound on
 | Isolation Forest (default) | 0.4476 | 0.9535 | 0.2924 | 0.8701 | No |
 | **Isolation Forest (tuned)** | **0.8375** | 0.7844 | 0.8982 | 0.8701 | No |
 
-The IF wins here mostly because I tuned its threshold via PR curve sweep and didn't touch RF's 0.5 default. A threshold-tuned RF would probably close the gap — RF's ROC-AUC (0.96 vs 0.87) shows labels genuinely improve the underlying score distribution. Still, the result holds that you can get competitive F1 without any labelled data, which matters in environments where attack patterns shift faster than you can relabel.
+The IF wins here mostly because I tuned its threshold via PR curve sweep and didn't touch RF's 0.5 default. A threshold-tuned RF would probably close the gap: RF's ROC-AUC (0.96 vs 0.87) shows labels genuinely improve the underlying score distribution. Still, the result holds that you can get competitive F1 without any labelled data, which matters in environments where attack patterns shift faster than you can relabel.
 
 ---
 
