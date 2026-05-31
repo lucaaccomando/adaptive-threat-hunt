@@ -174,7 +174,13 @@ python models/score.py --csv data/features.csv --model models/model.pkl --out da
 python dashboard/app.py   # http://localhost:5000
 ```
 
-### 8. Run via Docker
+### 8. Run tests
+
+```bash
+pytest tests/ -v
+```
+
+### 9. Run via Docker
 
 ```bash
 docker-compose up --build

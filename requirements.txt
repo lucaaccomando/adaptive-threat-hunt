@@ -16,3 +16,4 @@ jupyter==1.1.1
 notebook==7.4.2
 ipykernel==6.29.5
 nbconvert==7.16.6
+pytest==8.3.5
