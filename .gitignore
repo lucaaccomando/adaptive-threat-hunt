@@ -7,7 +7,6 @@ venv/
 env/
 *.sqlite
 *.db
-.gitignore
 # OS
 .DS_Store
 
