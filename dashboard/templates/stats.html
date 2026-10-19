@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Stats - Adaptive Threat Hunt{% endblock %}
+{% block styles %}
+    .container { max-width: 1100px; }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .chart-card {
+      padding: 1rem;
+      border-radius: 10px;
+      background: #020617;
+      border: 1px solid #1f2937;
+    }
+    .chart-title { font-size: 0.95rem; margin-bottom: 0.5rem; color: #e5e7eb; }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+      background: #0f172a;
+    }
+{% endblock %}
+{% block content %}
+    <a href="{{ url_for('index') }}" class="btn">Back to dashboard</a>
+    <h1>Flow and Anomaly Statistics</h1>
+
+    <div class="summary">
+      <div class="summary-card">
+        <div class="summary-label">Total flows</div>
+        <div class="summary-value">{{ total_flows }}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Anomalies</div>
+        <div class="summary-value">{{ num_anomalies }}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Anomaly score mean</div>
+        <div class="summary-value">{{ score_mean }}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Anomaly score min / max</div>
+        <div class="summary-value">{{ score_min }} / {{ score_max }}</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Anomaly score distribution</div>
+        {% if hist_img %}
+          <img src="data:image/png;base64,{{ hist_img }}" alt="Histogram of anomaly scores">
+        {% else %}
+          <p>No anomaly_score column found in scored.csv.</p>
+        {% endif %}
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Top 10 source IPs by flow count</div>
+        {% if bar_img %}
+          <img src="data:image/png;base64,{{ bar_img }}" alt="Top source IPs bar chart">
+        {% else %}
+          <p>No src column found in scored.csv.</p>
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}

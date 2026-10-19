@@ -1,0 +1,17 @@
+{
+  "model_type": "isolation_forest",
+  "contamination": 0.1,
+  "scaled": false,
+  "features": [
+    "pkt_count",
+    "bytes",
+    "duration_ms",
+    "avg_pkt_size",
+    "iat_mean_ms",
+    "iat_std_ms",
+    "payload_entropy",
+    "proto"
+  ],
+  "train_rows": 1002,
+  "train_time_s": 0.233
+}

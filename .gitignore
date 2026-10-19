@@ -7,6 +7,8 @@ venv/
 env/
 *.sqlite
 *.db
+.pytest_cache/
+.ipynb_checkpoints/
 
 # OS
 .DS_Store
@@ -15,4 +17,6 @@ env/
 data/*.pcap
 data/*.pcapng
 data/*.csv
+data/tcpdump.pid
 models/*.pkl
+models/*.meta.json
