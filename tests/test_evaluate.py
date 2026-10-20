@@ -3,9 +3,22 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "models"))
-from evaluate import NSL_KDD_COLUMNS, NUMERIC_COLS, mean_std, pick_threshold, run_benchmark
+from evaluate import (
+    ATTACK_CATEGORIES,
+    CATEGORY_OF,
+    NSL_KDD_COLUMNS,
+    NUMERIC_COLS,
+    attack_groups,
+    check_categories,
+    mean_std,
+    pick_threshold,
+    run_benchmark,
+)
+
+DATA = Path(__file__).parent.parent / "data" / "nslkdd"
 
 
 def _write_nslkdd(path, n, seed, flip_labels=False):
@@ -65,3 +78,32 @@ def test_benchmark_output_shape(tmp_path):
     assert set(summ) == {"roc_auc", "pr_auc", "default", "val_threshold"}
     assert 0.0 <= summ["val_threshold"]["f1"]["mean"] <= 1.0
     assert len(scores["Isolation Forest"]) == len(y_test) == 200
+
+
+def test_attack_groups_seen_and_unseen():
+    train = ["normal", "neptune", "neptune", "satan"]
+    test = ["normal", "neptune", "apache2", "satan", "mscan", "normal"]
+    g = attack_groups(train, test)
+    assert g["seen"].tolist() == [False, True, False, True, False, False]
+    assert g["unseen"].tolist() == [False, False, True, False, True, False]
+    assert g["DoS"].tolist() == [False, True, True, False, False, False]
+    assert g["Probe"].tolist() == [False, False, False, True, True, False]
+
+
+def test_check_categories_rejects_unknown_label():
+    check_categories(["normal", "neptune", "worm"])
+    with pytest.raises(ValueError, match="made_up_attack"):
+        check_categories(["normal", "made_up_attack"])
+
+
+def test_categories_do_not_overlap():
+    assert sum(len(s) for s in ATTACK_CATEGORIES.values()) == len(CATEGORY_OF)
+
+
+@pytest.mark.skipif(not (DATA / "KDDTest+.txt").exists(), reason="dataset not present")
+def test_every_nslkdd_label_has_a_category():
+    for name in ("KDDTrain+.txt", "KDDTest+.txt"):
+        labels = pd.read_csv(DATA / name, header=None, names=NSL_KDD_COLUMNS)["label"]
+        check_categories(labels)
+        attacks = labels[labels != "normal"]
+        assert attacks.map(CATEGORY_OF).notna().all()

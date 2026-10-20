@@ -70,9 +70,10 @@ TRAIN_URL = "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%
 TEST_URL  = "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt"
 
 # maps each NSL-KDD attack name to its category (DoS, Probe, R2L, or U2R)
+# worm (2 test rows) is listed as DoS in the NSL-KDD tables I found; the dataset ships no mapping file
 ATTACK_CATEGORIES: dict[str, set[str]] = {
     "DoS":   {"back", "land", "neptune", "pod", "smurf", "teardrop",
-              "apache2", "udpstorm", "processtable", "mailbomb"},
+              "apache2", "udpstorm", "processtable", "mailbomb", "worm"},
     "Probe": {"satan", "ipsweep", "nmap", "portsweep", "mscan", "saint"},
     "R2L":   {"guess_passwd", "ftp_write", "imap", "phf", "multihop",
               "warezmaster", "warezclient", "spy", "xlock", "xsnoop",
@@ -80,6 +81,8 @@ ATTACK_CATEGORIES: dict[str, set[str]] = {
     "U2R":   {"buffer_overflow", "loadmodule", "rootkit", "perl",
               "sqlattack", "xterm", "ps"},
 }
+
+CATEGORY_OF = {a: c for c, names in ATTACK_CATEGORIES.items() for a in names}
 
 MODELS = {
     "iforest": "Isolation Forest",
@@ -129,6 +132,24 @@ def _metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     }
 
 
+def check_categories(labels) -> None:
+    missing = sorted(set(labels) - set(CATEGORY_OF) - {"normal"})
+    if missing:
+        raise ValueError(f"attack labels with no category: {missing}")
+
+
+def attack_groups(train_labels, test_labels) -> dict[str, np.ndarray]:
+    # boolean masks over the test rows; "seen" = attack type that appears anywhere in KDDTrain+
+    test_labels = np.asarray(test_labels)
+    is_attack = test_labels != "normal"
+    seen_types = list(set(train_labels) - {"normal"})
+    seen = is_attack & np.isin(test_labels, seen_types)
+    groups = {"seen": seen, "unseen": is_attack & ~seen}
+    for cat, names in ATTACK_CATEGORIES.items():
+        groups[cat] = np.isin(test_labels, list(names))
+    return groups
+
+
 def build_model(key: str, seed: int, contamination: float):
     if key == "iforest":
         return IsolationForest(n_estimators=200, contamination=contamination,
@@ -162,7 +183,7 @@ def pick_threshold(y_val: np.ndarray, scores_val: np.ndarray) -> float:
     return float(thr[np.argmax(f1)])
 
 
-def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, seed, contamination):
+def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, groups, seed, contamination):
     clf = build_model(key, seed, contamination)
     if key == "rf":
         clf.fit(X_tr, y_tr)
@@ -175,15 +196,19 @@ def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, seed, contamin
     s_val = score_samples(key, clf, X_val)
     s_test = score_samples(key, clf, X_test)
     thr = pick_threshold(y_val, s_val)
+    pred = (s_test >= thr).astype(int)
 
     result = {
         "roc_auc": round(float(roc_auc_score(y_test, s_test)), 4),
         "pr_auc": round(float(average_precision_score(y_test, s_test)), 4),
         "default": _metrics(y_test, default_predict(key, clf, X_test)),
         "val_threshold": {
-            **_metrics(y_test, (s_test >= thr).astype(int)),
+            **_metrics(y_test, pred),
             "threshold": round(thr, 6),
             "val_f1": round(float(f1_score(y_val, (s_val >= thr).astype(int))), 4),
+            "recall_by_group": {
+                g: round(float(pred[m].mean()), 4) for g, m in groups.items() if m.any()
+            },
         },
     }
     return result, s_test
@@ -208,6 +233,10 @@ def summarize(per_seed: dict) -> dict:
             summary[name][setting] = {
                 m: mean_std([r[name][setting][m] for r in runs]) for m in SUMMARY_METRICS
             }
+        by_group = [r[name]["val_threshold"]["recall_by_group"] for r in runs]
+        summary[name]["val_threshold"]["recall_by_group"] = {
+            g: mean_std([r[g] for r in by_group]) for g in by_group[0]
+        }
     return summary
 
 
@@ -216,8 +245,13 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination):
     df_test = load_nslkdd(test_path)
     X_all, y_all = engineer_features(df_train)
     X_test_raw, y_test = engineer_features(df_test)
+    check_categories(df_train["label"])
+    check_categories(df_test["label"])
+    groups = attack_groups(df_train["label"], df_test["label"])
+    unseen_types = df_test.loc[groups["unseen"], "label"].value_counts()
     print(f"  train: {len(y_all):,} flows ({int(y_all.sum()):,} attacks)")
     print(f"  test:  {len(y_test):,} flows ({int(y_test.sum()):,} attacks)")
+    print(f"  unseen attack types in test: {len(unseen_types)} ({int(groups['unseen'].sum()):,} flows)")
     print(f"  features: {X_all.shape[1]}")
 
     per_seed: dict = {}
@@ -236,13 +270,15 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination):
         per_seed[str(seed)] = {}
         for key in keys:
             res, s_test = evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test,
-                                         seed, contamination)
+                                         groups, seed, contamination)
             per_seed[str(seed)][MODELS[key]] = res
             if seed == seeds[0]:
                 first_scores[MODELS[key]] = s_test
             v = res["val_threshold"]
+            rg = v["recall_by_group"]
             print(f"  {MODELS[key]:<22} F1={v['f1']:.4f}  recall={v['recall']:.4f}  "
-                  f"fpr={v['fpr']:.4f}  roc_auc={res['roc_auc']:.4f}")
+                  f"fpr={v['fpr']:.4f}  roc_auc={res['roc_auc']:.4f}  "
+                  f"recall seen/unseen={rg.get('seen', float('nan')):.3f}/{rg.get('unseen', float('nan')):.3f}")
 
     results = {
         "dataset": "NSL-KDD (KDDTrain+ / KDDTest+)",
@@ -257,6 +293,11 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination):
             "scaler": "fit on the training split only",
             "ocsvm_max_train_rows": OCSVM_MAX_TRAIN,
             "std": "sample std over seeds (ddof=1)",
+        },
+        "test_groups": {
+            "flows_per_group": {g: int(m.sum()) for g, m in groups.items()},
+            "unseen_attack_types": {t: int(n) for t, n in unseen_types.items()},
+            "seen": "attack type appears anywhere in KDDTrain+ (fixed across seeds)",
         },
         "seeds": list(seeds),
         "summary": summarize(per_seed),
@@ -309,6 +350,17 @@ def print_table(results: dict) -> None:
               f"{ms(v['fpr']):>15} {ms(s['default']['f1']):>15} "
               f"{ms(s['roc_auc']):>15} {ms(s['pr_auc']):>15}")
     print(f"{'=' * len(header)}\n")
+
+    cols = ["seen", "unseen", "DoS", "Probe", "R2L", "U2R"]
+    counts = results["test_groups"]["flows_per_group"]
+    header = f"{'Recall at val threshold':<24}" + "".join(
+        f"{c + ' (' + format(counts[c], ',') + ')':>17}" for c in cols)
+    print(header)
+    print("-" * len(header))
+    for name, s in results["summary"].items():
+        rg = s["val_threshold"]["recall_by_group"]
+        print(f"{name:<24}" + "".join(f"{ms(rg[c]):>17}" for c in cols))
+    print()
 
 
 def main(argv: list[str] | None = None) -> None:

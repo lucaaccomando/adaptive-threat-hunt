@@ -12,6 +12,36 @@
     "ocsvm_max_train_rows": 15000,
     "std": "sample std over seeds (ddof=1)"
   },
+  "test_groups": {
+    "flows_per_group": {
+      "seen": 9083,
+      "unseen": 3750,
+      "DoS": 7460,
+      "Probe": 2421,
+      "R2L": 2885,
+      "U2R": 67
+    },
+    "unseen_attack_types": {
+      "mscan": 996,
+      "apache2": 737,
+      "processtable": 685,
+      "snmpguess": 331,
+      "saint": 319,
+      "mailbomb": 293,
+      "snmpgetattack": 178,
+      "httptunnel": 133,
+      "named": 17,
+      "ps": 15,
+      "sendmail": 14,
+      "xterm": 13,
+      "xlock": 9,
+      "xsnoop": 4,
+      "worm": 2,
+      "sqlattack": 2,
+      "udpstorm": 2
+    },
+    "seen": "attack type appears anywhere in KDDTrain+ (fixed across seeds)"
+  },
   "seeds": [
     0,
     1,
@@ -71,6 +101,32 @@
         "accuracy": {
           "mean": 0.7949,
           "std": 0.0109
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.9307,
+            "std": 0.0078
+          },
+          "unseen": {
+            "mean": 0.8684,
+            "std": 0.0039
+          },
+          "DoS": {
+            "mean": 0.9923,
+            "std": 0.0021
+          },
+          "Probe": {
+            "mean": 0.9992,
+            "std": 0.0009
+          },
+          "R2L": {
+            "mean": 0.6315,
+            "std": 0.0238
+          },
+          "U2R": {
+            "mean": 0.997,
+            "std": 0.0067
+          }
         }
       }
     },
@@ -125,6 +181,32 @@
         "accuracy": {
           "mean": 0.5702,
           "std": 0.0008
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.9997,
+            "std": 0.0006
+          },
+          "unseen": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "DoS": {
+            "mean": 0.9996,
+            "std": 0.0007
+          },
+          "Probe": {
+            "mean": 0.9999,
+            "std": 0.0002
+          },
+          "R2L": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "U2R": {
+            "mean": 1.0,
+            "std": 0.0
+          }
         }
       }
     },
@@ -179,6 +261,32 @@
         "accuracy": {
           "mean": 0.7856,
           "std": 0.0087
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.7619,
+            "std": 0.0093
+          },
+          "unseen": {
+            "mean": 0.5958,
+            "std": 0.0378
+          },
+          "DoS": {
+            "mean": 0.798,
+            "std": 0.0257
+          },
+          "Probe": {
+            "mean": 0.8229,
+            "std": 0.0076
+          },
+          "R2L": {
+            "mean": 0.4031,
+            "std": 0.0044
+          },
+          "U2R": {
+            "mean": 0.6925,
+            "std": 0.0327
+          }
         }
       }
     },
@@ -233,6 +341,32 @@
         "accuracy": {
           "mean": 0.8033,
           "std": 0.0054
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.7901,
+            "std": 0.002
+          },
+          "unseen": {
+            "mean": 0.3985,
+            "std": 0.0308
+          },
+          "DoS": {
+            "mean": 0.8425,
+            "std": 0.0114
+          },
+          "Probe": {
+            "mean": 0.8349,
+            "std": 0.0247
+          },
+          "R2L": {
+            "mean": 0.1226,
+            "std": 0.0075
+          },
+          "U2R": {
+            "mean": 0.1672,
+            "std": 0.0324
+          }
         }
       }
     }
@@ -264,7 +398,15 @@
           "fp": 3870,
           "fn": 1039,
           "threshold": -0.116757,
-          "val_f1": 0.7529
+          "val_f1": 0.7529,
+          "recall_by_group": {
+            "seen": 0.9386,
+            "unseen": 0.8717,
+            "DoS": 0.9932,
+            "Probe": 1.0,
+            "R2L": 0.6575,
+            "U2R": 1.0
+          }
         }
       },
       "Local Outlier Factor": {
@@ -292,7 +434,15 @@
           "fp": 9696,
           "fn": 0,
           "threshold": -0.43084,
-          "val_f1": 0.6353
+          "val_f1": 0.6353,
+          "recall_by_group": {
+            "seen": 1.0,
+            "unseen": 1.0,
+            "DoS": 1.0,
+            "Probe": 1.0,
+            "R2L": 1.0,
+            "U2R": 1.0
+          }
         }
       },
       "One-Class SVM": {
@@ -320,7 +470,15 @@
           "fp": 1171,
           "fn": 3652,
           "threshold": -17.222518,
-          "val_f1": 0.8639
+          "val_f1": 0.8639,
+          "recall_by_group": {
+            "seen": 0.7624,
+            "unseen": 0.6016,
+            "DoS": 0.8008,
+            "Probe": 0.8245,
+            "R2L": 0.4031,
+            "U2R": 0.7164
+          }
         }
       },
       "Random Forest": {
@@ -348,7 +506,15 @@
           "fp": 275,
           "fn": 4114,
           "threshold": 0.37,
-          "val_f1": 0.9985
+          "val_f1": 0.9985,
+          "recall_by_group": {
+            "seen": 0.7909,
+            "unseen": 0.4093,
+            "DoS": 0.8468,
+            "Probe": 0.8368,
+            "R2L": 0.1272,
+            "U2R": 0.1343
+          }
         }
       }
     },
@@ -378,7 +544,15 @@
           "fp": 3671,
           "fn": 1058,
           "threshold": -0.120008,
-          "val_f1": 0.7628
+          "val_f1": 0.7628,
+          "recall_by_group": {
+            "seen": 0.936,
+            "unseen": 0.8728,
+            "DoS": 0.9952,
+            "Probe": 1.0,
+            "R2L": 0.6458,
+            "U2R": 1.0
+          }
         }
       },
       "Local Outlier Factor": {
@@ -406,7 +580,15 @@
           "fp": 9675,
           "fn": 3,
           "threshold": -0.423097,
-          "val_f1": 0.6358
+          "val_f1": 0.6358,
+          "recall_by_group": {
+            "seen": 0.9997,
+            "unseen": 1.0,
+            "DoS": 0.9996,
+            "Probe": 1.0,
+            "R2L": 1.0,
+            "U2R": 1.0
+          }
         }
       },
       "One-Class SVM": {
@@ -434,7 +616,15 @@
           "fp": 1194,
           "fn": 3397,
           "threshold": -14.309186,
-          "val_f1": 0.8598
+          "val_f1": 0.8598,
+          "recall_by_group": {
+            "seen": 0.7761,
+            "unseen": 0.6365,
+            "DoS": 0.8288,
+            "Probe": 0.8348,
+            "R2L": 0.4104,
+            "U2R": 0.7164
+          }
         }
       },
       "Random Forest": {
@@ -462,7 +652,15 @@
           "fp": 265,
           "fn": 4381,
           "threshold": 0.435,
-          "val_f1": 0.9985
+          "val_f1": 0.9985,
+          "recall_by_group": {
+            "seen": 0.7874,
+            "unseen": 0.3467,
+            "DoS": 0.8298,
+            "Probe": 0.7955,
+            "R2L": 0.1133,
+            "U2R": 0.1343
+          }
         }
       }
     },
@@ -492,7 +690,15 @@
           "fp": 3050,
           "fn": 1237,
           "threshold": -0.114069,
-          "val_f1": 0.7858
+          "val_f1": 0.7858,
+          "recall_by_group": {
+            "seen": 0.9194,
+            "unseen": 0.8653,
+            "DoS": 0.9894,
+            "Probe": 0.9983,
+            "R2L": 0.6003,
+            "U2R": 0.9851
+          }
         }
       },
       "Local Outlier Factor": {
@@ -520,7 +726,15 @@
           "fp": 9705,
           "fn": 0,
           "threshold": -0.434515,
-          "val_f1": 0.6354
+          "val_f1": 0.6354,
+          "recall_by_group": {
+            "seen": 1.0,
+            "unseen": 1.0,
+            "DoS": 1.0,
+            "Probe": 1.0,
+            "R2L": 1.0,
+            "U2R": 1.0
+          }
         }
       },
       "One-Class SVM": {
@@ -548,7 +762,15 @@
           "fp": 1113,
           "fn": 3975,
           "threshold": -17.014816,
-          "val_f1": 0.8669
+          "val_f1": 0.8669,
+          "recall_by_group": {
+            "seen": 0.7513,
+            "unseen": 0.5424,
+            "DoS": 0.763,
+            "Probe": 0.8141,
+            "R2L": 0.399,
+            "U2R": 0.6567
+          }
         }
       },
       "Random Forest": {
@@ -576,7 +798,15 @@
           "fp": 273,
           "fn": 4124,
           "threshold": 0.35,
-          "val_f1": 0.9986
+          "val_f1": 0.9986,
+          "recall_by_group": {
+            "seen": 0.7917,
+            "unseen": 0.4048,
+            "DoS": 0.8386,
+            "Probe": 0.8563,
+            "R2L": 0.1276,
+            "U2R": 0.1791
+          }
         }
       }
     },
@@ -606,7 +836,15 @@
           "fp": 3363,
           "fn": 1102,
           "threshold": -0.116243,
-          "val_f1": 0.7686
+          "val_f1": 0.7686,
+          "recall_by_group": {
+            "seen": 0.933,
+            "unseen": 0.8685,
+            "DoS": 0.9916,
+            "Probe": 0.9992,
+            "R2L": 0.6406,
+            "U2R": 1.0
+          }
         }
       },
       "Local Outlier Factor": {
@@ -634,7 +872,15 @@
           "fp": 9647,
           "fn": 13,
           "threshold": -0.405629,
-          "val_f1": 0.6355
+          "val_f1": 0.6355,
+          "recall_by_group": {
+            "seen": 0.9986,
+            "unseen": 1.0,
+            "DoS": 0.9984,
+            "Probe": 0.9996,
+            "R2L": 1.0,
+            "U2R": 1.0
+          }
         }
       },
       "One-Class SVM": {
@@ -662,7 +908,15 @@
           "fp": 1147,
           "fn": 3803,
           "threshold": -17.893616,
-          "val_f1": 0.8658
+          "val_f1": 0.8658,
+          "recall_by_group": {
+            "seen": 0.7566,
+            "unseen": 0.5755,
+            "DoS": 0.7834,
+            "Probe": 0.8207,
+            "R2L": 0.4003,
+            "U2R": 0.6567
+          }
         }
       },
       "Random Forest": {
@@ -690,7 +944,15 @@
           "fp": 276,
           "fn": 4129,
           "threshold": 0.355,
-          "val_f1": 0.9984
+          "val_f1": 0.9984,
+          "recall_by_group": {
+            "seen": 0.7921,
+            "unseen": 0.4024,
+            "DoS": 0.8374,
+            "Probe": 0.855,
+            "R2L": 0.1293,
+            "U2R": 0.209
+          }
         }
       }
     },
@@ -720,7 +982,15 @@
           "fp": 3546,
           "fn": 1180,
           "threshold": -0.113772,
-          "val_f1": 0.7668
+          "val_f1": 0.7668,
+          "recall_by_group": {
+            "seen": 0.9263,
+            "unseen": 0.8637,
+            "DoS": 0.992,
+            "Probe": 0.9983,
+            "R2L": 0.6132,
+            "U2R": 1.0
+          }
         }
       },
       "Local Outlier Factor": {
@@ -748,7 +1018,15 @@
           "fp": 9702,
           "fn": 0,
           "threshold": -0.433042,
-          "val_f1": 0.6354
+          "val_f1": 0.6354,
+          "recall_by_group": {
+            "seen": 1.0,
+            "unseen": 1.0,
+            "DoS": 1.0,
+            "Probe": 1.0,
+            "R2L": 1.0,
+            "U2R": 1.0
+          }
         }
       },
       "One-Class SVM": {
@@ -776,7 +1054,15 @@
           "fp": 1146,
           "fn": 3565,
           "threshold": -12.545018,
-          "val_f1": 0.858
+          "val_f1": 0.858,
+          "recall_by_group": {
+            "seen": 0.7631,
+            "unseen": 0.6232,
+            "DoS": 0.8139,
+            "Probe": 0.8203,
+            "R2L": 0.4028,
+            "U2R": 0.7164
+          }
         }
       },
       "Random Forest": {
@@ -804,7 +1090,15 @@
           "fp": 269,
           "fn": 4061,
           "threshold": 0.365,
-          "val_f1": 0.9986
+          "val_f1": 0.9986,
+          "recall_by_group": {
+            "seen": 0.7886,
+            "unseen": 0.4291,
+            "DoS": 0.8598,
+            "Probe": 0.8311,
+            "R2L": 0.1158,
+            "U2R": 0.1791
+          }
         }
       }
     }
