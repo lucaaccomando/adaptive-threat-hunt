@@ -1,0 +1,1111 @@
+{
+  "dataset": "NSL-KDD (KDDTrain+ / KDDTest+)",
+  "n_features": 38,
+  "train_flows": 125973,
+  "test_flows": 22544,
+  "contamination": 0.1,
+  "ablation": {
+    "train_on": "normal",
+    "categorical": "drop",
+    "note": "train_on=normal only changes the unsupervised models; rf always sees both classes"
+  },
+  "protocol": {
+    "validation_fraction": 0.2,
+    "split": "stratified on the binary label, new split per seed",
+    "threshold": "max F1 on the validation split, applied unchanged to KDDTest+",
+    "scaler": "fit on the training split only",
+    "ocsvm_max_train_rows": 15000,
+    "std": "sample std over seeds (ddof=1)"
+  },
+  "test_groups": {
+    "flows_per_group": {
+      "seen": 9083,
+      "unseen": 3750,
+      "DoS": 7460,
+      "Probe": 2421,
+      "R2L": 2885,
+      "U2R": 67
+    },
+    "unseen_attack_types": {
+      "mscan": 996,
+      "apache2": 737,
+      "processtable": 685,
+      "snmpguess": 331,
+      "saint": 319,
+      "mailbomb": 293,
+      "snmpgetattack": 178,
+      "httptunnel": 133,
+      "named": 17,
+      "ps": 15,
+      "sendmail": 14,
+      "xterm": 13,
+      "xlock": 9,
+      "xsnoop": 4,
+      "worm": 2,
+      "sqlattack": 2,
+      "udpstorm": 2
+    },
+    "seen": "attack type appears anywhere in KDDTrain+ (fixed across seeds)"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "summary": {
+    "Isolation Forest": {
+      "roc_auc": {
+        "mean": 0.9274,
+        "std": 0.0034
+      },
+      "pr_auc": {
+        "mean": 0.9488,
+        "std": 0.0018
+      },
+      "default": {
+        "f1": {
+          "mean": 0.8229,
+          "std": 0.0075
+        },
+        "precision": {
+          "mean": 0.939,
+          "std": 0.0161
+        },
+        "recall": {
+          "mean": 0.7324,
+          "std": 0.0036
+        },
+        "fpr": {
+          "mean": 0.0631,
+          "std": 0.0173
+        },
+        "accuracy": {
+          "mean": 0.8205,
+          "std": 0.0086
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.8212,
+          "std": 0.005
+        },
+        "precision": {
+          "mean": 0.9376,
+          "std": 0.0168
+        },
+        "recall": {
+          "mean": 0.7307,
+          "std": 0.0083
+        },
+        "fpr": {
+          "mean": 0.0646,
+          "std": 0.0185
+        },
+        "accuracy": {
+          "mean": 0.8188,
+          "std": 0.006
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.723,
+            "std": 0.0093
+          },
+          "unseen": {
+            "mean": 0.7492,
+            "std": 0.0113
+          },
+          "DoS": {
+            "mean": 0.8676,
+            "std": 0.0084
+          },
+          "Probe": {
+            "mean": 0.9592,
+            "std": 0.0078
+          },
+          "R2L": {
+            "mean": 0.1907,
+            "std": 0.0166
+          },
+          "U2R": {
+            "mean": 0.4746,
+            "std": 0.0323
+          }
+        }
+      }
+    },
+    "Local Outlier Factor": {
+      "roc_auc": {
+        "mean": 0.8346,
+        "std": 0.0021
+      },
+      "pr_auc": {
+        "mean": 0.8147,
+        "std": 0.0058
+      },
+      "default": {
+        "f1": {
+          "mean": 0.7342,
+          "std": 0.0032
+        },
+        "precision": {
+          "mean": 0.8189,
+          "std": 0.0043
+        },
+        "recall": {
+          "mean": 0.6654,
+          "std": 0.0055
+        },
+        "fpr": {
+          "mean": 0.1945,
+          "std": 0.0064
+        },
+        "accuracy": {
+          "mean": 0.7257,
+          "std": 0.0027
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.8357,
+          "std": 0.0027
+        },
+        "precision": {
+          "mean": 0.815,
+          "std": 0.0068
+        },
+        "recall": {
+          "mean": 0.8575,
+          "std": 0.0103
+        },
+        "fpr": {
+          "mean": 0.2573,
+          "std": 0.0144
+        },
+        "accuracy": {
+          "mean": 0.808,
+          "std": 0.0027
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.9079,
+            "std": 0.0081
+          },
+          "unseen": {
+            "mean": 0.7356,
+            "std": 0.0193
+          },
+          "DoS": {
+            "mean": 0.8964,
+            "std": 0.0073
+          },
+          "Probe": {
+            "mean": 0.9254,
+            "std": 0.0133
+          },
+          "R2L": {
+            "mean": 0.7023,
+            "std": 0.0208
+          },
+          "U2R": {
+            "mean": 0.7612,
+            "std": 0.0182
+          }
+        }
+      }
+    },
+    "One-Class SVM": {
+      "roc_auc": {
+        "mean": 0.8533,
+        "std": 0.01
+      },
+      "pr_auc": {
+        "mean": 0.8622,
+        "std": 0.008
+      },
+      "default": {
+        "f1": {
+          "mean": 0.8198,
+          "std": 0.0184
+        },
+        "precision": {
+          "mean": 0.9099,
+          "std": 0.0021
+        },
+        "recall": {
+          "mean": 0.7462,
+          "std": 0.0291
+        },
+        "fpr": {
+          "mean": 0.0975,
+          "std": 0.0017
+        },
+        "accuracy": {
+          "mean": 0.8135,
+          "std": 0.0159
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.7693,
+          "std": 0.0029
+        },
+        "precision": {
+          "mean": 0.9172,
+          "std": 0.0022
+        },
+        "recall": {
+          "mean": 0.6625,
+          "std": 0.0033
+        },
+        "fpr": {
+          "mean": 0.0791,
+          "std": 0.002
+        },
+        "accuracy": {
+          "mean": 0.7738,
+          "std": 0.0026
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.783,
+            "std": 0.0018
+          },
+          "unseen": {
+            "mean": 0.3709,
+            "std": 0.0135
+          },
+          "DoS": {
+            "mean": 0.7089,
+            "std": 0.006
+          },
+          "Probe": {
+            "mean": 0.8577,
+            "std": 0.0065
+          },
+          "R2L": {
+            "mean": 0.3791,
+            "std": 0.0027
+          },
+          "U2R": {
+            "mean": 0.6567,
+            "std": 0.0
+          }
+        }
+      }
+    },
+    "Random Forest": {
+      "roc_auc": {
+        "mean": 0.9612,
+        "std": 0.0012
+      },
+      "pr_auc": {
+        "mean": 0.9631,
+        "std": 0.0008
+      },
+      "default": {
+        "f1": {
+          "mean": 0.7486,
+          "std": 0.0078
+        },
+        "precision": {
+          "mean": 0.9679,
+          "std": 0.0006
+        },
+        "recall": {
+          "mean": 0.6103,
+          "std": 0.0102
+        },
+        "fpr": {
+          "mean": 0.0268,
+          "std": 0.0001
+        },
+        "accuracy": {
+          "mean": 0.7666,
+          "std": 0.0058
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.7964,
+          "std": 0.0069
+        },
+        "precision": {
+          "mean": 0.9696,
+          "std": 0.0003
+        },
+        "recall": {
+          "mean": 0.6757,
+          "std": 0.0098
+        },
+        "fpr": {
+          "mean": 0.028,
+          "std": 0.0005
+        },
+        "accuracy": {
+          "mean": 0.8033,
+          "std": 0.0054
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.7901,
+            "std": 0.002
+          },
+          "unseen": {
+            "mean": 0.3985,
+            "std": 0.0308
+          },
+          "DoS": {
+            "mean": 0.8425,
+            "std": 0.0114
+          },
+          "Probe": {
+            "mean": 0.8349,
+            "std": 0.0247
+          },
+          "R2L": {
+            "mean": 0.1226,
+            "std": 0.0075
+          },
+          "U2R": {
+            "mean": 0.1672,
+            "std": 0.0324
+          }
+        }
+      }
+    }
+  },
+  "per_seed": {
+    "0": {
+      "Isolation Forest": {
+        "roc_auc": 0.9249,
+        "pr_auc": 0.9479,
+        "default": {
+          "precision": 0.9652,
+          "recall": 0.7361,
+          "f1": 0.8352,
+          "fpr": 0.0351,
+          "accuracy": 0.8347,
+          "tp": 9447,
+          "tn": 9370,
+          "fp": 341,
+          "fn": 3386
+        },
+        "val_threshold": {
+          "precision": 0.9672,
+          "recall": 0.7218,
+          "f1": 0.8267,
+          "fpr": 0.0323,
+          "accuracy": 0.8277,
+          "tp": 9263,
+          "tn": 9397,
+          "fp": 314,
+          "fn": 3570,
+          "threshold": 0.007365,
+          "val_f1": 0.9048,
+          "recall_by_group": {
+            "seen": 0.7096,
+            "unseen": 0.7515,
+            "DoS": 0.855,
+            "Probe": 0.9694,
+            "R2L": 0.1757,
+            "U2R": 0.4627
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "roc_auc": 0.832,
+        "pr_auc": 0.8108,
+        "default": {
+          "precision": 0.8149,
+          "recall": 0.673,
+          "f1": 0.7371,
+          "fpr": 0.202,
+          "accuracy": 0.7268,
+          "tp": 8636,
+          "tn": 7749,
+          "fp": 1962,
+          "fn": 4197
+        },
+        "val_threshold": {
+          "precision": 0.8072,
+          "recall": 0.8629,
+          "f1": 0.8341,
+          "fpr": 0.2724,
+          "accuracy": 0.8046,
+          "tp": 11074,
+          "tn": 7066,
+          "fp": 2645,
+          "fn": 1759,
+          "threshold": -0.291619,
+          "val_f1": 0.8896,
+          "recall_by_group": {
+            "seen": 0.9163,
+            "unseen": 0.7336,
+            "DoS": 0.8936,
+            "Probe": 0.9397,
+            "R2L": 0.721,
+            "U2R": 0.791
+          }
+        }
+      },
+      "One-Class SVM": {
+        "roc_auc": 0.8561,
+        "pr_auc": 0.8628,
+        "default": {
+          "precision": 0.9098,
+          "recall": 0.7432,
+          "f1": 0.8181,
+          "fpr": 0.0974,
+          "accuracy": 0.8119,
+          "tp": 9538,
+          "tn": 8765,
+          "fp": 946,
+          "fn": 3295
+        },
+        "val_threshold": {
+          "precision": 0.9173,
+          "recall": 0.6638,
+          "f1": 0.7702,
+          "fpr": 0.0791,
+          "accuracy": 0.7745,
+          "tp": 8518,
+          "tn": 8943,
+          "fp": 768,
+          "fn": 4315,
+          "threshold": 31.119857,
+          "val_f1": 0.9301,
+          "recall_by_group": {
+            "seen": 0.7831,
+            "unseen": 0.3747,
+            "DoS": 0.7134,
+            "Probe": 0.8488,
+            "R2L": 0.3802,
+            "U2R": 0.6567
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": 0.9628,
+        "pr_auc": 0.964,
+        "default": {
+          "precision": 0.9683,
+          "recall": 0.6194,
+          "f1": 0.7555,
+          "fpr": 0.0268,
+          "accuracy": 0.7718,
+          "tp": 7949,
+          "tn": 9451,
+          "fp": 260,
+          "fn": 4884
+        },
+        "val_threshold": {
+          "precision": 0.9694,
+          "recall": 0.6794,
+          "f1": 0.7989,
+          "fpr": 0.0283,
+          "accuracy": 0.8053,
+          "tp": 8719,
+          "tn": 9436,
+          "fp": 275,
+          "fn": 4114,
+          "threshold": 0.37,
+          "val_f1": 0.9985,
+          "recall_by_group": {
+            "seen": 0.7909,
+            "unseen": 0.4093,
+            "DoS": 0.8468,
+            "Probe": 0.8368,
+            "R2L": 0.1272,
+            "U2R": 0.1343
+          }
+        }
+      }
+    },
+    "1": {
+      "Isolation Forest": {
+        "roc_auc": 0.9266,
+        "pr_auc": 0.9481,
+        "default": {
+          "precision": 0.9281,
+          "recall": 0.731,
+          "f1": 0.8178,
+          "fpr": 0.0749,
+          "accuracy": 0.8146,
+          "tp": 9381,
+          "tn": 8984,
+          "fp": 727,
+          "fn": 3452
+        },
+        "val_threshold": {
+          "precision": 0.9287,
+          "recall": 0.7239,
+          "f1": 0.8136,
+          "fpr": 0.0734,
+          "accuracy": 0.8112,
+          "tp": 9290,
+          "tn": 8998,
+          "fp": 713,
+          "fn": 3543,
+          "threshold": 0.003198,
+          "val_f1": 0.9075,
+          "recall_by_group": {
+            "seen": 0.7215,
+            "unseen": 0.7299,
+            "DoS": 0.8639,
+            "Probe": 0.9533,
+            "R2L": 0.1747,
+            "U2R": 0.4925
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "roc_auc": 0.8379,
+        "pr_auc": 0.8248,
+        "default": {
+          "precision": 0.8243,
+          "recall": 0.6606,
+          "f1": 0.7334,
+          "fpr": 0.1861,
+          "accuracy": 0.7266,
+          "tp": 8477,
+          "tn": 7904,
+          "fp": 1807,
+          "fn": 4356
+        },
+        "val_threshold": {
+          "precision": 0.8215,
+          "recall": 0.8426,
+          "f1": 0.8319,
+          "fpr": 0.242,
+          "accuracy": 0.8062,
+          "tp": 10813,
+          "tn": 7361,
+          "fp": 2350,
+          "fn": 2020,
+          "threshold": -0.237429,
+          "val_f1": 0.8992,
+          "recall_by_group": {
+            "seen": 0.8951,
+            "unseen": 0.7155,
+            "DoS": 0.8878,
+            "Probe": 0.9124,
+            "R2L": 0.669,
+            "U2R": 0.7612
+          }
+        }
+      },
+      "One-Class SVM": {
+        "roc_auc": 0.8637,
+        "pr_auc": 0.871,
+        "default": {
+          "precision": 0.9106,
+          "recall": 0.7719,
+          "f1": 0.8355,
+          "fpr": 0.1002,
+          "accuracy": 0.827,
+          "tp": 9906,
+          "tn": 8738,
+          "fp": 973,
+          "fn": 2927
+        },
+        "val_threshold": {
+          "precision": 0.9191,
+          "recall": 0.6673,
+          "f1": 0.7732,
+          "fpr": 0.0776,
+          "accuracy": 0.7772,
+          "tp": 8564,
+          "tn": 8957,
+          "fp": 754,
+          "fn": 4269,
+          "threshold": 33.164133,
+          "val_f1": 0.9311,
+          "recall_by_group": {
+            "seen": 0.7833,
+            "unseen": 0.3864,
+            "DoS": 0.7141,
+            "Probe": 0.8666,
+            "R2L": 0.3795,
+            "U2R": 0.6567
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": 0.9615,
+        "pr_auc": 0.9636,
+        "default": {
+          "precision": 0.9687,
+          "recall": 0.6212,
+          "f1": 0.757,
+          "fpr": 0.0266,
+          "accuracy": 0.7729,
+          "tp": 7972,
+          "tn": 9453,
+          "fp": 258,
+          "fn": 4861
+        },
+        "val_threshold": {
+          "precision": 0.9696,
+          "recall": 0.6586,
+          "f1": 0.7844,
+          "fpr": 0.0273,
+          "accuracy": 0.7939,
+          "tp": 8452,
+          "tn": 9446,
+          "fp": 265,
+          "fn": 4381,
+          "threshold": 0.435,
+          "val_f1": 0.9985,
+          "recall_by_group": {
+            "seen": 0.7874,
+            "unseen": 0.3467,
+            "DoS": 0.8298,
+            "Probe": 0.7955,
+            "R2L": 0.1133,
+            "U2R": 0.1343
+          }
+        }
+      }
+    },
+    "2": {
+      "Isolation Forest": {
+        "roc_auc": 0.9237,
+        "pr_auc": 0.9467,
+        "default": {
+          "precision": 0.9291,
+          "recall": 0.728,
+          "f1": 0.8163,
+          "fpr": 0.0734,
+          "accuracy": 0.8135,
+          "tp": 9342,
+          "tn": 8998,
+          "fp": 713,
+          "fn": 3491
+        },
+        "val_threshold": {
+          "precision": 0.9263,
+          "recall": 0.7428,
+          "f1": 0.8245,
+          "fpr": 0.0781,
+          "accuracy": 0.82,
+          "tp": 9532,
+          "tn": 8953,
+          "fp": 758,
+          "fn": 3301,
+          "threshold": -0.009867,
+          "val_f1": 0.9049,
+          "recall_by_group": {
+            "seen": 0.7358,
+            "unseen": 0.7597,
+            "DoS": 0.8765,
+            "Probe": 0.9657,
+            "R2L": 0.2149,
+            "U2R": 0.5224
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "roc_auc": 0.8347,
+        "pr_auc": 0.8143,
+        "default": {
+          "precision": 0.8208,
+          "recall": 0.6629,
+          "f1": 0.7335,
+          "fpr": 0.1912,
+          "accuracy": 0.7257,
+          "tp": 8507,
+          "tn": 7854,
+          "fp": 1857,
+          "fn": 4326
+        },
+        "val_threshold": {
+          "precision": 0.8081,
+          "recall": 0.8705,
+          "f1": 0.8382,
+          "fpr": 0.2731,
+          "accuracy": 0.8086,
+          "tp": 11171,
+          "tn": 7059,
+          "fp": 2652,
+          "fn": 1662,
+          "threshold": -0.31428,
+          "val_f1": 0.8897,
+          "recall_by_group": {
+            "seen": 0.9129,
+            "unseen": 0.7677,
+            "DoS": 0.9078,
+            "Probe": 0.9393,
+            "R2L": 0.7189,
+            "U2R": 0.7612
+          }
+        }
+      },
+      "One-Class SVM": {
+        "roc_auc": 0.8607,
+        "pr_auc": 0.8689,
+        "default": {
+          "precision": 0.9128,
+          "recall": 0.7768,
+          "f1": 0.8394,
+          "fpr": 0.098,
+          "accuracy": 0.8307,
+          "tp": 9969,
+          "tn": 8759,
+          "fp": 952,
+          "fn": 2864
+        },
+        "val_threshold": {
+          "precision": 0.9195,
+          "recall": 0.6628,
+          "f1": 0.7703,
+          "fpr": 0.0767,
+          "accuracy": 0.775,
+          "tp": 8506,
+          "tn": 8966,
+          "fp": 745,
+          "fn": 4327,
+          "threshold": 35.936591,
+          "val_f1": 0.9296,
+          "recall_by_group": {
+            "seen": 0.7799,
+            "unseen": 0.3792,
+            "DoS": 0.7119,
+            "Probe": 0.8554,
+            "R2L": 0.3744,
+            "U2R": 0.6567
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": 0.9617,
+        "pr_auc": 0.9635,
+        "default": {
+          "precision": 0.9673,
+          "recall": 0.5992,
+          "f1": 0.74,
+          "fpr": 0.0268,
+          "accuracy": 0.7603,
+          "tp": 7690,
+          "tn": 9451,
+          "fp": 260,
+          "fn": 5143
+        },
+        "val_threshold": {
+          "precision": 0.9696,
+          "recall": 0.6786,
+          "f1": 0.7984,
+          "fpr": 0.0281,
+          "accuracy": 0.805,
+          "tp": 8709,
+          "tn": 9438,
+          "fp": 273,
+          "fn": 4124,
+          "threshold": 0.35,
+          "val_f1": 0.9986,
+          "recall_by_group": {
+            "seen": 0.7917,
+            "unseen": 0.4048,
+            "DoS": 0.8386,
+            "Probe": 0.8563,
+            "R2L": 0.1276,
+            "U2R": 0.1791
+          }
+        }
+      }
+    },
+    "3": {
+      "Isolation Forest": {
+        "roc_auc": 0.9303,
+        "pr_auc": 0.95,
+        "default": {
+          "precision": 0.9441,
+          "recall": 0.7306,
+          "f1": 0.8238,
+          "fpr": 0.0572,
+          "accuracy": 0.822,
+          "tp": 9376,
+          "tn": 9156,
+          "fp": 555,
+          "fn": 3457
+        },
+        "val_threshold": {
+          "precision": 0.9347,
+          "recall": 0.7323,
+          "f1": 0.8212,
+          "fpr": 0.0676,
+          "accuracy": 0.8185,
+          "tp": 9397,
+          "tn": 9055,
+          "fp": 656,
+          "fn": 3436,
+          "threshold": -0.003059,
+          "val_f1": 0.9067,
+          "recall_by_group": {
+            "seen": 0.7243,
+            "unseen": 0.7515,
+            "DoS": 0.8701,
+            "Probe": 0.9533,
+            "R2L": 0.1969,
+            "U2R": 0.4478
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "roc_auc": 0.8339,
+        "pr_auc": 0.8126,
+        "default": {
+          "precision": 0.8204,
+          "recall": 0.6694,
+          "f1": 0.7373,
+          "fpr": 0.1937,
+          "accuracy": 0.7284,
+          "tp": 8591,
+          "tn": 7830,
+          "fp": 1881,
+          "fn": 4242
+        },
+        "val_threshold": {
+          "precision": 0.8184,
+          "recall": 0.8548,
+          "f1": 0.8362,
+          "fpr": 0.2506,
+          "accuracy": 0.8094,
+          "tp": 10970,
+          "tn": 7277,
+          "fp": 2434,
+          "fn": 1863,
+          "threshold": -0.23471,
+          "val_f1": 0.8983,
+          "recall_by_group": {
+            "seen": 0.9059,
+            "unseen": 0.7312,
+            "DoS": 0.8956,
+            "Probe": 0.9145,
+            "R2L": 0.7019,
+            "U2R": 0.7463
+          }
+        }
+      },
+      "One-Class SVM": {
+        "roc_auc": 0.8458,
+        "pr_auc": 0.856,
+        "default": {
+          "precision": 0.9095,
+          "recall": 0.7332,
+          "f1": 0.8119,
+          "fpr": 0.0964,
+          "accuracy": 0.8066,
+          "tp": 9409,
+          "tn": 8775,
+          "fp": 936,
+          "fn": 3424
+        },
+        "val_threshold": {
+          "precision": 0.9154,
+          "recall": 0.6599,
+          "f1": 0.7669,
+          "fpr": 0.0806,
+          "accuracy": 0.7716,
+          "tp": 8468,
+          "tn": 8928,
+          "fp": 783,
+          "fn": 4365,
+          "threshold": 31.803842,
+          "val_f1": 0.9282,
+          "recall_by_group": {
+            "seen": 0.7836,
+            "unseen": 0.3603,
+            "DoS": 0.7039,
+            "Probe": 0.8579,
+            "R2L": 0.3799,
+            "U2R": 0.6567
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": 0.96,
+        "pr_auc": 0.9623,
+        "default": {
+          "precision": 0.9673,
+          "recall": 0.6009,
+          "f1": 0.7413,
+          "fpr": 0.0269,
+          "accuracy": 0.7612,
+          "tp": 7711,
+          "tn": 9450,
+          "fp": 261,
+          "fn": 5122
+        },
+        "val_threshold": {
+          "precision": 0.9693,
+          "recall": 0.6783,
+          "f1": 0.7981,
+          "fpr": 0.0284,
+          "accuracy": 0.8046,
+          "tp": 8704,
+          "tn": 9435,
+          "fp": 276,
+          "fn": 4129,
+          "threshold": 0.355,
+          "val_f1": 0.9984,
+          "recall_by_group": {
+            "seen": 0.7921,
+            "unseen": 0.4024,
+            "DoS": 0.8374,
+            "Probe": 0.855,
+            "R2L": 0.1293,
+            "U2R": 0.209
+          }
+        }
+      }
+    },
+    "4": {
+      "Isolation Forest": {
+        "roc_auc": 0.9317,
+        "pr_auc": 0.9512,
+        "default": {
+          "precision": 0.9286,
+          "recall": 0.7362,
+          "f1": 0.8213,
+          "fpr": 0.0749,
+          "accuracy": 0.8176,
+          "tp": 9448,
+          "tn": 8984,
+          "fp": 727,
+          "fn": 3385
+        },
+        "val_threshold": {
+          "precision": 0.9311,
+          "recall": 0.7325,
+          "f1": 0.8199,
+          "fpr": 0.0717,
+          "accuracy": 0.8168,
+          "tp": 9400,
+          "tn": 9015,
+          "fp": 696,
+          "fn": 3433,
+          "threshold": 0.004509,
+          "val_f1": 0.9113,
+          "recall_by_group": {
+            "seen": 0.7239,
+            "unseen": 0.7533,
+            "DoS": 0.8724,
+            "Probe": 0.9542,
+            "R2L": 0.1913,
+            "U2R": 0.4478
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "roc_auc": 0.8345,
+        "pr_auc": 0.811,
+        "default": {
+          "precision": 0.8142,
+          "recall": 0.661,
+          "f1": 0.7296,
+          "fpr": 0.1993,
+          "accuracy": 0.7212,
+          "tp": 8482,
+          "tn": 7776,
+          "fp": 1935,
+          "fn": 4351
+        },
+        "val_threshold": {
+          "precision": 0.82,
+          "recall": 0.8568,
+          "f1": 0.838,
+          "fpr": 0.2485,
+          "accuracy": 0.8114,
+          "tp": 10995,
+          "tn": 7298,
+          "fp": 2413,
+          "fn": 1838,
+          "threshold": -0.249616,
+          "val_f1": 0.9031,
+          "recall_by_group": {
+            "seen": 0.9092,
+            "unseen": 0.7299,
+            "DoS": 0.8973,
+            "Probe": 0.9211,
+            "R2L": 0.7005,
+            "U2R": 0.7463
+          }
+        }
+      },
+      "One-Class SVM": {
+        "roc_auc": 0.8401,
+        "pr_auc": 0.8524,
+        "default": {
+          "precision": 0.907,
+          "recall": 0.7061,
+          "f1": 0.794,
+          "fpr": 0.0957,
+          "accuracy": 0.7915,
+          "tp": 9061,
+          "tn": 8782,
+          "fp": 929,
+          "fn": 3772
+        },
+        "val_threshold": {
+          "precision": 0.9145,
+          "recall": 0.6589,
+          "f1": 0.7659,
+          "fpr": 0.0815,
+          "accuracy": 0.7708,
+          "tp": 8456,
+          "tn": 8920,
+          "fp": 791,
+          "fn": 4377,
+          "threshold": 27.384952,
+          "val_f1": 0.9278,
+          "recall_by_group": {
+            "seen": 0.7849,
+            "unseen": 0.3539,
+            "DoS": 0.7011,
+            "Probe": 0.86,
+            "R2L": 0.3813,
+            "U2R": 0.6567
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": 0.9601,
+        "pr_auc": 0.9621,
+        "default": {
+          "precision": 0.968,
+          "recall": 0.6109,
+          "f1": 0.7491,
+          "fpr": 0.0267,
+          "accuracy": 0.767,
+          "tp": 7840,
+          "tn": 9452,
+          "fp": 259,
+          "fn": 4993
+        },
+        "val_threshold": {
+          "precision": 0.9702,
+          "recall": 0.6836,
+          "f1": 0.802,
+          "fpr": 0.0277,
+          "accuracy": 0.8079,
+          "tp": 8772,
+          "tn": 9442,
+          "fp": 269,
+          "fn": 4061,
+          "threshold": 0.365,
+          "val_f1": 0.9986,
+          "recall_by_group": {
+            "seen": 0.7886,
+            "unseen": 0.4291,
+            "DoS": 0.8598,
+            "Probe": 0.8311,
+            "R2L": 0.1158,
+            "U2R": 0.1791
+          }
+        }
+      }
+    }
+  }
+}

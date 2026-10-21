@@ -6,7 +6,8 @@
 # usage:
 #   python models/evaluate.py
 #   python models/evaluate.py --seeds 0 1 2 --models iforest rf
-#   python models/evaluate.py --out results/benchmark.json
+#   python models/evaluate.py --train-on normal      # unsupervised models fit on normal flows only
+#   python models/evaluate.py --categorical onehot   # keep protocol_type, service and flag
 
 import argparse
 import json
@@ -50,7 +51,7 @@ NSL_KDD_COLUMNS = [
     "dst_host_srv_rerror_rate", "label", "difficulty",
 ]
 
-# we drop the 3 categorical columns and use these 38 numeric ones
+# the default feature set: these 38 numeric columns, the 3 categorical ones are dropped
 NUMERIC_COLS = [
     "duration", "src_bytes", "dst_bytes", "land", "wrong_fragment",
     "urgent", "hot", "num_failed_logins", "logged_in", "num_compromised",
@@ -84,6 +85,8 @@ ATTACK_CATEGORIES: dict[str, set[str]] = {
 
 CATEGORY_OF = {a: c for c, names in ATTACK_CATEGORIES.items() for a in names}
 
+CATEGORICAL_COLS = ["protocol_type", "service", "flag"]
+
 MODELS = {
     "iforest": "Isolation Forest",
     "lof": "Local Outlier Factor",
@@ -113,9 +116,19 @@ def load_nslkdd(path: Path) -> pd.DataFrame:
     return df
 
 
-def engineer_features(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+def category_levels(df: pd.DataFrame) -> dict[str, list[str]]:
+    return {c: sorted(df[c].unique()) for c in CATEGORICAL_COLS}
+
+
+def engineer_features(df: pd.DataFrame, levels: dict[str, list[str]] | None = None
+                      ) -> tuple[np.ndarray, np.ndarray]:
     # pull out just the numeric columns as a numpy array
     X = df[NUMERIC_COLS].fillna(0.0).values.astype(float)
+    if levels:
+        # levels come from KDDTrain+, so a test value never seen in training is all zeros
+        onehot = [(df[c].values[:, None] == np.array(vals)[None, :]).astype(float)
+                  for c, vals in levels.items()]
+        X = np.hstack([X] + onehot)
     y = df["binary_label"].values
     return X, y
 
@@ -183,15 +196,17 @@ def pick_threshold(y_val: np.ndarray, scores_val: np.ndarray) -> float:
     return float(thr[np.argmax(f1)])
 
 
-def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, groups, seed, contamination):
+def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, groups, seed, contamination,
+                   normal_only=False):
     clf = build_model(key, seed, contamination)
     if key == "rf":
         clf.fit(X_tr, y_tr)
-    elif key == "ocsvm" and len(X_tr) > OCSVM_MAX_TRAIN:
-        idx = np.random.default_rng(seed).choice(len(X_tr), OCSVM_MAX_TRAIN, replace=False)
-        clf.fit(X_tr[idx])
     else:
-        clf.fit(X_tr)
+        X_fit = X_tr[y_tr == 0] if normal_only else X_tr
+        if key == "ocsvm" and len(X_fit) > OCSVM_MAX_TRAIN:
+            idx = np.random.default_rng(seed).choice(len(X_fit), OCSVM_MAX_TRAIN, replace=False)
+            X_fit = X_fit[idx]
+        clf.fit(X_fit)
 
     s_val = score_samples(key, clf, X_val)
     s_test = score_samples(key, clf, X_test)
@@ -240,11 +255,13 @@ def summarize(per_seed: dict) -> dict:
     return summary
 
 
-def run_benchmark(keys, train_path, test_path, seeds, contamination):
+def run_benchmark(keys, train_path, test_path, seeds, contamination,
+                  train_on="mixed", categorical="drop"):
     df_train = load_nslkdd(train_path)
     df_test = load_nslkdd(test_path)
-    X_all, y_all = engineer_features(df_train)
-    X_test_raw, y_test = engineer_features(df_test)
+    levels = category_levels(df_train) if categorical == "onehot" else None
+    X_all, y_all = engineer_features(df_train, levels)
+    X_test_raw, y_test = engineer_features(df_test, levels)
     check_categories(df_train["label"])
     check_categories(df_test["label"])
     groups = attack_groups(df_train["label"], df_test["label"])
@@ -270,7 +287,8 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination):
         per_seed[str(seed)] = {}
         for key in keys:
             res, s_test = evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test,
-                                         groups, seed, contamination)
+                                         groups, seed, contamination,
+                                         normal_only=train_on == "normal")
             per_seed[str(seed)][MODELS[key]] = res
             if seed == seeds[0]:
                 first_scores[MODELS[key]] = s_test
@@ -286,6 +304,11 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination):
         "train_flows": int(len(y_all)),
         "test_flows": int(len(y_test)),
         "contamination": contamination,
+        "ablation": {
+            "train_on": train_on,
+            "categorical": categorical,
+            "note": "train_on=normal only changes the unsupervised models; rf always sees both classes",
+        },
         "protocol": {
             "validation_fraction": VAL_FRACTION,
             "split": "stratified on the binary label, new split per seed",
@@ -340,7 +363,9 @@ def print_table(results: dict) -> None:
     header = (f"{'Model':<22} {'F1':>15} {'Precision':>15} {'Recall':>15} "
               f"{'FPR':>15} {'F1 default':>15} {'ROC-AUC':>15} {'PR-AUC':>15}")
     print(f"\n{'=' * len(header)}")
+    ab = results["ablation"]
     print(f"  NSL-KDD, threshold from validation split, seeds {results['seeds']}")
+    print(f"  unsupervised training rows: {ab['train_on']}, categorical columns: {ab['categorical']}")
     print(f"{'=' * len(header)}")
     print(header)
     print("-" * len(header))
@@ -367,7 +392,11 @@ def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description="NSL-KDD benchmark with a validation-chosen threshold")
     ap.add_argument("--train", default="", help="path to KDDTrain+.txt (auto-downloaded if blank)")
     ap.add_argument("--test", default="", help="path to KDDTest+.txt (auto-downloaded if blank)")
-    ap.add_argument("--out", default="results/benchmark.json", help="output JSON path")
+    ap.add_argument("--out", default="", help="output JSON path (default depends on the ablation flags)")
+    ap.add_argument("--train-on", choices=["mixed", "normal"], default="mixed",
+                    help="training rows for the unsupervised models (default: mixed, as in KDDTrain+)")
+    ap.add_argument("--categorical", choices=["drop", "onehot"], default="drop",
+                    help="drop protocol_type/service/flag or one-hot them (default: drop)")
     ap.add_argument("--contamination", type=float, default=0.1,
                     help="expected fraction of anomalies for the unsupervised models (default: 0.1)")
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
@@ -383,10 +412,13 @@ def main(argv: list[str] | None = None) -> None:
     download_if_missing(TEST_URL, test_path)
 
     results, first_scores, y_test = run_benchmark(
-        args.models, train_path, test_path, args.seeds, args.contamination
+        args.models, train_path, test_path, args.seeds, args.contamination,
+        args.train_on, args.categorical
     )
 
-    out_path = Path(args.out)
+    suffix = ("_normal_only" if args.train_on == "normal" else "") + \
+             ("_onehot" if args.categorical == "onehot" else "")
+    out_path = Path(args.out or f"results/benchmark{suffix}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(results, indent=2))
     print(f"\nresults saved to {out_path}")

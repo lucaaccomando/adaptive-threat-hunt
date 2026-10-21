@@ -13,6 +13,7 @@ from evaluate import (
     NUMERIC_COLS,
     attack_groups,
     check_categories,
+    engineer_features,
     mean_std,
     pick_threshold,
     run_benchmark,
@@ -78,6 +79,38 @@ def test_benchmark_output_shape(tmp_path):
     assert set(summ) == {"roc_auc", "pr_auc", "default", "val_threshold"}
     assert 0.0 <= summ["val_threshold"]["f1"]["mean"] <= 1.0
     assert len(scores["Isolation Forest"]) == len(y_test) == 200
+
+
+def test_onehot_uses_training_levels():
+    df = pd.DataFrame({**{c: [0.0, 0.0] for c in NUMERIC_COLS},
+                       "protocol_type": ["tcp", "icmp"], "service": ["http", "http"],
+                       "flag": ["SF", "SF"], "binary_label": [0, 1]})
+    levels = {"protocol_type": ["tcp", "udp"], "service": ["http"], "flag": ["REJ", "SF"]}
+    X, _ = engineer_features(df, levels)
+    assert X.shape == (2, len(NUMERIC_COLS) + 5)
+    assert X[0, len(NUMERIC_COLS):].tolist() == [1, 0, 1, 0, 1]
+    # icmp was not in the training levels, so the protocol block is all zeros
+    assert X[1, len(NUMERIC_COLS):len(NUMERIC_COLS) + 2].tolist() == [0, 0]
+    assert engineer_features(df)[0].shape == (2, len(NUMERIC_COLS))
+
+
+def test_ablation_flags(tmp_path):
+    train, test = tmp_path / "train.txt", tmp_path / "test.txt"
+    _write_nslkdd(train, 400, seed=1)
+    _write_nslkdd(test, 200, seed=2)
+    models = ["iforest", "rf"]
+
+    base, _, _ = run_benchmark(models, train, test, [0], 0.1)
+    normal, _, _ = run_benchmark(models, train, test, [0], 0.1, train_on="normal")
+    onehot, _, _ = run_benchmark(models, train, test, [0], 0.1, categorical="onehot")
+
+    assert normal["ablation"] == {**base["ablation"], "train_on": "normal"}
+    assert onehot["n_features"] == base["n_features"] + 3
+    # rf sees both classes whatever the flag says, so only the unsupervised model moves
+    rf = lambda r: r["per_seed"]["0"]["Random Forest"]["val_threshold"]
+    iforest = lambda r: r["per_seed"]["0"]["Isolation Forest"]["val_threshold"]
+    assert rf(normal) == rf(base)
+    assert iforest(normal)["threshold"] != iforest(base)["threshold"]
 
 
 def test_attack_groups_seen_and_unseen():
