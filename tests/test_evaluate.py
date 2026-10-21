@@ -11,11 +11,15 @@ from evaluate import (
     CATEGORY_OF,
     NSL_KDD_COLUMNS,
     NUMERIC_COLS,
+    OP_SETTINGS,
     attack_groups,
     check_categories,
     engineer_features,
+    fpr_threshold,
     mean_std,
+    operating_point,
     pick_threshold,
+    precision_at_prevalence,
     run_benchmark,
 )
 
@@ -49,6 +53,45 @@ def test_mean_std():
     assert mean_std([5.0]) == {"mean": 5.0, "std": 0.0}
 
 
+def test_fpr_threshold_caps_false_alarms():
+    s = np.arange(100, dtype=float)
+    assert (s >= fpr_threshold(s, 0.05)).sum() == 5
+    assert (s >= fpr_threshold(s, 0.01)).sum() == 1
+
+
+def test_fpr_threshold_with_ties_stays_under_target():
+    # ten normal rows share the top score, so allowing 5 alerts would mean splitting the tie
+    s = np.array([0.0] * 90 + [1.0] * 10)
+    assert (s >= fpr_threshold(s, 0.05)).sum() == 0
+
+
+def test_fpr_threshold_rejects_bad_target():
+    for bad in (0.0, 1.0, -0.1):
+        with pytest.raises(ValueError):
+            fpr_threshold(np.arange(10.0), bad)
+
+
+def test_precision_at_prevalence():
+    assert precision_at_prevalence(0.9, 0.1, 0.5) == pytest.approx(0.9)
+    assert precision_at_prevalence(0.5, 0.01, 0.01) == pytest.approx(0.005 / 0.0149)
+    assert precision_at_prevalence(0.0, 0.0, 0.1) == 0.0
+
+
+def test_operating_point_by_hand():
+    y_test = np.array([0, 0, 0, 0, 1, 1, 1, 1])
+    s_test = np.array([0.1, 0.2, 0.6, 0.3, 0.7, 0.4, 0.8, 0.9])
+    y_val = np.array([0, 0, 1, 1])
+    s_val = np.array([0.1, 0.6, 0.7, 0.9])
+    op = operating_point(0.5, s_val, y_val, s_test, y_test, {"attacks": y_test == 1})
+    assert (op["tp"], op["fn"], op["fp"], op["tn"]) == (3, 1, 1, 3)
+    assert op["recall"] == 0.75 and op["fpr"] == 0.25
+    assert op["val_f1"] == 0.8 and op["val_fpr"] == 0.5
+    assert op["f1_gap"] == -0.05 and op["fpr_gap"] == -0.25
+    assert op["alerts_per_10k_normal"] == 2500.0
+    assert op["precision_prev10"] == 0.25
+    assert op["recall_by_group"] == {"attacks": 0.75}
+
+
 def test_threshold_ignores_test_labels(tmp_path):
     train = tmp_path / "train.txt"
     _write_nslkdd(train, 400, seed=1)
@@ -60,10 +103,12 @@ def test_threshold_ignores_test_labels(tmp_path):
     res_b, _, _ = run_benchmark(["iforest", "rf"], train, test_b, [0], 0.1)
 
     for name in ("Isolation Forest", "Random Forest"):
-        a = res_a["per_seed"]["0"][name]["val_threshold"]
-        b = res_b["per_seed"]["0"][name]["val_threshold"]
-        assert a["threshold"] == b["threshold"]
-        assert a["val_f1"] == b["val_f1"]
+        for setting in OP_SETTINGS:
+            a = res_a["per_seed"]["0"][name][setting]
+            b = res_b["per_seed"]["0"][name][setting]
+            assert a["threshold"] == b["threshold"]
+            assert a["val_f1"] == b["val_f1"]
+            assert a["val_fpr"] == b["val_fpr"]
 
 
 def test_benchmark_output_shape(tmp_path):
@@ -76,9 +121,24 @@ def test_benchmark_output_shape(tmp_path):
     assert res["seeds"] == [0, 1]
     assert set(res["per_seed"]) == {"0", "1"}
     summ = res["summary"]["Isolation Forest"]
-    assert set(summ) == {"roc_auc", "pr_auc", "default", "val_threshold"}
+    assert set(summ) == {"roc_auc", "pr_auc", "default", *OP_SETTINGS}
     assert 0.0 <= summ["val_threshold"]["f1"]["mean"] <= 1.0
     assert len(scores["Isolation Forest"]) == len(y_test) == 200
+    assert res["attack_prevalence"]["test"] == round(float(y_test.mean()), 4)
+
+
+def test_fixed_fpr_points_respect_validation_target(tmp_path):
+    train, test = tmp_path / "train.txt", tmp_path / "test.txt"
+    _write_nslkdd(train, 400, seed=1)
+    _write_nslkdd(test, 200, seed=2)
+
+    res, _, _ = run_benchmark(["iforest", "lof", "ocsvm", "rf"], train, test, [0], 0.1)
+
+    for r in res["per_seed"]["0"].values():
+        assert r["fpr_1pct"]["val_fpr"] <= 0.01
+        assert r["fpr_5pct"]["val_fpr"] <= 0.05
+        assert r["fpr_1pct"]["threshold"] >= r["fpr_5pct"]["threshold"]
+        assert r["fpr_1pct"]["recall"] <= r["fpr_5pct"]["recall"]
 
 
 def test_onehot_uses_training_levels():

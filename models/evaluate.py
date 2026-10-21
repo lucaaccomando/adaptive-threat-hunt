@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # benchmarks isolation forest, LOF, one-class svm and a random forest on NSL-KDD
-# models train on 80% of KDDTrain+, the alert threshold (max F1) is picked on the other 20%
-# and applied unchanged to KDDTest+; repeated over several seeds
+# models train on 80% of KDDTrain+; alert thresholds (max F1, and 1% / 5% false alarms on normal
+# flows) are picked on the other 20% and applied unchanged to KDDTest+; repeated over several seeds
 #
 # usage:
 #   python models/evaluate.py
@@ -97,6 +97,12 @@ VAL_FRACTION = 0.2
 # ocsvm is too slow to fit on the full training split
 OCSVM_MAX_TRAIN = 15_000
 SUMMARY_METRICS = ("f1", "precision", "recall", "fpr", "accuracy")
+FPR_TARGETS = {"fpr_1pct": 0.01, "fpr_5pct": 0.05}
+OP_SETTINGS = ["val_threshold", *FPR_TARGETS]
+# attack base rates for the re-weighted precision (Axelsson)
+PREVALENCES = {"precision_prev1": 0.01, "precision_prev10": 0.10}
+OP_METRICS = SUMMARY_METRICS + ("val_f1", "val_fpr", "f1_gap", "fpr_gap",
+                                "alerts_per_10k_normal") + tuple(PREVALENCES)
 
 
 def download_if_missing(url: str, dest: Path) -> None:
@@ -196,6 +202,43 @@ def pick_threshold(y_val: np.ndarray, scores_val: np.ndarray) -> float:
     return float(thr[np.argmax(f1)])
 
 
+def fpr_threshold(scores_normal: np.ndarray, fpr: float) -> float:
+    # alerts are score >= threshold, so go just above the (k+1)-th highest normal score:
+    # at most k = floor(fpr * n) normal rows alert, fewer if scores are tied
+    if not 0 < fpr < 1:
+        raise ValueError(f"fpr must be between 0 and 1, got {fpr}")
+    s = np.sort(scores_normal)[::-1]
+    k = int(np.floor(fpr * len(s) + 1e-9))
+    return float(np.nextafter(s[k], np.inf))
+
+
+def precision_at_prevalence(recall: float, fpr: float, prevalence: float) -> float:
+    tp, fp = recall * prevalence, fpr * (1 - prevalence)
+    return tp / (tp + fp) if tp + fp > 0 else 0.0
+
+
+def operating_point(thr, s_val, y_val, s_test, y_test, groups) -> dict:
+    pred = (s_test >= thr).astype(int)
+    test = _metrics(y_test, pred)
+    val = _metrics(y_val, (s_val >= thr).astype(int))
+    recall = test["tp"] / max(test["tp"] + test["fn"], 1)
+    fpr = test["fp"] / max(test["fp"] + test["tn"], 1)
+    return {
+        **test,
+        "threshold": round(thr, 6),
+        "val_f1": val["f1"],
+        "val_fpr": val["fpr"],
+        "f1_gap": round(test["f1"] - val["f1"], 4),
+        "fpr_gap": round(test["fpr"] - val["fpr"], 4),
+        "alerts_per_10k_normal": round(fpr * 10_000, 1),
+        **{name: round(precision_at_prevalence(recall, fpr, p), 4)
+           for name, p in PREVALENCES.items()},
+        "recall_by_group": {
+            g: round(float(pred[m].mean()), 4) for g, m in groups.items() if m.any()
+        },
+    }
+
+
 def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, groups, seed, contamination,
                    normal_only=False):
     clf = build_model(key, seed, contamination)
@@ -210,21 +253,16 @@ def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, groups, seed, 
 
     s_val = score_samples(key, clf, X_val)
     s_test = score_samples(key, clf, X_test)
-    thr = pick_threshold(y_val, s_val)
-    pred = (s_test >= thr).astype(int)
+    thresholds = {"val_threshold": pick_threshold(y_val, s_val)}
+    for name, fpr in FPR_TARGETS.items():
+        thresholds[name] = fpr_threshold(s_val[y_val == 0], fpr)
 
     result = {
         "roc_auc": round(float(roc_auc_score(y_test, s_test)), 4),
         "pr_auc": round(float(average_precision_score(y_test, s_test)), 4),
         "default": _metrics(y_test, default_predict(key, clf, X_test)),
-        "val_threshold": {
-            **_metrics(y_test, pred),
-            "threshold": round(thr, 6),
-            "val_f1": round(float(f1_score(y_val, (s_val >= thr).astype(int))), 4),
-            "recall_by_group": {
-                g: round(float(pred[m].mean()), 4) for g, m in groups.items() if m.any()
-            },
-        },
+        **{name: operating_point(thr, s_val, y_val, s_test, y_test, groups)
+           for name, thr in thresholds.items()},
     }
     return result, s_test
 
@@ -244,14 +282,17 @@ def summarize(per_seed: dict) -> dict:
             "roc_auc": mean_std([r[name]["roc_auc"] for r in runs]),
             "pr_auc": mean_std([r[name]["pr_auc"] for r in runs]),
         }
-        for setting in ("default", "val_threshold"):
-            summary[name][setting] = {
-                m: mean_std([r[name][setting][m] for r in runs]) for m in SUMMARY_METRICS
-            }
-        by_group = [r[name]["val_threshold"]["recall_by_group"] for r in runs]
-        summary[name]["val_threshold"]["recall_by_group"] = {
-            g: mean_std([r[g] for r in by_group]) for g in by_group[0]
+        summary[name]["default"] = {
+            m: mean_std([r[name]["default"][m] for r in runs]) for m in SUMMARY_METRICS
         }
+        for setting in OP_SETTINGS:
+            summary[name][setting] = {
+                m: mean_std([r[name][setting][m] for r in runs]) for m in OP_METRICS
+            }
+            by_group = [r[name][setting]["recall_by_group"] for r in runs]
+            summary[name][setting]["recall_by_group"] = {
+                g: mean_std([r[g] for r in by_group]) for g in by_group[0]
+            }
     return summary
 
 
@@ -292,17 +333,21 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
             per_seed[str(seed)][MODELS[key]] = res
             if seed == seeds[0]:
                 first_scores[MODELS[key]] = s_test
-            v = res["val_threshold"]
-            rg = v["recall_by_group"]
-            print(f"  {MODELS[key]:<22} F1={v['f1']:.4f}  recall={v['recall']:.4f}  "
-                  f"fpr={v['fpr']:.4f}  roc_auc={res['roc_auc']:.4f}  "
-                  f"recall seen/unseen={rg.get('seen', float('nan')):.3f}/{rg.get('unseen', float('nan')):.3f}")
+            lo, hi, v = res["fpr_1pct"], res["fpr_5pct"], res["val_threshold"]
+            rg = hi["recall_by_group"]
+            print(f"  {MODELS[key]:<22} roc_auc={res['roc_auc']:.4f}  "
+                  f"recall@1%fpr={lo['recall']:.4f} (fpr {lo['fpr']:.4f})  "
+                  f"recall@5%fpr={hi['recall']:.4f} (fpr {hi['fpr']:.4f})  "
+                  f"seen/unseen@5%={rg.get('seen', float('nan')):.3f}/{rg.get('unseen', float('nan')):.3f}  "
+                  f"max-F1={v['f1']:.4f}")
 
     results = {
         "dataset": "NSL-KDD (KDDTrain+ / KDDTest+)",
         "n_features": int(X_all.shape[1]),
         "train_flows": int(len(y_all)),
         "test_flows": int(len(y_test)),
+        "attack_prevalence": {"train_and_val": round(float(y_all.mean()), 4),
+                              "test": round(float(y_test.mean()), 4)},
         "contamination": contamination,
         "ablation": {
             "train_on": train_on,
@@ -313,6 +358,11 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
             "validation_fraction": VAL_FRACTION,
             "split": "stratified on the binary label, new split per seed",
             "threshold": "max F1 on the validation split, applied unchanged to KDDTest+",
+            "fixed_fpr_thresholds": "highest-recall threshold with at most 1% / 5% false alarms on the "
+                                    "validation normal rows, applied unchanged to KDDTest+",
+            "precision_prev": "recall * p / (recall * p + fpr * (1 - p)) for attack base rate p = 1% and 10%; "
+                              "assumes the test recall and fpr carry over to that base rate",
+            "gaps": "test minus validation; f1_gap also moves with the attack prevalence, fpr_gap does not",
             "scaler": "fit on the training split only",
             "ocsvm_max_train_rows": OCSVM_MAX_TRAIN,
             "std": "sample std over seeds (ddof=1)",
@@ -376,16 +426,30 @@ def print_table(results: dict) -> None:
               f"{ms(s['roc_auc']):>15} {ms(s['pr_auc']):>15}")
     print(f"{'=' * len(header)}\n")
 
-    cols = ["seen", "unseen", "DoS", "Probe", "R2L", "U2R"]
-    counts = results["test_groups"]["flows_per_group"]
-    header = f"{'Recall at val threshold':<24}" + "".join(
-        f"{c + ' (' + format(counts[c], ',') + ')':>17}" for c in cols)
+    labels = {"fpr_1pct": "1% fpr", "fpr_5pct": "5% fpr", "val_threshold": "max F1"}
+    header = (f"{'Operating point':<30} {'test FPR':>15} {'recall':>15} {'prec @1%':>15} "
+              f"{'prec @10%':>15} {'alerts/10k':>20} {'FPR gap':>15}")
     print(header)
     print("-" * len(header))
     for name, s in results["summary"].items():
-        rg = s["val_threshold"]["recall_by_group"]
-        print(f"{name:<24}" + "".join(f"{ms(rg[c]):>17}" for c in cols))
+        for setting in ("fpr_1pct", "fpr_5pct", "val_threshold"):
+            v = s[setting]
+            print(f"{name + ', ' + labels[setting]:<30} {ms(v['fpr']):>15} {ms(v['recall']):>15} "
+                  f"{ms(v['precision_prev1']):>15} {ms(v['precision_prev10']):>15} "
+                  f"{ms(v['alerts_per_10k_normal']):>20} {ms(v['fpr_gap']):>15}")
     print()
+
+    cols = ["seen", "unseen", "DoS", "Probe", "R2L", "U2R"]
+    counts = results["test_groups"]["flows_per_group"]
+    for setting in ("fpr_1pct", "fpr_5pct", "val_threshold"):
+        header = f"{'Recall at ' + labels[setting]:<24}" + "".join(
+            f"{c + ' (' + format(counts[c], ',') + ')':>17}" for c in cols)
+        print(header)
+        print("-" * len(header))
+        for name, s in results["summary"].items():
+            rg = s[setting]["recall_by_group"]
+            print(f"{name:<24}" + "".join(f"{ms(rg[c]):>17}" for c in cols))
+        print()
 
 
 def main(argv: list[str] | None = None) -> None:
