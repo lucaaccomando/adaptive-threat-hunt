@@ -9,9 +9,13 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "models"))
 from evaluate import (
     ATTACK_CATEGORIES,
     CATEGORY_OF,
+    GRIDS,
+    HEAVY_TAILED_COLS,
     NSL_KDD_COLUMNS,
+    MODELS,
     NUMERIC_COLS,
     OP_SETTINGS,
+    apply_transform,
     attack_groups,
     check_categories,
     engineer_features,
@@ -121,7 +125,7 @@ def test_benchmark_output_shape(tmp_path):
     assert res["seeds"] == [0, 1]
     assert set(res["per_seed"]) == {"0", "1"}
     summ = res["summary"]["Isolation Forest"]
-    assert set(summ) == {"roc_auc", "pr_auc", "default", *OP_SETTINGS}
+    assert set(summ) == {"roc_auc", "pr_auc", "val_pr_auc", "default", *OP_SETTINGS}
     assert 0.0 <= summ["val_threshold"]["f1"]["mean"] <= 1.0
     assert len(scores["Isolation Forest"]) == len(y_test) == 200
     assert res["attack_prevalence"]["test"] == round(float(y_test.mean()), 4)
@@ -200,3 +204,39 @@ def test_every_nslkdd_label_has_a_category():
         check_categories(labels)
         attacks = labels[labels != "normal"]
         assert attacks.map(CATEGORY_OF).notna().all()
+
+
+def test_log1p_only_touches_heavy_tailed_columns():
+    X = np.full((2, len(NUMERIC_COLS)), 3.0)
+    out = apply_transform(X, "log1p")
+    changed = [NUMERIC_COLS[i] for i in np.flatnonzero(out[0] != 3.0)]
+    assert sorted(changed) == sorted(HEAVY_TAILED_COLS)
+    assert np.allclose(out[0, NUMERIC_COLS.index("src_bytes")], np.log1p(3.0))
+    assert (X == 3.0).all()
+    assert apply_transform(X, "none") is X
+
+
+def test_grids_cover_every_model_without_duplicates():
+    assert set(GRIDS) == set(MODELS)
+    for key, grid in GRIDS.items():
+        assert len(grid) > 1
+        assert len({tuple(sorted(g.items(), key=str)) for g in grid}) == len(grid)
+
+
+def test_tuning_picks_on_validation_only(tmp_path):
+    train = tmp_path / "train.txt"
+    _write_nslkdd(train, 400, seed=1)
+    test_a, test_b = tmp_path / "test_a.txt", tmp_path / "test_b.txt"
+    _write_nslkdd(test_a, 200, seed=2)
+    _write_nslkdd(test_b, 200, seed=2, flip_labels=True)
+
+    res_a, _, _ = run_benchmark(["lof", "rf"], train, test_a, [0], 0.1, transform="log1p", tune=True)
+    res_b, _, _ = run_benchmark(["lof", "rf"], train, test_b, [0], 0.1, transform="log1p", tune=True)
+
+    assert res_a["ablation"]["tuned"] and res_a["ablation"]["transform"] == "log1p"
+    for name, key in (("Local Outlier Factor", "lof"), ("Random Forest", "rf")):
+        a, b = res_a["per_seed"]["0"][name], res_b["per_seed"]["0"][name]
+        assert a["params"] == b["params"] and a["val_pr_auc"] == b["val_pr_auc"]
+        assert a["params"] in GRIDS[key]
+    untuned, _, _ = run_benchmark(["lof"], train, test_a, [0], 0.1)
+    assert untuned["per_seed"]["0"]["Local Outlier Factor"]["params"] == GRIDS["lof"][0]

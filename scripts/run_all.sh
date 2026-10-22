@@ -11,4 +11,3 @@ pip install -r requirements.txt
 
 python feature_extractor/extract.py
 python models/train.py --csv data/features.csv --model models/model.pkl
-python dashboard/app.py

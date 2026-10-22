@@ -4,12 +4,10 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.5-orange?logo=scikitlearn)
-![Flask](https://img.shields.io/badge/Flask-3.0-black?logo=flask)
-![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)
 ![Dataset](https://img.shields.io/badge/Dataset-NSL--KDD-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-Captures network traffic from PCAPs or a live interface, extracts flow-level features, and scores flows with Isolation Forest, LOF, or One-Class SVM. Benchmarked on NSL-KDD against a supervised Random Forest baseline, with threshold tuning, feature importance analysis, and per-attack-category breakdown. Flask dashboard for interactive use; Docker for reproducible deployment.
+Captures network traffic from PCAPs or a live interface, extracts flow-level features, and scores flows with Isolation Forest, LOF, or One-Class SVM. Benchmarked on NSL-KDD against a supervised Random Forest baseline, with threshold tuning, feature importance analysis, and per-attack-category breakdown.
 
 ---
 
@@ -77,9 +75,7 @@ This suggests threshold-calibrated unsupervised models are worth considering whe
 - Supervised baseline (Random Forest) for comparison
 - Feature importance analysis and correlation heatmap
 - Per-attack-category detection rates (DoS, Probe, R2L, U2R)
-- Flask dashboard for live visualization
 - Jupyter notebook with full research narrative (`notebooks/analysis.ipynb`)
-- Fully containerized for reproducible deployment
 
 ---
 
@@ -88,12 +84,10 @@ This suggests threshold-calibrated unsupervised models are worth considering whe
 | Layer | Technology |
 |---|---|
 | Language | Python 3.12 |
-| Framework | Flask 3.0 |
 | Network Capture | Scapy / tcpdump |
 | ML & Analytics | Scikit-learn, Pandas, NumPy |
 | Visualization | Matplotlib |
 | Notebook | Jupyter |
-| Containerization | Docker & Docker Compose |
 | Dataset | NSL-KDD (UNB) |
 
 ---
@@ -102,7 +96,6 @@ This suggests threshold-calibrated unsupervised models are worth considering whe
 
 ```
 adaptive-threat-hunt/
-├── dashboard/              # Flask web interface
 ├── feature_extractor/      # Scapy-based PCAP feature extraction
 ├── models/
 │   ├── evaluate.py         # Multi-model benchmark + threshold tuning + attack breakdown
@@ -114,8 +107,6 @@ adaptive-threat-hunt/
 │   └── analysis.ipynb      # Full research narrative notebook
 ├── results/                # Generated plots and benchmark.json
 ├── data/nslkdd/            # NSL-KDD dataset (auto-downloaded)
-├── Dockerfile
-├── docker-compose.yml
 └── requirements.txt
 ```
 
@@ -168,22 +159,10 @@ python models/train.py --model-type isolation_forest --csv data/features.csv
 python models/score.py --csv data/features.csv --model models/model.pkl --out data/scored.csv
 ```
 
-### 7. Launch the Flask dashboard
-
-```bash
-python dashboard/app.py   # http://localhost:5000
-```
-
-### 8. Run tests
+### 7. Run tests
 
 ```bash
 pytest tests/ -v
-```
-
-### 9. Run via Docker
-
-```bash
-docker-compose up --build
 ```
 
 ---
@@ -195,7 +174,7 @@ docker-compose up --build
 - **Dimensionality reduction** — evaluate PCA-reduced feature sets (e.g. 15 components) given the 13 highly correlated feature pairs
 - **R2L detection improvement** — the hardest attack category (59% detection rate) requires payload-level or session-aggregated features beyond flow statistics
 - **Expanded feature engineering** — add features for encrypted traffic (TLS metadata, certificate fields)
-- **Live alerting** — webhook or email notifications for flagged anomalies from the dashboard
+- **Live alerting** — webhook or email notifications for flagged anomalies
 
 ---
 

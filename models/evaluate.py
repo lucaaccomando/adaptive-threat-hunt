@@ -8,6 +8,8 @@
 #   python models/evaluate.py --seeds 0 1 2 --models iforest rf
 #   python models/evaluate.py --train-on normal      # unsupervised models fit on normal flows only
 #   python models/evaluate.py --categorical onehot   # keep protocol_type, service and flag
+#   python models/evaluate.py --transform log1p      # log1p on the heavy-tailed columns before scaling
+#   python models/evaluate.py --tune                 # small hyperparameter grid, chosen on validation
 
 import argparse
 import json
@@ -66,6 +68,24 @@ NUMERIC_COLS = [
     "dst_host_srv_serror_rate", "dst_host_rerror_rate",
     "dst_host_srv_rerror_rate",
 ]
+
+# non-negative count / size columns with a huge range; the rest are binary or bounded rates
+HEAVY_TAILED_COLS = [
+    "duration", "src_bytes", "dst_bytes", "hot", "num_compromised", "num_root",
+    "num_file_creations", "count", "srv_count",
+]
+HEAVY_TAILED_IDX = [NUMERIC_COLS.index(c) for c in HEAVY_TAILED_COLS]
+
+# the first entry of each grid is the setting used without --tune, and ties on validation keep the
+# earlier entry; ocsvm nu None means the contamination argument
+GRIDS = {
+    "iforest": [{"n_estimators": t, "max_samples": m} for t, m in
+                [(200, 256), (200, 1024), (200, 4096), (500, 256), (500, 1024), (500, 4096)]],
+    "lof": [{"n_neighbors": k} for k in (20, 10, 50)],
+    "ocsvm": [{"gamma_mult": g, "nu": nu} for g, nu in
+              [(1.0, None), (0.1, None), (10.0, None), (1.0, 0.05), (1.0, 0.2)]],
+    "rf": [{"max_depth": d} for d in (None, 10, 20)],
+}
 
 TRAIN_URL = "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt"
 TEST_URL  = "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt"
@@ -139,6 +159,14 @@ def engineer_features(df: pd.DataFrame, levels: dict[str, list[str]] | None = No
     return X, y
 
 
+def apply_transform(X: np.ndarray, transform: str) -> np.ndarray:
+    if transform == "none":
+        return X
+    X = X.copy()
+    X[:, HEAVY_TAILED_IDX] = np.log1p(X[:, HEAVY_TAILED_IDX])
+    return X
+
+
 def _metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[0, 1]).ravel()
     return {
@@ -169,18 +197,33 @@ def attack_groups(train_labels, test_labels) -> dict[str, np.ndarray]:
     return groups
 
 
-def build_model(key: str, seed: int, contamination: float):
+def build_model(key: str, seed: int, contamination: float, **p):
     if key == "iforest":
-        return IsolationForest(n_estimators=200, contamination=contamination,
-                               random_state=seed, n_jobs=-1)
+        return IsolationForest(n_estimators=p.get("n_estimators", 200),
+                               max_samples=p.get("max_samples", "auto"),
+                               contamination=contamination, random_state=seed, n_jobs=-1)
     if key == "lof":
         # novelty=True lets us score data the model wasn't fit on
-        return LocalOutlierFactor(n_neighbors=20, contamination=contamination,
+        return LocalOutlierFactor(n_neighbors=p.get("n_neighbors", 20), contamination=contamination,
                                   novelty=True, n_jobs=-1)
     if key == "ocsvm":
-        return OneClassSVM(kernel="rbf", nu=contamination, gamma="scale")
-    return RandomForestClassifier(n_estimators=200, random_state=seed, n_jobs=-1,
-                                  class_weight="balanced")
+        return OneClassSVM(kernel="rbf", nu=p.get("nu") or contamination, gamma=p.get("gamma", "scale"))
+    return RandomForestClassifier(n_estimators=200, max_depth=p.get("max_depth"),
+                                  random_state=seed, n_jobs=-1, class_weight="balanced")
+
+
+def fit_model(key, X_tr, y_tr, seed, contamination, params, normal_only=False):
+    p = dict(params)
+    if key == "rf":
+        return build_model(key, seed, contamination, **p).fit(X_tr, y_tr)
+    X_fit = X_tr[y_tr == 0] if normal_only else X_tr
+    if key == "ocsvm":
+        if len(X_fit) > OCSVM_MAX_TRAIN:
+            idx = np.random.default_rng(seed).choice(len(X_fit), OCSVM_MAX_TRAIN, replace=False)
+            X_fit = X_fit[idx]
+        # gamma_mult 1 is sklearn's gamma="scale"
+        p["gamma"] = p.pop("gamma_mult", 1.0) / (X_fit.shape[1] * X_fit.var())
+    return build_model(key, seed, contamination, **p).fit(X_fit)
 
 
 def score_samples(key: str, clf, X: np.ndarray) -> np.ndarray:
@@ -240,24 +283,25 @@ def operating_point(thr, s_val, y_val, s_test, y_test, groups) -> dict:
 
 
 def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, groups, seed, contamination,
-                   normal_only=False):
-    clf = build_model(key, seed, contamination)
-    if key == "rf":
-        clf.fit(X_tr, y_tr)
-    else:
-        X_fit = X_tr[y_tr == 0] if normal_only else X_tr
-        if key == "ocsvm" and len(X_fit) > OCSVM_MAX_TRAIN:
-            idx = np.random.default_rng(seed).choice(len(X_fit), OCSVM_MAX_TRAIN, replace=False)
-            X_fit = X_fit[idx]
-        clf.fit(X_fit)
+                   normal_only=False, tune=False):
+    # candidates are compared on validation PR-AUC only
+    best = None
+    for params in (GRIDS[key] if tune else GRIDS[key][:1]):
+        clf = fit_model(key, X_tr, y_tr, seed, contamination, params, normal_only)
+        s_val = score_samples(key, clf, X_val)
+        val_pr = float(average_precision_score(y_val, s_val))
+        if best is None or val_pr > best[0]:
+            best = (val_pr, params, clf, s_val)
+    val_pr, params, clf, s_val = best
 
-    s_val = score_samples(key, clf, X_val)
     s_test = score_samples(key, clf, X_test)
     thresholds = {"val_threshold": pick_threshold(y_val, s_val)}
     for name, fpr in FPR_TARGETS.items():
         thresholds[name] = fpr_threshold(s_val[y_val == 0], fpr)
 
     result = {
+        "params": params,
+        "val_pr_auc": round(val_pr, 4),
         "roc_auc": round(float(roc_auc_score(y_test, s_test)), 4),
         "pr_auc": round(float(average_precision_score(y_test, s_test)), 4),
         "default": _metrics(y_test, default_predict(key, clf, X_test)),
@@ -281,6 +325,7 @@ def summarize(per_seed: dict) -> dict:
         summary[name] = {
             "roc_auc": mean_std([r[name]["roc_auc"] for r in runs]),
             "pr_auc": mean_std([r[name]["pr_auc"] for r in runs]),
+            "val_pr_auc": mean_std([r[name]["val_pr_auc"] for r in runs]),
         }
         summary[name]["default"] = {
             m: mean_std([r[name]["default"][m] for r in runs]) for m in SUMMARY_METRICS
@@ -297,12 +342,14 @@ def summarize(per_seed: dict) -> dict:
 
 
 def run_benchmark(keys, train_path, test_path, seeds, contamination,
-                  train_on="mixed", categorical="drop"):
+                  train_on="mixed", categorical="drop", transform="none", tune=False):
     df_train = load_nslkdd(train_path)
     df_test = load_nslkdd(test_path)
     levels = category_levels(df_train) if categorical == "onehot" else None
     X_all, y_all = engineer_features(df_train, levels)
     X_test_raw, y_test = engineer_features(df_test, levels)
+    # log1p is per-value, so applying it before the split leaks nothing
+    X_all, X_test_raw = apply_transform(X_all, transform), apply_transform(X_test_raw, transform)
     check_categories(df_train["label"])
     check_categories(df_test["label"])
     groups = attack_groups(df_train["label"], df_test["label"])
@@ -329,7 +376,7 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
         for key in keys:
             res, s_test = evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test,
                                          groups, seed, contamination,
-                                         normal_only=train_on == "normal")
+                                         normal_only=train_on == "normal", tune=tune)
             per_seed[str(seed)][MODELS[key]] = res
             if seed == seeds[0]:
                 first_scores[MODELS[key]] = s_test
@@ -339,7 +386,7 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
                   f"recall@1%fpr={lo['recall']:.4f} (fpr {lo['fpr']:.4f})  "
                   f"recall@5%fpr={hi['recall']:.4f} (fpr {hi['fpr']:.4f})  "
                   f"seen/unseen@5%={rg.get('seen', float('nan')):.3f}/{rg.get('unseen', float('nan')):.3f}  "
-                  f"max-F1={v['f1']:.4f}")
+                  f"max-F1={v['f1']:.4f}  val_pr_auc={res['val_pr_auc']:.4f}  {res['params'] or ''}")
 
     results = {
         "dataset": "NSL-KDD (KDDTrain+ / KDDTest+)",
@@ -352,6 +399,8 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
         "ablation": {
             "train_on": train_on,
             "categorical": categorical,
+            "transform": transform,
+            "tuned": tune,
             "note": "train_on=normal only changes the unsupervised models; rf always sees both classes",
         },
         "protocol": {
@@ -364,6 +413,9 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
                               "assumes the test recall and fpr carry over to that base rate",
             "gaps": "test minus validation; f1_gap also moves with the attack prevalence, fpr_gap does not",
             "scaler": "fit on the training split only",
+            "transform": f"log1p on {HEAVY_TAILED_COLS} before scaling (per-value, so no split leakage)",
+            "tuning": "with --tune each model tries its grid (GRIDS in evaluate.py) and keeps the setting "
+                      "with the best PR-AUC on the validation split; the first grid entry is the untuned setting",
             "ocsvm_max_train_rows": OCSVM_MAX_TRAIN,
             "std": "sample std over seeds (ddof=1)",
         },
@@ -415,7 +467,8 @@ def print_table(results: dict) -> None:
     print(f"\n{'=' * len(header)}")
     ab = results["ablation"]
     print(f"  NSL-KDD, threshold from validation split, seeds {results['seeds']}")
-    print(f"  unsupervised training rows: {ab['train_on']}, categorical columns: {ab['categorical']}")
+    print(f"  unsupervised training rows: {ab['train_on']}, categorical columns: {ab['categorical']}, "
+          f"transform: {ab['transform']}, tuned: {ab['tuned']}")
     print(f"{'=' * len(header)}")
     print(header)
     print("-" * len(header))
@@ -461,6 +514,10 @@ def main(argv: list[str] | None = None) -> None:
                     help="training rows for the unsupervised models (default: mixed, as in KDDTrain+)")
     ap.add_argument("--categorical", choices=["drop", "onehot"], default="drop",
                     help="drop protocol_type/service/flag or one-hot them (default: drop)")
+    ap.add_argument("--transform", choices=["none", "log1p"], default="none",
+                    help="log1p the heavy-tailed columns before scaling (default: none)")
+    ap.add_argument("--tune", action="store_true",
+                    help="pick each model's hyperparameters from a small grid on the validation split")
     ap.add_argument("--contamination", type=float, default=0.1,
                     help="expected fraction of anomalies for the unsupervised models (default: 0.1)")
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
@@ -477,11 +534,12 @@ def main(argv: list[str] | None = None) -> None:
 
     results, first_scores, y_test = run_benchmark(
         args.models, train_path, test_path, args.seeds, args.contamination,
-        args.train_on, args.categorical
+        args.train_on, args.categorical, args.transform, args.tune
     )
 
     suffix = ("_normal_only" if args.train_on == "normal" else "") + \
-             ("_onehot" if args.categorical == "onehot" else "")
+             ("_onehot" if args.categorical == "onehot" else "") + \
+             ("_log1p" if args.transform == "log1p" else "") + ("_tuned" if args.tune else "")
     out_path = Path(args.out or f"results/benchmark{suffix}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(results, indent=2))
