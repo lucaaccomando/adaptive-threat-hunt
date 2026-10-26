@@ -185,6 +185,8 @@ def test_attack_groups_seen_and_unseen():
     assert g["unseen"].tolist() == [False, False, True, False, True, False]
     assert g["DoS"].tolist() == [False, True, True, False, False, False]
     assert g["Probe"].tolist() == [False, False, False, True, True, False]
+    assert g["apache2"].tolist() == [False, False, True, False, False, False]
+    assert g["mscan"].tolist() == [False, False, False, False, True, False]
 
 
 def test_check_categories_rejects_unknown_label():

@@ -1,191 +1,194 @@
 # Adaptive Threat Hunt
 
-### Machine Learning–Driven Network Anomaly Detection
-
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
-![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.5-orange?logo=scikitlearn)
 ![Dataset](https://img.shields.io/badge/Dataset-NSL--KDD-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-Captures network traffic from PCAPs or a live interface, extracts flow-level features, and scores flows with Isolation Forest, LOF, or One-Class SVM. Benchmarked on NSL-KDD against a supervised Random Forest baseline, with threshold tuning, feature importance analysis, and per-attack-category breakdown.
+A research project on network intrusion detection under novelty, supervised by Dr. Pamela Thompson.
+It is a work in progress: the results below are the ones the current code produces, and the open
+items are listed in Status.
 
----
+## Research question
 
-## Benchmark Results (NSL-KDD)
+When does a network intrusion detector catch an attack type it has never seen during training, and can
+we tell in advance which new attacks it will miss?
 
-| Model | Type | F1 | Precision | Recall | ROC-AUC |
-|---|---|---|---|---|---|
-| Isolation Forest (default) | Unsupervised | 0.4476 | **0.9535** | 0.2924 | **0.8701** |
-| Isolation Forest (tuned) | Unsupervised* | **0.8375** | 0.7844 | **0.8982** | 0.8701 |
-| Local Outlier Factor | Unsupervised | 0.6245 | 0.7464 | 0.5369 | 0.6834 |
-| One-Class SVM | Unsupervised | 0.4191 | 0.8276 | 0.2806 | 0.7764 |
-| Random Forest | Supervised | 0.7564 | 0.9688 | 0.6204 | 0.9612 |
+Three hypotheses, to be tested rather than assumed:
 
-\* Same model, threshold optimised post-hoc via precision-recall curve sweep. No labels used during training.
+- A supervised detector catches a new attack type when it resembles the types it was trained on.
+- An anomaly detector catches a new attack type when it lies far from normal traffic.
+- Attack types that lie close to normal traffic and far from every known attack type are missed by both,
+  at a reasonable false-alarm rate.
 
-**Key finding:** Threshold-tuned Isolation Forest (F1=0.84) exceeds the supervised Random Forest baseline (F1=0.76) without access to any labels.
+## Status
 
-> Full methodology and interpretation → [`RESULTS.md`](RESULTS.md)
+- Done: a train / validation / test protocol. Alert thresholds are chosen on a validation split, results
+  are averaged over 5 seeds, and recall is reported per attack type and per category at fixed
+  false-alarm targets.
+- Done: a leave-one-attack-type-out study (`models/leave_one_out.py`). Its results are not generated yet.
+- Partly done: the detection map (`models/detection_map.py`). Attack-type positions are computed; the
+  recall analysis waits for the leave-one-out results.
+- Not done: a second dataset, label-free thresholds, a hybrid detector, and a table of evaluation
+  pitfalls.
 
-To reproduce:
-```bash
-python models/evaluate.py          # benchmark + threshold tuning + attack breakdown
-python models/supervised_baseline.py   # supervised comparison
-python models/feature_analysis.py      # importance plots + correlation heatmap
-```
+## Results so far (NSL-KDD)
 
----
+Models train on 80% of KDDTrain+ (125,973 flows, 47% attacks). The other 20%, a stratified split that
+changes per seed, picks each detector's alert threshold. That threshold is then applied unchanged to
+KDDTest+ (22,544 flows, 57% attacks). KDDTest+ contains 17 attack types that never appear in KDDTrain+
+(3,750 flows). Isolation Forest, LOF and One-Class SVM get no labels during training; the validation split
+does use labels, to choose the threshold. Random Forest uses labels in training. All numbers are means over
+5 seeds. The spread across seeds is in `results/benchmark.json` and `results/benchmark_normal_only.json`.
 
-## Research Methodology
+Ranking quality on KDDTest+:
 
-All models are evaluated on the NSL-KDD dataset (KDDTrain+ / KDDTest+) using a fixed train/test split. A `StandardScaler` is fit on the training set only and applied to both splits — no data leakage.
+| Detector | Training | ROC-AUC | PR-AUC |
+|---|---|---|---|
+| Random Forest | labels | 0.961 | 0.963 |
+| Isolation Forest | normal flows only | 0.927 | 0.949 |
+| Isolation Forest | all training flows | 0.880 | 0.894 |
+| One-Class SVM | normal flows only | 0.853 | 0.862 |
 
-**Unsupervised training:** Isolation Forest, LOF, and One-Class SVM receive no labels during training. They learn the shape of the training distribution and flag test flows that deviate from it.
+Recall at a fixed false-alarm target. The target is set on validation normal flows. The test column is
+the false-alarm rate that the same threshold produces on KDDTest+:
 
-**Threshold tuning:** Unsupervised models produce a continuous anomaly score. The default `contamination=0.10` parameter flags the top 10% of scores as anomalies: a conservative threshold for a dataset where ~57% of test flows are attacks. We sweep 500 percentile thresholds and identify the point that maximises F1 and the best-precision point subject to recall ≥ 0.80. Results and a precision-recall curve are saved to `results/`.
+| Detector | Training | Target | Test false-alarm rate | Recall, all | Recall, seen | Recall, unseen | Precision at 1% base rate |
+|---|---|---|---|---|---|---|---|
+| Isolation Forest | normal flows only | 1% | 0.007 | 0.540 | 0.595 | 0.407 | 0.42 |
+| Isolation Forest | normal flows only | 5% | 0.022 | 0.638 | 0.644 | 0.622 | 0.22 |
+| Isolation Forest | all training flows | 1% | 0.003 | 0.133 | 0.063 | 0.301 | 0.34 |
+| Isolation Forest | all training flows | 5% | 0.014 | 0.258 | 0.137 | 0.552 | 0.17 |
+| Random Forest | labels | 1% | 0.064 | 0.818 | 0.852 | 0.737 | 0.12 |
+| Random Forest | labels | 5% | 0.126 | 0.960 | 0.979 | 0.913 | 0.07 |
+| One-Class SVM | normal flows only | 5% | 0.079 | 0.661 | 0.783 | 0.366 | 0.08 |
+| Local Outlier Factor | normal flows only | 5% | 0.102 | 0.474 | 0.554 | 0.281 | 0.05 |
 
-**Supervised baseline:** A Random Forest classifier is trained on the binary labels using the same scaler and split. It serves as an upper bound to quantify how much discriminative power is lost by not having labels.
+Precision at 1% base rate re-weights the test recall and false-alarm rate to a world where 1% of flows
+are attacks, following Axelsson (1999). It is there because NSL-KDD is 57% attacks, which flatters every
+detector's precision.
 
-**Feature space:** 38 numeric columns from the 41-column NSL-KDD schema. Three categorical columns (`protocol_type`, `service`, `flag`) are dropped.
+What the table shows so far:
 
----
+- Random Forest ranks flows best and recalls the most attacks at each target. Its alert threshold does not
+  transfer to KDDTest+: a 1% validation target becomes a 6.4% false-alarm rate on the test set, and a 5%
+  target becomes 12.6%. The gap is the distribution shift between the two files.
+- Normal-only Isolation Forest keeps its false-alarm rate close to target (0.7% and 2.2%) and recalls 62% of
+  unseen attack flows at the 5% target. It recalls much less than Random Forest at the same target, but at
+  a fraction of the false alarms. A comparison at equal false-alarm rate on the test set is not yet
+  possible: that needs thresholds that do not use test labels, which are planned.
+- At each detector's best validation F1, normal-only Isolation Forest scores 0.821 and Random Forest 0.796.
+  Isolation Forest's threshold sits at a 6.5% false-alarm rate and Random Forest's at 2.8%, so this F1
+  comparison is not like-for-like. An earlier version of this README reported Isolation Forest beating
+  Random Forest. That number used a threshold tuned on test labels and should not be used.
+- Training Isolation Forest on normal flows only changes it a lot. Its false-alarm rate at best validation
+  F1 falls from 36% to 6.5%, and ROC-AUC rises from 0.88 to 0.93. Recall on unseen types at that point
+  falls from 0.87 to 0.75.
+- The gap is widest on R2L attacks (2,885 test flows). At the 5% target Random Forest recalls 83% of them and
+  normal-only Isolation Forest 8%. Probe and DoS are caught by both at the 5% target (DoS 0.78 and 0.999 for
+  Isolation Forest and Random Forest, Probe 0.88 and 1.00).
+- LOF trained on all flows flags almost everything at its best F1 (false-alarm rate 99.7%), so its F1 of
+  0.726 is the flag-all score at this test set's 57% base rate. It is not a result.
 
-## Supervised Baseline Comparison
+### Detection map (positions only)
 
-The core research question is: *how close can unsupervised detection get without labels?*
+For each attack type, x is its distance from normal training flows and y its distance from the other
+attack types, in standardized feature units. The positions use the mean distance to the 5 nearest
+reference flows, taken as the median over the type's flows. Reference flows come from KDDTrain+ only.
+Of the 30 types (13 from KDDTrain+ and 17 that appear only in KDDTest+), 27 lie at x below 12. The
+three that do not are xterm, sqlattack and xsnoop, all KDDTest+ types, at x between 64 and 145.
+In KDDTest+, 30 unseen attack flows are exact copies of a KDDTrain+ normal flow: 28 are snmpgetattack, one
+named and one snmpguess. The map's recall colours are not computed yet.
 
-| | F1 | Notes |
-|---|---|---|
-| Random Forest (supervised) | 0.7564 | Trained with binary labels; default 0.5 threshold |
-| Isolation Forest (tuned) | 0.8375 | No labels; threshold found via PR curve sweep |
-| Gap | −0.08 | Tuned unsupervised exceeds supervised at default threshold |
+## Limitations
 
-The IF advantage over RF at default thresholds is largely a threshold-selection effect: both models have strong discriminative power (ROC-AUC 0.87 vs 0.96), but IF's threshold was explicitly optimised while RF's was not. A threshold-tuned RF would likely close this gap.
+- NSL-KDD is derived from DARPA 1998 traffic simulation. It is dated, and its attacks are simulated. These
+  results describe this dataset, not current traffic.
+- The alert thresholds use labels from a validation split (20% of KDDTrain+). The unsupervised models
+  themselves train without labels.
+- The false-alarm rate at a validation threshold moves on the test set. For Random Forest, the 1% and 5%
+  targets give 6.4% and 12.6% on KDDTest+. Fixed-false-alarm comparisons across detectors on the test set
+  are therefore not yet fair.
+- Results use 38 numeric features. The three categorical columns are dropped in the main results. The
+  capture pipeline uses a different, 8-feature set, so these results say nothing about it.
+- The capture pipeline is experimental. When no pcap is given, `feature_extractor/extract.py` writes two
+  demo rows instead of failing. Fixing that is the next step on the list, and the path is not evaluated.
+- One dataset. A second dataset with genuinely new attacks is planned.
 
-This suggests threshold-calibrated unsupervised models are worth considering when you don't have labelled training data or when attack patterns shift faster than you can relabel.
+## Setup
 
----
-
-## Features
-
-- Real-time or `.pcap`-based network traffic capture and feature extraction
-- Automatic flow-level feature extraction (packet size, entropy, inter-arrival time, byte counts)
-- Multi-model anomaly detection: Isolation Forest, Local Outlier Factor, One-Class SVM
-- Threshold tuning via precision-recall curve sweep with configurable recall target
-- Supervised baseline (Random Forest) for comparison
-- Feature importance analysis and correlation heatmap
-- Per-attack-category detection rates (DoS, Probe, R2L, U2R)
-- Jupyter notebook with full research narrative (`notebooks/analysis.ipynb`)
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Language | Python 3.12 |
-| Network Capture | Scapy / tcpdump |
-| ML & Analytics | Scikit-learn, Pandas, NumPy |
-| Visualization | Matplotlib |
-| Notebook | Jupyter |
-| Dataset | NSL-KDD (UNB) |
-
----
-
-## Project Structure
-
-```
-adaptive-threat-hunt/
-├── feature_extractor/      # Scapy-based PCAP feature extraction
-├── models/
-│   ├── evaluate.py         # Multi-model benchmark + threshold tuning + attack breakdown
-│   ├── train.py            # Train a single model (IF / LOF / OCSVM)
-│   ├── score.py            # Score new flows against a trained model
-│   ├── supervised_baseline.py  # Random Forest supervised comparison
-│   └── feature_analysis.py    # Feature importance + correlation heatmap
-├── notebooks/
-│   └── analysis.ipynb      # Full research narrative notebook
-├── results/                # Generated plots and benchmark.json
-├── data/nslkdd/            # NSL-KDD dataset (auto-downloaded)
-└── requirements.txt
-```
-
----
-
-## Installation and Usage
-
-### 1. Clone the repository
+macOS or Linux:
 
 ```bash
 git clone https://github.com/lucaaccomando/adaptive-threat-hunt.git
 cd adaptive-threat-hunt
-```
-
-### 2. Create a virtual environment and install dependencies
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # macOS / Linux
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+python -m pytest -q
 ```
 
-### 3. Run the full benchmark
+Windows (PowerShell):
+
+```powershell
+git clone https://github.com/lucaaccomando/adaptive-threat-hunt.git
+cd adaptive-threat-hunt
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python -m pytest -q
+```
+
+Reproduce the results:
 
 ```bash
-python models/evaluate.py
+python models/evaluate.py                    # default protocol, about 5 minutes
+python models/evaluate.py --train-on normal  # unsupervised models trained on normal flows only
+python models/detection_map.py               # attack-type positions on the map
 ```
 
-NSL-KDD is auto-downloaded on first run (~1MB). Outputs: `results/benchmark.json`, `results/pr_curve_isolation_forest.png`, `results/attack_breakdown.json`.
+These write `results/benchmark.json`, `results/benchmark_normal_only.json` and
+`results/detection_map.json`, with a figure for each. The leave-one-attack-type-out study is
+`python models/leave_one_out.py`. It takes about 1.5 hours and has not been run yet.
 
-### 4. Run the supervised baseline and feature analysis
+The commands above have not been tested from a fresh clone yet.
 
-```bash
-python models/supervised_baseline.py   # adds "supervised_baseline" to benchmark.json
-python models/feature_analysis.py      # saves feature_importance.png, correlation_heatmap.png
+The NSL-KDD files are in `data/nslkdd/` (about 22 MB, tracked in git). The scripts download them if they
+are missing. Checksums are not checked yet.
+
+## Repository layout
+
 ```
-
-### 5. Open the research notebook
-
-```bash
-.venv\Scripts\jupyter.exe notebook notebooks/analysis.ipynb
+models/              detectors, benchmark, leave-one-out study, detection map
+feature_extractor/   pcap to flow features (experimental)
+tests/               pytest suite
+results/             JSON outputs and figures
+data/nslkdd/         NSL-KDD files
+notebooks/           analysis notebooks (not yet rewritten; their numbers are out of date)
 ```
-
-### 6. Train a model on custom traffic
-
-```bash
-python feature_extractor/extract.py --pcap data/capture.pcap --out data/features.csv
-python models/train.py --model-type isolation_forest --csv data/features.csv
-python models/score.py --csv data/features.csv --model models/model.pkl --out data/scored.csv
-```
-
-### 7. Run tests
-
-```bash
-pytest tests/ -v
-```
-
----
-
-## Future Work
-
-- **Threshold tuning for LOF and OC-SVM** — apply the same PR curve sweep to determine whether their default thresholds are similarly suboptimal
-- **Supervised threshold tuning** — tune the RF decision threshold for a fair head-to-head comparison with threshold-tuned IF
-- **Dimensionality reduction** — evaluate PCA-reduced feature sets (e.g. 15 components) given the 13 highly correlated feature pairs
-- **R2L detection improvement** — the hardest attack category (59% detection rate) requires payload-level or session-aggregated features beyond flow statistics
-- **Expanded feature engineering** — add features for encrypted traffic (TLS metadata, certificate fields)
-- **Live alerting** — webhook or email notifications for flagged anomalies
-
----
-
-## License
-
-MIT License © 2025 Luca Accomando
-
----
 
 ## Acknowledgements
 
-Built as a CS senior independent study.
+Research supervised by Dr. Pamela Thompson.
 
-Dataset: [NSL-KDD — University of New Brunswick](https://www.unb.ca/cic/datasets/nsl.html)
+Dataset: NSL-KDD, University of New Brunswick, [https://www.unb.ca/cic/datasets/nsl.html](https://www.unb.ca/cic/datasets/nsl.html).
+
+## References
+
+- Arp, Quiring, Pendlebury, Warnecke, Pierazzi, Wressnegger, Cavallaro, Rieck. Dos and Don'ts of Machine
+  Learning in Computer Security. USENIX Security Symposium, 2022.
+- Axelsson, S. The base-rate fallacy and its implications for the difficulty of intrusion detection. ACM
+  Conference on Computer and Communications Security, 1999.
+- Breunig, Kriegel, Ng, Sander. LOF: Identifying Density-Based Local Outliers. ACM SIGMOD, 2000, pp. 93-104.
+- Engelen, Rimmer, Joosen. CICIDS2017 relabelling. IEEE Security and Privacy Workshops, 2021, pp. 7-12.
+  DOI 10.1109/SPW53761.2021.00009.
+- Liu, Ting, Zhou. Isolation Forest. IEEE International Conference on Data Mining, 2008, pp. 413-422.
+- Schoelkopf, Platt, Shawe-Taylor, Smola, Williamson. Estimating the Support of a High-Dimensional
+  Distribution. Neural Computation 13(7), 2001, pp. 1443-1471.
+- Sommer, Paxson. Outside the Closed World: On Using Machine Learning for Network Intrusion Detection.
+  IEEE Symposium on Security and Privacy, 2010. DOI 10.1109/SP.2010.25.
+- Tavallaee, Bagheri, Lu, Ghorbani. A Detailed Analysis of the KDD CUP 99 Data Set. IEEE Symposium on
+  Computational Intelligence for Security and Defense Applications, 2009, pp. 1-6.
+
+## License
+
+MIT License, copyright 2025 Luca Accomando

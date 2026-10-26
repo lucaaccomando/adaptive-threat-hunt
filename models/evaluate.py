@@ -194,6 +194,8 @@ def attack_groups(train_labels, test_labels) -> dict[str, np.ndarray]:
     groups = {"seen": seen, "unseen": is_attack & ~seen}
     for cat, names in ATTACK_CATEGORIES.items():
         groups[cat] = np.isin(test_labels, list(names))
+    for t in np.unique(test_labels[is_attack]):
+        groups[str(t)] = test_labels == t
     return groups
 
 
