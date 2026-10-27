@@ -48,3 +48,22 @@ def test_main_runs_end_to_end(tmp_path):
     res = json.loads(out.read_text())
     assert set(res["summary"]) == {"if_normal", "ocsvm_normal", "if_mixed", "forest_alone"}
     assert all(len(v["share_to_forest"]) == 1 for v in res["summary"].values())
+
+
+def test_row_recall_per_group_and_fpr_on_normal_rows():
+    from hybrid import _row
+    a = np.array([1, 0, 1, 0], dtype=bool)
+    y = np.array([1, 1, 0, 0])
+    groups = {"all": np.ones(4, bool), "empty": np.zeros(4, bool)}
+    row = _row(a, groups, y, share=0.5)
+    assert row == {"share_to_forest": 0.5, "recall": {"all": 0.5}, "fpr": 0.5}
+
+
+def test_summarize_keeps_per_seed_shares_and_averages_recall():
+    from hybrid import summarize
+    runs = [{"share_to_forest": 0.5, "fpr": 0.04, "recall": {"seen": 0.4}},
+            {"share_to_forest": 0.5, "fpr": 0.06, "recall": {"seen": 0.6}}]
+    out = summarize({"forest_plus_if": runs})["forest_plus_if"]
+    assert out["share_to_forest"] == [0.5, 0.5]
+    assert out["fpr"]["mean"] == 0.05
+    assert out["recall"]["seen"]["mean"] == 0.5

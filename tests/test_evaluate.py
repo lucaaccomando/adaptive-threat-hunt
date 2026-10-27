@@ -8,6 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / "models"))
 from evaluate import (
     ATTACK_CATEGORIES,
+    CATEGORICAL_COLS,
     CATEGORY_OF,
     GRIDS,
     HEAVY_TAILED_COLS,
@@ -16,9 +17,14 @@ from evaluate import (
     NUMERIC_COLS,
     OP_SETTINGS,
     apply_transform,
+    _metrics,
     attack_groups,
+    build_model,
+    category_levels,
     check_categories,
+    default_predict,
     engineer_features,
+    fit_model,
     fpr_threshold,
     mean_std,
     operating_point,
@@ -26,6 +32,7 @@ from evaluate import (
     precision_at_prevalence,
     quantile_threshold,
     run_benchmark,
+    score_samples,
 )
 
 DATA = Path(__file__).parent.parent / "data" / "nslkdd"
@@ -252,3 +259,77 @@ def test_tuning_picks_on_validation_only(tmp_path):
         assert a["params"] in GRIDS[key]
     untuned, _, _ = run_benchmark(["lof"], train, test_a, [0], 0.1)
     assert untuned["per_seed"]["0"]["Local Outlier Factor"]["params"] == GRIDS["lof"][0]
+
+
+class _Stub:
+    def __init__(self, pred=None, dec=None, proba=None):
+        self._pred, self._dec, self._proba = pred, dec, proba
+
+    def predict(self, X):
+        return self._pred
+
+    def decision_function(self, X):
+        return self._dec
+
+    def predict_proba(self, X):
+        return self._proba
+
+
+def test_metrics_by_hand():
+    m = _metrics(np.array([1, 1, 0, 0]), np.array([1, 0, 1, 0]))
+    assert (m["tp"], m["fn"], m["fp"], m["tn"]) == (1, 1, 1, 1)
+    assert m["precision"] == m["recall"] == m["f1"] == m["fpr"] == m["accuracy"] == 0.5
+
+
+def test_category_levels_are_sorted_unique_values():
+    df = pd.DataFrame({c: ["b", "a", "b"] for c in CATEGORICAL_COLS})
+    assert category_levels(df) == {c: ["a", "b"] for c in CATEGORICAL_COLS}
+
+
+def test_default_predict_maps_isolation_output_to_alerts():
+    clf = _Stub(pred=np.array([1, -1, 1]))
+    assert default_predict("iforest", clf, None).tolist() == [0, 1, 0]
+    assert default_predict("rf", _Stub(pred=np.array([0, 1])), None).tolist() == [0, 1]
+
+
+def test_score_samples_higher_is_more_suspicious():
+    assert score_samples("iforest", _Stub(dec=np.array([0.5, -0.5])), None).tolist() == [-0.5, 0.5]
+    assert score_samples("rf", _Stub(proba=np.array([[0.9, 0.1], [0.2, 0.8]])), None).tolist() == [0.1, 0.8]
+
+
+def test_build_model_returns_each_family():
+    from sklearn.ensemble import IsolationForest, RandomForestClassifier
+    from sklearn.neighbors import LocalOutlierFactor
+    from sklearn.svm import OneClassSVM
+    assert isinstance(build_model("iforest", 0, 0.1), IsolationForest)
+    assert isinstance(build_model("lof", 0, 0.1), LocalOutlierFactor)
+    assert build_model("ocsvm", 0, 0.1).nu == 0.1
+    rf = build_model("rf", 0, 0.1)
+    assert isinstance(rf, RandomForestClassifier) and rf.class_weight == "balanced"
+    assert isinstance(build_model("ocsvm", 0, 0.1), OneClassSVM)
+
+
+def test_fit_model_normal_only_drops_attack_rows():
+    rng = np.random.default_rng(0)
+    X = rng.normal(size=(120, 4))
+    y = np.array([0] * 100 + [1] * 20)
+    clf = fit_model("lof", X, y, seed=0, contamination=0.1, params={}, normal_only=True)
+    assert clf.n_samples_fit_ == 100
+    assert fit_model("lof", X, y, seed=0, contamination=0.1, params={}).n_samples_fit_ == 120
+
+
+def test_summarize_averages_every_setting_over_seeds():
+    from evaluate import OP_METRICS, OP_SETTINGS, SUMMARY_METRICS, summarize
+
+    def run(v):
+        d = {"roc_auc": v, "pr_auc": v, "val_pr_auc": v,
+             "default": {m: v for m in SUMMARY_METRICS}}
+        for s in OP_SETTINGS:
+            d[s] = {m: v for m in OP_METRICS}
+            d[s]["recall_by_group"] = {"seen": v}
+        return {"iforest": d}
+
+    out = summarize({0: run(0.2), 1: run(0.4)})["iforest"]
+    assert out["roc_auc"]["mean"] == 0.3
+    assert out["default"]["f1"]["mean"] == 0.3
+    assert out["val_threshold"]["recall_by_group"]["seen"]["mean"] == 0.3

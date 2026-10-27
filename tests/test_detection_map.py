@@ -14,6 +14,7 @@ from detection_map import (
     leave_one_type_out,
     load_recall,
     main,
+    analyse,
     positions,
     spearman_ci,
 )
@@ -108,3 +109,18 @@ def test_main_runs_end_to_end_on_small_data(tmp_path):
     assert res["points"]["drop_k5"]["apache2"]["group"] == "unseen_test"
     assert out.with_suffix(".png").exists()
     assert set(res["rank_stability"]) == {"drop_k1", "onehot_k1", "onehot_k5"}
+
+
+def test_analyse_splits_groups_and_skips_small_ones():
+    points = {
+        f"t{i}": {"x": float(i), "y": float(6 - i), "group": "held_out",
+                  "recall": {"if_normal": i / 10, "rf": i / 10}}
+        for i in range(6)
+    }
+    points["u"] = {"x": 1.0, "y": 1.0, "group": "unseen_test", "recall": {"if_normal": 0.2}}
+    out = analyse(points, np.random.default_rng(0))
+    assert out["all"]["rf"]["n"] == 6
+    assert out["all"]["rf"]["x_vs_recall"]["rho"] == 1.0
+    assert out["held_out"]["if_normal"]["n"] == 6
+    assert out["unseen_test"] == {"best_other": {"n": 0}, "if_normal": {"n": 1},
+                                  "rf": {"n": 0}}

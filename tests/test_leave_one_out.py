@@ -78,3 +78,23 @@ def test_leave_one_out_output_shape_and_fpr_targets(tmp_path):
             for m in hold.values():
                 assert m["fpr_1pct"]["val_fpr"] <= 0.01 and m["fpr_5pct"]["val_fpr"] <= 0.05
                 assert m["fpr_1pct"]["recall"] <= m["fpr_5pct"]["recall"]
+
+
+def test_compact_keeps_only_reported_fields():
+    from leave_one_out import SETTINGS, compact
+    res = {"roc_auc": 0.9, "extra": 1}
+    res.update({s: {"recall": 0.5, "fpr": 0.04, "val_fpr": 0.05, "extra": 1} for s in SETTINGS})
+    out = compact(res)
+    assert set(out) == {"roc_auc", *SETTINGS}
+    assert out["fpr_1pct"] == {"recall": 0.5, "fpr": 0.04, "val_fpr": 0.05}
+
+
+def test_summarize_means_over_seeds():
+    from leave_one_out import SETTINGS, summarize
+    def run(auc):
+        m = {"roc_auc": auc}
+        m.update({s: {"recall": 0.5, "fpr": 0.04, "val_fpr": 0.05} for s in SETTINGS})
+        return {"neptune": {"rf": m}}
+    out = summarize({0: run(0.9), 1: run(0.7)})
+    assert out["neptune"]["rf"]["roc_auc"]["mean"] == 0.8
+    assert out["neptune"]["rf"]["val_threshold"]["recall"] == {"mean": 0.5, "std": 0.0}

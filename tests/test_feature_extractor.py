@@ -120,3 +120,26 @@ def test_no_pcap_and_no_demo_is_a_usage_error(monkeypatch):
     monkeypatch.setattr(sys, "argv", ["extract.py"])
     with pytest.raises(SystemExit):
         main()
+
+
+def test_flow_row_features_by_hand():
+    from feature_extractor.extract import _flow_row
+    flow = {"src": "10.0.0.1", "dst": "10.0.0.2", "sport": 1234, "dport": 80, "proto": 6,
+            "times": [0.0, 1.5, 0.5], "bytes": 300, "payloads": [b"ab", b"cd"]}
+    row = _flow_row(flow)
+    assert row["pkt_count"] == 3
+    assert row["duration_ms"] == 1500.0
+    assert row["avg_pkt_size"] == 100.0
+    assert row["iat_mean_ms"] == pytest.approx(750.0)
+    assert row["iat_std_ms"] == pytest.approx(250.0)
+    assert row["payload_entropy"] == pytest.approx(2.0)
+
+
+def test_flow_row_single_packet_has_zero_timing():
+    from feature_extractor.extract import _flow_row
+    flow = {"src": "a", "dst": "b", "sport": 1, "dport": 2, "proto": 17,
+            "times": [3.0], "bytes": 64, "payloads": [b""]}
+    row = _flow_row(flow)
+    assert row["duration_ms"] == 0.0
+    assert row["iat_mean_ms"] == 0.0 and row["iat_std_ms"] == 0.0
+    assert row["payload_entropy"] == 0.0
