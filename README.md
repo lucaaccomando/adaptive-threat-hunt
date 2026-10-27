@@ -25,9 +25,9 @@ Three hypotheses, to be tested rather than assumed:
 - Done: a train / validation / test protocol. Alert thresholds are chosen on a validation split, results
   are averaged over 5 seeds, and recall is reported per attack type and per category at fixed
   false-alarm targets.
-- Done: a leave-one-attack-type-out study (`models/leave_one_out.py`). Its results are not generated yet.
-- Partly done: the detection map (`models/detection_map.py`). Attack-type positions are computed; the
-  recall analysis waits for the leave-one-out results.
+- Done: a leave-one-attack-type-out study on KDDTrain+ (`models/leave_one_out.py`). It gives recall at a
+  matched false-alarm rate, which the KDDTest+ table cannot.
+- Done: the detection map (`models/detection_map.py`). Positions, recall and rank correlations are computed.
 - Not done: a second dataset, label-free thresholds, a hybrid detector, and a table of evaluation
   pitfalls.
 
@@ -89,7 +89,30 @@ What the table shows so far:
 - LOF trained on all flows flags almost everything at its best F1 (false-alarm rate 99.7%), so its F1 of
   0.726 is the flag-all score at this test set's 57% base rate. It is not a result.
 
-### Detection map (positions only)
+### Leave-one-attack-type-out (KDDTrain+)
+
+Each held-out type (13 types with at least 20 flows, plus the four categories) is removed from training
+and validation. Its flows form the attack side of the test set, next to 20% of the normal flows, which no
+model or threshold sees. Thresholds come from validation normals at a 5% target. Test normals come from the
+same file as training, so the test false-alarm rate stays on target: 0.041 to 0.051 for every model and
+category below. This is the matched comparison the KDDTest+ table cannot give.
+
+Recall at a 5% false-alarm target, 5 seeds:
+
+| Held out | Random Forest | IF, normal only | OC-SVM, normal only | LOF, normal only |
+|---|---|---|---|---|
+| DoS (6 types) | 0.993 | 0.909 | 0.938 | 0.518 |
+| Probe (4 types) | 0.966 | 0.542 | 0.761 | 0.733 |
+| R2L (8 types) | 0.473 | 0.169 | 0.441 | 0.467 |
+| U2R (4 types) | 0.931 | 0.235 | 0.669 | 0.550 |
+
+Single types show the same split. Random Forest recalls 1.000 of teardrop, pod and warezmaster flows, and
+normal-only Isolation Forest recalls 0.105, 0.045 and 0.050 of them. Normal-only models never see attacks,
+so their recall on a type reflects how far that type lies from normal traffic. Random Forest's weakest
+single held-out type is warezclient (0.475). These are not zero-day tests in the strict sense: the other attack types
+in training can still be close relatives of the held-out type.
+
+### Detection map
 
 For each attack type, x is its distance from normal training flows and y its distance from the other
 attack types, in standardized feature units. The positions use the mean distance to the 5 nearest
@@ -97,7 +120,35 @@ reference flows, taken as the median over the type's flows. Reference flows come
 Of the 30 types (13 from KDDTrain+ and 17 that appear only in KDDTest+), 27 lie at x below 12. The
 three that do not are xterm, sqlattack and xsnoop, all KDDTest+ types, at x between 64 and 145.
 In KDDTest+, 30 unseen attack flows are exact copies of a KDDTrain+ normal flow: 28 are snmpgetattack, one
-named and one snmpguess. The map's recall colours are not computed yet.
+named and one snmpguess. Recall at 5% false alarms is in `results/detection_map.png`, one panel per detector. Held-out types take
+their recall from the leave-one-out study, at matched false alarms. Unseen KDDTest+ types take it from the
+benchmark at the 5% validation target, where the test false-alarm rate drifts (12.6% for Random Forest,
+2.2% for normal-only Isolation Forest). The two groups are therefore also analysed separately.
+
+Spearman rank correlation between position and recall over types, with 95% bootstrap intervals:
+
+| Group (types) | x vs Random Forest recall | x vs IF normal-only recall | y vs Random Forest recall |
+|---|---|---|---|
+| All (30) | 0.74 [0.48, 0.89] | 0.62 [0.33, 0.84] | 0.41 [0.04, 0.70] |
+| Held out (13) | 0.48 [-0.18, 0.87] | 0.37 [-0.25, 0.96] | 0.37 [-0.26, 0.83] |
+| Unseen in KDDTest+ (17) | 0.76 [0.35, 0.94] | 0.68 [0.22, 0.91] | 0.31 [-0.20, 0.75] |
+
+Leave-one-type-out prediction of recall from (x, y) does not beat the mean of the other types. Mean absolute
+error over all 30 types is 0.17 for Random Forest against 0.17 for the mean, and 0.33 against 0.30 for
+normal-only Isolation Forest.
+
+What this says about the three hypotheses:
+
+- Distance from normal traffic goes with recall for both detectors. This matches the second hypothesis for
+  the anomaly detector.
+- Distance from other attack types does not predict Random Forest recall in the direction the first
+  hypothesis predicts. The pooled sign is positive: types close to known attacks are not caught more. The
+  interval barely excludes zero.
+- The blind-spot hypothesis, types near normal and far from other attacks, is not tested by these
+  correlations yet.
+- Position explains the ranking of types but does not predict the recall of an individual type.
+- The x ranking is stable across neighbour counts (Spearman 0.97 at k=1, 0.99 at k=20). Encoding the
+  categorical columns as one-hot moves it more (0.88 to 0.92), so the map depends partly on that choice.
 
 ## Limitations
 
@@ -112,6 +163,8 @@ named and one snmpguess. The map's recall colours are not computed yet.
   capture pipeline uses a different, 8-feature set, so these results say nothing about it.
 - The capture pipeline is experimental. When no pcap is given, `feature_extractor/extract.py` writes two
   demo rows instead of failing. Fixing that is the next step on the list, and the path is not evaluated.
+- The map pools two operating points, so its pooled correlations mix a 5% matched false-alarm rate with
+  drifted ones. With 13 to 30 types, the intervals are wide.
 - One dataset. A second dataset with genuinely new attacks is planned.
 
 ## Setup
@@ -148,7 +201,7 @@ python models/detection_map.py               # attack-type positions on the map
 
 These write `results/benchmark.json`, `results/benchmark_normal_only.json` and
 `results/detection_map.json`, with a figure for each. The leave-one-attack-type-out study is
-`python models/leave_one_out.py`. It takes about 1.5 hours and has not been run yet.
+`python models/leave_one_out.py`. It takes about 1.5 hours and writes `results/leave_one_out.json`.
 
 The commands above have not been tested from a fresh clone yet.
 

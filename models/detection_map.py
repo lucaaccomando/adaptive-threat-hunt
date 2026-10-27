@@ -158,19 +158,24 @@ def leave_one_type_out(x, y, r) -> dict:
 
 
 def analyse(points: dict, rng) -> dict:
+    # held_out and unseen_test recall come from different operating points (see protocol), so they are
+    # analysed separately as well as pooled
     out = {}
-    for det in ("if_normal", "rf", "best_other"):
-        rows = [(p["x"], p["y"], p["recall"][det]) for p in points.values() if det in p["recall"]]
-        if len(rows) < 5:
-            out[det] = {"n": len(rows)}
-            continue
-        x, y, r = (np.array(c, dtype=float) for c in zip(*rows))
-        out[det] = {
-            "n": len(rows),
-            "x_vs_recall": spearman_ci(x, r, rng),
-            "y_vs_recall": spearman_ci(y, r, rng),
-            "leave_one_type_out": leave_one_type_out(x, y, r),
-        }
+    for name, group in (("all", None), ("held_out", "held_out"), ("unseen_test", "unseen_test")):
+        sub = {t: p for t, p in points.items() if group is None or p["group"] == group}
+        out[name] = {}
+        for det in ("if_normal", "rf", "best_other"):
+            rows = [(p["x"], p["y"], p["recall"][det]) for p in sub.values() if det in p["recall"]]
+            if len(rows) < 5:
+                out[name][det] = {"n": len(rows)}
+                continue
+            x, y, r = (np.array(c, dtype=float) for c in zip(*rows))
+            out[name][det] = {
+                "n": len(rows),
+                "x_vs_recall": spearman_ci(x, r, rng),
+                "y_vs_recall": spearman_ci(y, r, rng),
+                "leave_one_type_out": leave_one_type_out(x, y, r),
+            }
     return out
 
 
@@ -224,7 +229,7 @@ def plot_map(points: dict, out_path: Path) -> None:
     axes[0].scatter([], [], marker="^", color="grey", label="KDDTest+ unseen type")
     axes[0].legend(loc="upper left", fontsize=8)
     if sc is not None:
-        fig.colorbar(sc, ax=axes, label="recall at 5% false alarms (hollow: not measured yet)")
+        fig.colorbar(sc, ax=axes, label="recall at 5% false alarms (hollow: no recall)")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
@@ -277,9 +282,10 @@ def main(argv: list[str] | None = None) -> None:
         "protocol": {
             "x": "median over the type's flows of the mean distance to the k nearest normal KDDTrain+ flows",
             "y": "same, to the k nearest KDDTrain+ flows of the other attack types (the type itself excluded)",
-            "groups": "held_out: KDDTrain+ types with >= 20 rows (positions only, recall from leave_one_out.json); "
-                      "unseen_test: KDDTest+ types absent from KDDTrain+ (query rows from KDDTest+, "
-                      "recall from the benchmark JSONs)",
+            "groups": "held_out: KDDTrain+ types with >= 20 rows (recall from leave_one_out.json, test false-alarm "
+                      "rate about 5% because test normals come from the same file); unseen_test: KDDTest+ types "
+                      "absent from KDDTrain+ (query rows from KDDTest+, recall from the benchmark JSONs at the 5% "
+                      "validation target, where the test false-alarm rate drifts: RF 12.6%, IF normal-only 2.2%)",
             "scaler": "fit on all KDDTrain+ rows; the drop space is the 38 numeric columns, onehot adds the "
                       "3 categorical columns as one-hot",
             "analysis_only": "grouping KDDTest+ rows by type is for this analysis only; no model sees the test labels",
