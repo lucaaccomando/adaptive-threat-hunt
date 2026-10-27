@@ -20,6 +20,8 @@
     "split": "stratified on the binary label, new split per seed",
     "threshold": "max F1 on the validation split, applied unchanged to KDDTest+",
     "fixed_fpr_thresholds": "highest-recall threshold with at most 1% / 5% false alarms on the validation normal rows, applied unchanged to KDDTest+",
+    "oracle_test_max_f1": "LEAK, reported only to measure it: max-F1 threshold chosen on KDDTest+ labels",
+    "quantile_thresholds": "label-free: the 95th / 99th percentile of the scores of ALL validation flows (no labels used), so about 5% / 1% of validation flows alert; the false-alarm rate on normal traffic is whatever that gives",
     "precision_prev": "recall * p / (recall * p + fpr * (1 - p)) for attack base rate p = 1% and 10%; assumes the test recall and fpr carry over to that base rate",
     "gaps": "test minus validation; f1_gap also moves with the attack prevalence, fpr_gap does not",
     "scaler": "fit on the training split only",
@@ -809,6 +811,678 @@
             "std": 0.0
           }
         }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.0909,
+          "std": 0.0303
+        },
+        "precision": {
+          "mean": 0.997,
+          "std": 0.0017
+        },
+        "recall": {
+          "mean": 0.0478,
+          "std": 0.0164
+        },
+        "fpr": {
+          "mean": 0.0002,
+          "std": 0.0001
+        },
+        "accuracy": {
+          "mean": 0.4579,
+          "std": 0.0094
+        },
+        "val_f1": {
+          "mean": 0.1945,
+          "std": 0.0007
+        },
+        "val_fpr": {
+          "mean": 0.0003,
+          "std": 0.0002
+        },
+        "f1_gap": {
+          "mean": -0.1036,
+          "std": 0.0299
+        },
+        "fpr_gap": {
+          "mean": -0.0001,
+          "std": 0.0002
+        },
+        "alerts_per_10k_normal": {
+          "mean": 1.84,
+          "std": 1.3502
+        },
+        "precision_prev1": {
+          "mean": 0.7329,
+          "std": 0.1097
+        },
+        "precision_prev10": {
+          "mean": 0.9659,
+          "std": 0.019
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.0548,
+            "std": 0.0152
+          },
+          "unseen": {
+            "mean": 0.0309,
+            "std": 0.0211
+          },
+          "DoS": {
+            "mean": 0.0259,
+            "std": 0.0047
+          },
+          "Probe": {
+            "mean": 0.1735,
+            "std": 0.0904
+          },
+          "R2L": {
+            "mean": 0.0002,
+            "std": 0.0001
+          },
+          "U2R": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "apache2": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "buffer_overflow": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "httptunnel": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "land": {
+            "mean": 0.4286,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mscan": {
+            "mean": 0.0046,
+            "std": 0.0026
+          },
+          "multihop": {
+            "mean": 0.0445,
+            "std": 0.0249
+          },
+          "named": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 0.0406,
+            "std": 0.0073
+          },
+          "nmap": {
+            "mean": 0.3671,
+            "std": 0.484
+          },
+          "perl": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "portsweep": {
+            "mean": 0.0178,
+            "std": 0.0188
+          },
+          "processtable": {
+            "mean": 0.0012,
+            "std": 0.0026
+          },
+          "ps": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "rootkit": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.3467,
+            "std": 0.2413
+          },
+          "satan": {
+            "mean": 0.3744,
+            "std": 0.1957
+          },
+          "sendmail": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpgetattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpguess": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sqlattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xsnoop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.0438,
+          "std": 0.0167
+        },
+        "precision": {
+          "mean": 0.9956,
+          "std": 0.0034
+        },
+        "recall": {
+          "mean": 0.0224,
+          "std": 0.0087
+        },
+        "fpr": {
+          "mean": 0.0001,
+          "std": 0.0001
+        },
+        "accuracy": {
+          "mean": 0.4435,
+          "std": 0.0049
+        },
+        "val_f1": {
+          "mean": 0.0425,
+          "std": 0.0014
+        },
+        "val_fpr": {
+          "mean": 0.0002,
+          "std": 0.0001
+        },
+        "f1_gap": {
+          "mean": 0.0013,
+          "std": 0.0167
+        },
+        "fpr_gap": {
+          "mean": -0.0001,
+          "std": 0.0001
+        },
+        "alerts_per_10k_normal": {
+          "mean": 1.02,
+          "std": 0.743
+        },
+        "precision_prev1": {
+          "mean": 0.683,
+          "std": 0.2114
+        },
+        "precision_prev10": {
+          "mean": 0.9516,
+          "std": 0.0375
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.0258,
+            "std": 0.0089
+          },
+          "unseen": {
+            "mean": 0.0142,
+            "std": 0.0106
+          },
+          "DoS": {
+            "mean": 0.0028,
+            "std": 0.0025
+          },
+          "Probe": {
+            "mean": 0.11,
+            "std": 0.0529
+          },
+          "R2L": {
+            "mean": 0.0002,
+            "std": 0.0002
+          },
+          "U2R": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "apache2": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "buffer_overflow": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "httptunnel": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "land": {
+            "mean": 0.3429,
+            "std": 0.1917
+          },
+          "loadmodule": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mscan": {
+            "mean": 0.0026,
+            "std": 0.0022
+          },
+          "multihop": {
+            "mean": 0.0334,
+            "std": 0.0305
+          },
+          "named": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 0.004,
+            "std": 0.0038
+          },
+          "nmap": {
+            "mean": 0.3041,
+            "std": 0.4247
+          },
+          "perl": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "portsweep": {
+            "mean": 0.0051,
+            "std": 0.0083
+          },
+          "processtable": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "rootkit": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.1586,
+            "std": 0.1286
+          },
+          "satan": {
+            "mean": 0.2588,
+            "std": 0.1334
+          },
+          "sendmail": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpgetattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpguess": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sqlattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xsnoop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.8715,
+          "std": 0.0027
+        },
+        "precision": {
+          "mean": 0.885,
+          "std": 0.0071
+        },
+        "recall": {
+          "mean": 0.8584,
+          "std": 0.003
+        },
+        "fpr": {
+          "mean": 0.1474,
+          "std": 0.0106
+        },
+        "accuracy": {
+          "mean": 0.8559,
+          "std": 0.0036
+        },
+        "val_f1": {
+          "mean": 0.865,
+          "std": 0.0054
+        },
+        "val_fpr": {
+          "mean": 0.2488,
+          "std": 0.0162
+        },
+        "f1_gap": {
+          "mean": 0.0065,
+          "std": 0.0037
+        },
+        "fpr_gap": {
+          "mean": -0.1014,
+          "std": 0.0073
+        },
+        "alerts_per_10k_normal": {
+          "mean": 1474.2,
+          "std": 105.662
+        },
+        "precision_prev1": {
+          "mean": 0.0557,
+          "std": 0.0037
+        },
+        "precision_prev10": {
+          "mean": 0.3934,
+          "std": 0.0167
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.8706,
+            "std": 0.0043
+          },
+          "unseen": {
+            "mean": 0.8289,
+            "std": 0.0031
+          },
+          "DoS": {
+            "mean": 0.9682,
+            "std": 0.0033
+          },
+          "Probe": {
+            "mean": 0.9978,
+            "std": 0.0002
+          },
+          "R2L": {
+            "mean": 0.4581,
+            "std": 0.0075
+          },
+          "U2R": {
+            "mean": 0.8328,
+            "std": 0.0287
+          },
+          "apache2": {
+            "mean": 0.9973,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.9031,
+            "std": 0.0654
+          },
+          "buffer_overflow": {
+            "mean": 0.94,
+            "std": 0.0224
+          },
+          "ftp_write": {
+            "mean": 0.6667,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.162,
+            "std": 0.0076
+          },
+          "httptunnel": {
+            "mean": 0.9744,
+            "std": 0.0041
+          },
+          "imap": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.9858,
+            "std": 0.0
+          },
+          "land": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.5119,
+            "std": 0.0368
+          },
+          "mscan": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "multihop": {
+            "mean": 0.6445,
+            "std": 0.0305
+          },
+          "named": {
+            "mean": 0.9647,
+            "std": 0.0322
+          },
+          "neptune": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "nmap": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "perl": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.9756,
+            "std": 0.0
+          },
+          "portsweep": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "processtable": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.6933,
+            "std": 0.0596
+          },
+          "rootkit": {
+            "mean": 0.6154,
+            "std": 0.0942
+          },
+          "saint": {
+            "mean": 0.99,
+            "std": 0.0014
+          },
+          "satan": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "sendmail": {
+            "mean": 0.8857,
+            "std": 0.0392
+          },
+          "smurf": {
+            "mean": 0.9269,
+            "std": 0.043
+          },
+          "snmpgetattack": {
+            "mean": 0.1382,
+            "std": 0.0209
+          },
+          "snmpguess": {
+            "mean": 0.0127,
+            "std": 0.0099
+          },
+          "sqlattack": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 0.5333,
+            "std": 0.1514
+          },
+          "udpstorm": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.96,
+            "std": 0.0058
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.9111,
+            "std": 0.0497
+          },
+          "xsnoop": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.9692,
+            "std": 0.0421
+          }
+        }
       }
     },
     "Local Outlier Factor": {
@@ -1515,6 +2189,678 @@
           "xterm": {
             "mean": 0.7692,
             "std": 0.0
+          }
+        }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.1674,
+          "std": 0.0353
+        },
+        "precision": {
+          "mean": 0.7679,
+          "std": 0.0384
+        },
+        "recall": {
+          "mean": 0.0942,
+          "std": 0.0217
+        },
+        "fpr": {
+          "mean": 0.0365,
+          "std": 0.0016
+        },
+        "accuracy": {
+          "mean": 0.4687,
+          "std": 0.012
+        },
+        "val_f1": {
+          "mean": 0.1506,
+          "std": 0.0035
+        },
+        "val_fpr": {
+          "mean": 0.021,
+          "std": 0.0017
+        },
+        "f1_gap": {
+          "mean": 0.0168,
+          "std": 0.0348
+        },
+        "fpr_gap": {
+          "mean": 0.0155,
+          "std": 0.0018
+        },
+        "alerts_per_10k_normal": {
+          "mean": 364.74,
+          "std": 15.7095
+        },
+        "precision_prev1": {
+          "mean": 0.0253,
+          "std": 0.0053
+        },
+        "precision_prev10": {
+          "mean": 0.2211,
+          "std": 0.0367
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.1017,
+            "std": 0.029
+          },
+          "unseen": {
+            "mean": 0.0759,
+            "std": 0.0091
+          },
+          "DoS": {
+            "mean": 0.1013,
+            "std": 0.035
+          },
+          "Probe": {
+            "mean": 0.0691,
+            "std": 0.0033
+          },
+          "R2L": {
+            "mean": 0.0907,
+            "std": 0.0115
+          },
+          "U2R": {
+            "mean": 0.3612,
+            "std": 0.0164
+          },
+          "apache2": {
+            "mean": 0.0214,
+            "std": 0.0197
+          },
+          "back": {
+            "mean": 0.0886,
+            "std": 0.0576
+          },
+          "buffer_overflow": {
+            "mean": 0.24,
+            "std": 0.0224
+          },
+          "ftp_write": {
+            "mean": 0.6667,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.1074,
+            "std": 0.009
+          },
+          "httptunnel": {
+            "mean": 0.0962,
+            "std": 0.0034
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.7362,
+            "std": 0.0645
+          },
+          "land": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0826,
+            "std": 0.0249
+          },
+          "mscan": {
+            "mean": 0.01,
+            "std": 0.001
+          },
+          "multihop": {
+            "mean": 0.2778,
+            "std": 0.0
+          },
+          "named": {
+            "mean": 0.1765,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 0.0664,
+            "std": 0.0526
+          },
+          "nmap": {
+            "mean": 0.5014,
+            "std": 0.0074
+          },
+          "perl": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.4976,
+            "std": 0.0218
+          },
+          "portsweep": {
+            "mean": 0.056,
+            "std": 0.051
+          },
+          "processtable": {
+            "mean": 0.2739,
+            "std": 0.0542
+          },
+          "ps": {
+            "mean": 0.1466,
+            "std": 0.0298
+          },
+          "rootkit": {
+            "mean": 0.2308,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.0063,
+            "std": 0.0
+          },
+          "satan": {
+            "mean": 0.0082,
+            "std": 0.003
+          },
+          "sendmail": {
+            "mean": 0.1429,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.222,
+            "std": 0.0058
+          },
+          "snmpgetattack": {
+            "mean": 0.018,
+            "std": 0.0025
+          },
+          "snmpguess": {
+            "mean": 0.0169,
+            "std": 0.0016
+          },
+          "sqlattack": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.0953,
+            "std": 0.0255
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.3333,
+            "std": 0.0
+          },
+          "xsnoop": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.7077,
+            "std": 0.0344
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.0319,
+          "std": 0.0048
+        },
+        "precision": {
+          "mean": 0.626,
+          "std": 0.0567
+        },
+        "recall": {
+          "mean": 0.0164,
+          "std": 0.0025
+        },
+        "fpr": {
+          "mean": 0.0128,
+          "std": 0.0017
+        },
+        "accuracy": {
+          "mean": 0.4345,
+          "std": 0.002
+        },
+        "val_f1": {
+          "mean": 0.0233,
+          "std": 0.0037
+        },
+        "val_fpr": {
+          "mean": 0.0083,
+          "std": 0.0017
+        },
+        "f1_gap": {
+          "mean": 0.0085,
+          "std": 0.0032
+        },
+        "fpr_gap": {
+          "mean": 0.0045,
+          "std": 0.0014
+        },
+        "alerts_per_10k_normal": {
+          "mean": 128.1,
+          "std": 17.5616
+        },
+        "precision_prev1": {
+          "mean": 0.0131,
+          "std": 0.0037
+        },
+        "precision_prev10": {
+          "mean": 0.1264,
+          "std": 0.0308
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.0151,
+            "std": 0.0017
+          },
+          "unseen": {
+            "mean": 0.0195,
+            "std": 0.005
+          },
+          "DoS": {
+            "mean": 0.0103,
+            "std": 0.0025
+          },
+          "Probe": {
+            "mean": 0.0372,
+            "std": 0.0026
+          },
+          "R2L": {
+            "mean": 0.0106,
+            "std": 0.0044
+          },
+          "U2R": {
+            "mean": 0.1881,
+            "std": 0.0226
+          },
+          "apache2": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.0189,
+            "std": 0.0061
+          },
+          "buffer_overflow": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.3333,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.0075,
+            "std": 0.0014
+          },
+          "httptunnel": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.6397,
+            "std": 0.0444
+          },
+          "land": {
+            "mean": 0.7143,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0205,
+            "std": 0.0
+          },
+          "mscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "multihop": {
+            "mean": 0.1111,
+            "std": 0.0
+          },
+          "named": {
+            "mean": 0.1294,
+            "std": 0.0263
+          },
+          "neptune": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "nmap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "perl": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.0342,
+            "std": 0.0218
+          },
+          "portsweep": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "processtable": {
+            "mean": 0.0777,
+            "std": 0.0251
+          },
+          "ps": {
+            "mean": 0.0667,
+            "std": 0.0
+          },
+          "rootkit": {
+            "mean": 0.2308,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "satan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sendmail": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpgetattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpguess": {
+            "mean": 0.0006,
+            "std": 0.0013
+          },
+          "sqlattack": {
+            "mean": 0.6,
+            "std": 0.5477
+          },
+          "teardrop": {
+            "mean": 0.35,
+            "std": 0.1087
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.0148,
+            "std": 0.0144
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xsnoop": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.5693,
+            "std": 0.0421
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.8397,
+          "std": 0.002
+        },
+        "precision": {
+          "mean": 0.7973,
+          "std": 0.0041
+        },
+        "recall": {
+          "mean": 0.8868,
+          "std": 0.0081
+        },
+        "fpr": {
+          "mean": 0.2979,
+          "std": 0.01
+        },
+        "accuracy": {
+          "mean": 0.8072,
+          "std": 0.0017
+        },
+        "val_f1": {
+          "mean": 0.8784,
+          "std": 0.0061
+        },
+        "val_fpr": {
+          "mean": 0.2096,
+          "std": 0.0146
+        },
+        "f1_gap": {
+          "mean": -0.0387,
+          "std": 0.0071
+        },
+        "fpr_gap": {
+          "mean": 0.0883,
+          "std": 0.0069
+        },
+        "alerts_per_10k_normal": {
+          "mean": 2979.5,
+          "std": 100.2194
+        },
+        "precision_prev1": {
+          "mean": 0.0292,
+          "std": 0.0007
+        },
+        "precision_prev10": {
+          "mean": 0.2486,
+          "std": 0.0048
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.9254,
+            "std": 0.0055
+          },
+          "unseen": {
+            "mean": 0.7933,
+            "std": 0.0178
+          },
+          "DoS": {
+            "mean": 0.9209,
+            "std": 0.0084
+          },
+          "Probe": {
+            "mean": 0.9561,
+            "std": 0.0055
+          },
+          "R2L": {
+            "mean": 0.742,
+            "std": 0.0127
+          },
+          "U2R": {
+            "mean": 0.8149,
+            "std": 0.025
+          },
+          "apache2": {
+            "mean": 0.7156,
+            "std": 0.0685
+          },
+          "back": {
+            "mean": 0.893,
+            "std": 0.0153
+          },
+          "buffer_overflow": {
+            "mean": 0.95,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.6667,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.8063,
+            "std": 0.0195
+          },
+          "httptunnel": {
+            "mean": 0.1654,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.9702,
+            "std": 0.0032
+          },
+          "land": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.9966,
+            "std": 0.0042
+          },
+          "mscan": {
+            "mean": 0.9558,
+            "std": 0.0058
+          },
+          "multihop": {
+            "mean": 0.6222,
+            "std": 0.0608
+          },
+          "named": {
+            "mean": 0.7882,
+            "std": 0.0322
+          },
+          "neptune": {
+            "mean": 0.9967,
+            "std": 0.0021
+          },
+          "nmap": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "perl": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.9414,
+            "std": 0.0134
+          },
+          "portsweep": {
+            "mean": 0.8624,
+            "std": 0.0035
+          },
+          "processtable": {
+            "mean": 0.9031,
+            "std": 0.0607
+          },
+          "ps": {
+            "mean": 0.5466,
+            "std": 0.0298
+          },
+          "rootkit": {
+            "mean": 0.7692,
+            "std": 0.0942
+          },
+          "saint": {
+            "mean": 0.9436,
+            "std": 0.0
+          },
+          "satan": {
+            "mean": 0.975,
+            "std": 0.0098
+          },
+          "sendmail": {
+            "mean": 0.7714,
+            "std": 0.0319
+          },
+          "smurf": {
+            "mean": 0.6177,
+            "std": 0.006
+          },
+          "snmpgetattack": {
+            "mean": 0.2157,
+            "std": 0.0085
+          },
+          "snmpguess": {
+            "mean": 0.5015,
+            "std": 0.0184
+          },
+          "sqlattack": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.6,
+            "std": 0.2236
+          },
+          "warezmaster": {
+            "mean": 0.9237,
+            "std": 0.0087
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.8222,
+            "std": 0.0609
+          },
+          "xsnoop": {
+            "mean": 0.75,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.877,
+            "std": 0.0421
           }
         }
       }
@@ -2225,6 +3571,678 @@
             "std": 0.0344
           }
         }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.249,
+          "std": 0.0095
+        },
+        "precision": {
+          "mean": 0.9175,
+          "std": 0.0069
+        },
+        "recall": {
+          "mean": 0.1441,
+          "std": 0.0062
+        },
+        "fpr": {
+          "mean": 0.0171,
+          "std": 0.0009
+        },
+        "accuracy": {
+          "mean": 0.5054,
+          "std": 0.0039
+        },
+        "val_f1": {
+          "mean": 0.1444,
+          "std": 0.0034
+        },
+        "val_fpr": {
+          "mean": 0.0239,
+          "std": 0.0016
+        },
+        "f1_gap": {
+          "mean": 0.1045,
+          "std": 0.0064
+        },
+        "fpr_gap": {
+          "mean": -0.0069,
+          "std": 0.001
+        },
+        "alerts_per_10k_normal": {
+          "mean": 170.74,
+          "std": 9.1779
+        },
+        "precision_prev1": {
+          "mean": 0.0788,
+          "std": 0.0073
+        },
+        "precision_prev10": {
+          "mean": 0.484,
+          "std": 0.0239
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.1757,
+            "std": 0.0029
+          },
+          "unseen": {
+            "mean": 0.0674,
+            "std": 0.0147
+          },
+          "DoS": {
+            "mean": 0.0052,
+            "std": 0.0014
+          },
+          "Probe": {
+            "mean": 0.3183,
+            "std": 0.0301
+          },
+          "R2L": {
+            "mean": 0.3456,
+            "std": 0.0002
+          },
+          "U2R": {
+            "mean": 0.6269,
+            "std": 0.0
+          },
+          "apache2": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "buffer_overflow": {
+            "mean": 0.85,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.6667,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.3794,
+            "std": 0.0
+          },
+          "httptunnel": {
+            "mean": 0.0075,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.6596,
+            "std": 0.0
+          },
+          "land": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mscan": {
+            "mean": 0.0339,
+            "std": 0.0544
+          },
+          "multihop": {
+            "mean": 0.3889,
+            "std": 0.0
+          },
+          "named": {
+            "mean": 0.1765,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "nmap": {
+            "mean": 0.0274,
+            "std": 0.0
+          },
+          "perl": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.2927,
+            "std": 0.1742
+          },
+          "portsweep": {
+            "mean": 0.1962,
+            "std": 0.0528
+          },
+          "processtable": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.4,
+            "std": 0.0
+          },
+          "rootkit": {
+            "mean": 0.2308,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.5693,
+            "std": 0.0047
+          },
+          "satan": {
+            "mean": 0.5842,
+            "std": 0.017
+          },
+          "sendmail": {
+            "mean": 0.7143,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.018,
+            "std": 0.0123
+          },
+          "snmpgetattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpguess": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sqlattack": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 0.6667,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.5303,
+            "std": 0.0005
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.3777,
+            "std": 0.0609
+          },
+          "xsnoop": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.7692,
+            "std": 0.0
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.0371,
+          "std": 0.0243
+        },
+        "precision": {
+          "mean": 0.8266,
+          "std": 0.0652
+        },
+        "recall": {
+          "mean": 0.0191,
+          "std": 0.0128
+        },
+        "fpr": {
+          "mean": 0.0043,
+          "std": 0.0005
+        },
+        "accuracy": {
+          "mean": 0.4398,
+          "std": 0.0074
+        },
+        "val_f1": {
+          "mean": 0.0349,
+          "std": 0.0034
+        },
+        "val_fpr": {
+          "mean": 0.0032,
+          "std": 0.0015
+        },
+        "f1_gap": {
+          "mean": 0.0022,
+          "std": 0.0276
+        },
+        "fpr_gap": {
+          "mean": 0.0011,
+          "std": 0.0018
+        },
+        "alerts_per_10k_normal": {
+          "mean": 42.82,
+          "std": 4.6354
+        },
+        "precision_prev1": {
+          "mean": 0.044,
+          "std": 0.0316
+        },
+        "precision_prev10": {
+          "mean": 0.3124,
+          "std": 0.1354
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.024,
+            "std": 0.0178
+          },
+          "unseen": {
+            "mean": 0.007,
+            "std": 0.0009
+          },
+          "DoS": {
+            "mean": 0.0017,
+            "std": 0.0003
+          },
+          "Probe": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "R2L": {
+            "mean": 0.0686,
+            "std": 0.0564
+          },
+          "U2R": {
+            "mean": 0.5074,
+            "std": 0.099
+          },
+          "apache2": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "buffer_overflow": {
+            "mean": 0.54,
+            "std": 0.2408
+          },
+          "ftp_write": {
+            "mean": 0.4667,
+            "std": 0.1826
+          },
+          "guess_passwd": {
+            "mean": 0.1466,
+            "std": 0.1306
+          },
+          "httptunnel": {
+            "mean": 0.0075,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "land": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "multihop": {
+            "mean": 0.2222,
+            "std": 0.0
+          },
+          "named": {
+            "mean": 0.1765,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "nmap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "perl": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "portsweep": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "processtable": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.28,
+            "std": 0.1366
+          },
+          "rootkit": {
+            "mean": 0.2308,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "satan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sendmail": {
+            "mean": 0.2,
+            "std": 0.0931
+          },
+          "smurf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpgetattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpguess": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sqlattack": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 0.4834,
+            "std": 0.2075
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.0011,
+            "std": 0.0
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.1555,
+            "std": 0.0609
+          },
+          "xsnoop": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.7692,
+            "std": 0.0
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.8565,
+          "std": 0.0045
+        },
+        "precision": {
+          "mean": 0.8671,
+          "std": 0.0137
+        },
+        "recall": {
+          "mean": 0.8464,
+          "std": 0.005
+        },
+        "fpr": {
+          "mean": 0.1717,
+          "std": 0.0213
+        },
+        "accuracy": {
+          "mean": 0.8386,
+          "std": 0.0067
+        },
+        "val_f1": {
+          "mean": 0.8636,
+          "std": 0.0117
+        },
+        "val_fpr": {
+          "mean": 0.2306,
+          "std": 0.03
+        },
+        "f1_gap": {
+          "mean": -0.0071,
+          "std": 0.0075
+        },
+        "fpr_gap": {
+          "mean": -0.0589,
+          "std": 0.0097
+        },
+        "alerts_per_10k_normal": {
+          "mean": 1717.02,
+          "std": 212.8086
+        },
+        "precision_prev1": {
+          "mean": 0.0479,
+          "std": 0.0055
+        },
+        "precision_prev10": {
+          "mean": 0.3557,
+          "std": 0.0276
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.8712,
+            "std": 0.0043
+          },
+          "unseen": {
+            "mean": 0.7862,
+            "std": 0.0069
+          },
+          "DoS": {
+            "mean": 0.9251,
+            "std": 0.006
+          },
+          "Probe": {
+            "mean": 0.9784,
+            "std": 0.0067
+          },
+          "R2L": {
+            "mean": 0.5336,
+            "std": 0.0023
+          },
+          "U2R": {
+            "mean": 0.7731,
+            "std": 0.0067
+          },
+          "apache2": {
+            "mean": 0.9854,
+            "std": 0.0036
+          },
+          "back": {
+            "mean": 0.1554,
+            "std": 0.0926
+          },
+          "buffer_overflow": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.6667,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.4271,
+            "std": 0.0022
+          },
+          "httptunnel": {
+            "mean": 0.9158,
+            "std": 0.0063
+          },
+          "imap": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.9858,
+            "std": 0.0
+          },
+          "land": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.2327,
+            "std": 0.0255
+          },
+          "mscan": {
+            "mean": 0.9617,
+            "std": 0.0144
+          },
+          "multihop": {
+            "mean": 0.5,
+            "std": 0.0
+          },
+          "named": {
+            "mean": 0.5882,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "nmap": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "perl": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.9512,
+            "std": 0.0
+          },
+          "portsweep": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "processtable": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.72,
+            "std": 0.0298
+          },
+          "rootkit": {
+            "mean": 0.2308,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.9655,
+            "std": 0.0063
+          },
+          "satan": {
+            "mean": 0.9986,
+            "std": 0.0
+          },
+          "sendmail": {
+            "mean": 0.9286,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.9783,
+            "std": 0.0014
+          },
+          "snmpgetattack": {
+            "mean": 0.1079,
+            "std": 0.0074
+          },
+          "snmpguess": {
+            "mean": 0.0181,
+            "std": 0.0
+          },
+          "sqlattack": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.1,
+            "std": 0.2236
+          },
+          "warezmaster": {
+            "mean": 0.8703,
+            "std": 0.0031
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.5556,
+            "std": 0.0
+          },
+          "xsnoop": {
+            "mean": 0.75,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.9231,
+            "std": 0.0
+          }
+        }
       }
     },
     "Random Forest": {
@@ -2933,6 +4951,678 @@
             "std": 0.0
           }
         }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.5885,
+          "std": 0.0123
+        },
+        "precision": {
+          "mean": 0.9898,
+          "std": 0.0006
+        },
+        "recall": {
+          "mean": 0.4188,
+          "std": 0.0126
+        },
+        "fpr": {
+          "mean": 0.0058,
+          "std": 0.0004
+        },
+        "accuracy": {
+          "mean": 0.6667,
+          "std": 0.007
+        },
+        "val_f1": {
+          "mean": 0.9719,
+          "std": 0.0008
+        },
+        "val_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "f1_gap": {
+          "mean": -0.3835,
+          "std": 0.0119
+        },
+        "fpr_gap": {
+          "mean": 0.0058,
+          "std": 0.0004
+        },
+        "alerts_per_10k_normal": {
+          "mean": 57.46,
+          "std": 4.4725
+        },
+        "precision_prev1": {
+          "mean": 0.4246,
+          "std": 0.0149
+        },
+        "precision_prev10": {
+          "mean": 0.8902,
+          "std": 0.006
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.571,
+            "std": 0.0179
+          },
+          "unseen": {
+            "mean": 0.0502,
+            "std": 0.0006
+          },
+          "DoS": {
+            "mean": 0.6102,
+            "std": 0.0214
+          },
+          "Probe": {
+            "mean": 0.3398,
+            "std": 0.006
+          },
+          "R2L": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "U2R": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "apache2": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.107,
+            "std": 0.0136
+          },
+          "buffer_overflow": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "httptunnel": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.9291,
+            "std": 0.0112
+          },
+          "land": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "multihop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "named": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 0.8973,
+            "std": 0.0119
+          },
+          "nmap": {
+            "mean": 0.0301,
+            "std": 0.06
+          },
+          "perl": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.4097,
+            "std": 0.0401
+          },
+          "portsweep": {
+            "mean": 0.628,
+            "std": 0.0224
+          },
+          "processtable": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "rootkit": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.59,
+            "std": 0.0071
+          },
+          "satan": {
+            "mean": 0.5477,
+            "std": 0.015
+          },
+          "sendmail": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.4749,
+            "std": 0.1678
+          },
+          "snmpgetattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpguess": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sqlattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 0.1667,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xsnoop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.5885,
+          "std": 0.0123
+        },
+        "precision": {
+          "mean": 0.9898,
+          "std": 0.0006
+        },
+        "recall": {
+          "mean": 0.4188,
+          "std": 0.0126
+        },
+        "fpr": {
+          "mean": 0.0058,
+          "std": 0.0004
+        },
+        "accuracy": {
+          "mean": 0.6667,
+          "std": 0.007
+        },
+        "val_f1": {
+          "mean": 0.9719,
+          "std": 0.0008
+        },
+        "val_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "f1_gap": {
+          "mean": -0.3835,
+          "std": 0.0119
+        },
+        "fpr_gap": {
+          "mean": 0.0058,
+          "std": 0.0004
+        },
+        "alerts_per_10k_normal": {
+          "mean": 57.46,
+          "std": 4.4725
+        },
+        "precision_prev1": {
+          "mean": 0.4246,
+          "std": 0.0149
+        },
+        "precision_prev10": {
+          "mean": 0.8902,
+          "std": 0.006
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.571,
+            "std": 0.0179
+          },
+          "unseen": {
+            "mean": 0.0502,
+            "std": 0.0006
+          },
+          "DoS": {
+            "mean": 0.6102,
+            "std": 0.0214
+          },
+          "Probe": {
+            "mean": 0.3398,
+            "std": 0.006
+          },
+          "R2L": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "U2R": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "apache2": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "back": {
+            "mean": 0.107,
+            "std": 0.0136
+          },
+          "buffer_overflow": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "httptunnel": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "imap": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 0.9291,
+            "std": 0.0112
+          },
+          "land": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "mscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "multihop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "named": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 0.8973,
+            "std": 0.0119
+          },
+          "nmap": {
+            "mean": 0.0301,
+            "std": 0.06
+          },
+          "perl": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 0.4097,
+            "std": 0.0401
+          },
+          "portsweep": {
+            "mean": 0.628,
+            "std": 0.0224
+          },
+          "processtable": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "rootkit": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "saint": {
+            "mean": 0.59,
+            "std": 0.0071
+          },
+          "satan": {
+            "mean": 0.5477,
+            "std": 0.015
+          },
+          "sendmail": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "smurf": {
+            "mean": 0.4749,
+            "std": 0.1678
+          },
+          "snmpgetattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "snmpguess": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "sqlattack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 0.1667,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "worm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xlock": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xsnoop": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.9357,
+          "std": 0.002
+        },
+        "precision": {
+          "mean": 0.9036,
+          "std": 0.0032
+        },
+        "recall": {
+          "mean": 0.9702,
+          "std": 0.0057
+        },
+        "fpr": {
+          "mean": 0.1368,
+          "std": 0.0056
+        },
+        "accuracy": {
+          "mean": 0.9241,
+          "std": 0.0022
+        },
+        "val_f1": {
+          "mean": 0.9673,
+          "std": 0.0047
+        },
+        "val_fpr": {
+          "mean": 0.0589,
+          "std": 0.0088
+        },
+        "f1_gap": {
+          "mean": -0.0316,
+          "std": 0.0054
+        },
+        "fpr_gap": {
+          "mean": 0.0779,
+          "std": 0.0034
+        },
+        "alerts_per_10k_normal": {
+          "mean": 1367.52,
+          "std": 56.0551
+        },
+        "precision_prev1": {
+          "mean": 0.067,
+          "std": 0.0022
+        },
+        "precision_prev10": {
+          "mean": 0.441,
+          "std": 0.0088
+        },
+        "recall_by_group": {
+          "seen": {
+            "mean": 0.9896,
+            "std": 0.0043
+          },
+          "unseen": {
+            "mean": 0.9232,
+            "std": 0.0104
+          },
+          "DoS": {
+            "mean": 0.9993,
+            "std": 0.0007
+          },
+          "Probe": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "R2L": {
+            "mean": 0.8703,
+            "std": 0.0244
+          },
+          "U2R": {
+            "mean": 0.9403,
+            "std": 0.0182
+          },
+          "apache2": {
+            "mean": 0.9989,
+            "std": 0.0011
+          },
+          "back": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "buffer_overflow": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ftp_write": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "guess_passwd": {
+            "mean": 0.9316,
+            "std": 0.0326
+          },
+          "httptunnel": {
+            "mean": 0.9835,
+            "std": 0.0063
+          },
+          "imap": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ipsweep": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "land": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "loadmodule": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "mailbomb": {
+            "mean": 0.9918,
+            "std": 0.0183
+          },
+          "mscan": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "multihop": {
+            "mean": 0.9333,
+            "std": 0.0248
+          },
+          "named": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "neptune": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "nmap": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "perl": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "phf": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "pod": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "portsweep": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "processtable": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "ps": {
+            "mean": 0.9067,
+            "std": 0.0365
+          },
+          "rootkit": {
+            "mean": 0.8,
+            "std": 0.0688
+          },
+          "saint": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "satan": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "sendmail": {
+            "mean": 0.8143,
+            "std": 0.1195
+          },
+          "smurf": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "snmpgetattack": {
+            "mean": 0.0404,
+            "std": 0.0047
+          },
+          "snmpguess": {
+            "mean": 0.681,
+            "std": 0.1044
+          },
+          "sqlattack": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "teardrop": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "udpstorm": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "warezmaster": {
+            "mean": 0.9928,
+            "std": 0.002
+          },
+          "worm": {
+            "mean": 0.1,
+            "std": 0.2236
+          },
+          "xlock": {
+            "mean": 0.9333,
+            "std": 0.0994
+          },
+          "xsnoop": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "xterm": {
+            "mean": 1.0,
+            "std": 0.0
+          }
+        }
       }
     }
   },
@@ -3148,6 +5838,198 @@
             "xsnoop": 0.5,
             "xterm": 0.4615
           }
+        },
+        "quantile_95": {
+          "precision": 0.9943,
+          "recall": 0.0542,
+          "f1": 0.1029,
+          "fpr": 0.0004,
+          "accuracy": 0.4615,
+          "tp": 696,
+          "tn": 9707,
+          "fp": 4,
+          "fn": 12137,
+          "threshold": 0.1954,
+          "val_f1": 0.1944,
+          "val_fpr": 0.0003,
+          "f1_gap": -0.0915,
+          "fpr_gap": 0.0001,
+          "alerts_per_10k_normal": 4.1,
+          "precision_prev1": 0.5708,
+          "precision_prev10": 0.936,
+          "recall_by_group": {
+            "seen": 0.0595,
+            "unseen": 0.0416,
+            "DoS": 0.0205,
+            "Probe": 0.2239,
+            "R2L": 0.0003,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.009,
+            "multihop": 0.0556,
+            "named": 0.0,
+            "neptune": 0.0322,
+            "nmap": 0.7808,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0382,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.4608,
+            "satan": 0.4395,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9927,
+          "recall": 0.0211,
+          "f1": 0.0414,
+          "fpr": 0.0002,
+          "accuracy": 0.4427,
+          "tp": 271,
+          "tn": 9709,
+          "fp": 2,
+          "fn": 12562,
+          "threshold": 0.198843,
+          "val_f1": 0.045,
+          "val_fpr": 0.0001,
+          "f1_gap": -0.0036,
+          "fpr_gap": 0.0001,
+          "alerts_per_10k_normal": 2.1,
+          "precision_prev1": 0.5088,
+          "precision_prev10": 0.9193,
+          "recall_by_group": {
+            "seen": 0.0265,
+            "unseen": 0.008,
+            "DoS": 0.0029,
+            "Probe": 0.1024,
+            "R2L": 0.0003,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.006,
+            "multihop": 0.0556,
+            "named": 0.0,
+            "neptune": 0.0041,
+            "nmap": 0.5616,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0191,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.0752,
+            "satan": 0.2367,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8827,
+          "recall": 0.8576,
+          "f1": 0.87,
+          "fpr": 0.1506,
+          "accuracy": 0.8541,
+          "tp": 11005,
+          "tn": 8249,
+          "fp": 1462,
+          "fn": 1828,
+          "threshold": -0.065513,
+          "val_f1": 0.8634,
+          "val_fpr": 0.2542,
+          "f1_gap": 0.0066,
+          "fpr_gap": -0.1036,
+          "alerts_per_10k_normal": 1505.5,
+          "precision_prev1": 0.0544,
+          "precision_prev10": 0.3876,
+          "recall_by_group": {
+            "seen": 0.8712,
+            "unseen": 0.8245,
+            "DoS": 0.9664,
+            "Probe": 0.9979,
+            "R2L": 0.4582,
+            "U2R": 0.8657,
+            "apache2": 0.9973,
+            "back": 0.9861,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1633,
+            "httptunnel": 0.9774,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.4539,
+            "mscan": 1.0,
+            "multihop": 0.6667,
+            "named": 0.9412,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9756,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.7333,
+            "rootkit": 0.6923,
+            "saint": 0.9906,
+            "satan": 1.0,
+            "sendmail": 0.8571,
+            "smurf": 0.8857,
+            "snmpgetattack": 0.1461,
+            "snmpguess": 0.0091,
+            "sqlattack": 1.0,
+            "teardrop": 0.5833,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9587,
+            "worm": 0.0,
+            "xlock": 0.8889,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
         }
       },
       "Local Outlier Factor": {
@@ -3358,6 +6240,198 @@
             "xlock": 0.4444,
             "xsnoop": 0.5,
             "xterm": 0.7692
+          }
+        },
+        "quantile_95": {
+          "precision": 0.7153,
+          "recall": 0.0676,
+          "f1": 0.1235,
+          "fpr": 0.0355,
+          "accuracy": 0.4539,
+          "tp": 867,
+          "tn": 9366,
+          "fp": 345,
+          "fn": 11966,
+          "threshold": 4.570011,
+          "val_f1": 0.1531,
+          "val_fpr": 0.0197,
+          "f1_gap": -0.0296,
+          "fpr_gap": 0.0158,
+          "alerts_per_10k_normal": 355.3,
+          "precision_prev1": 0.0188,
+          "precision_prev10": 0.1744,
+          "recall_by_group": {
+            "seen": 0.0657,
+            "unseen": 0.072,
+            "DoS": 0.059,
+            "Probe": 0.0715,
+            "R2L": 0.0797,
+            "U2R": 0.3582,
+            "apache2": 0.0,
+            "back": 0.0418,
+            "buffer_overflow": 0.25,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1024,
+            "httptunnel": 0.0977,
+            "imap": 0.0,
+            "ipsweep": 0.8369,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0819,
+            "mscan": 0.009,
+            "multihop": 0.2778,
+            "named": 0.1765,
+            "neptune": 0.0045,
+            "nmap": 0.4932,
+            "perl": 0.5,
+            "phf": 0.5,
+            "pod": 0.4878,
+            "portsweep": 0.0191,
+            "processtable": 0.2774,
+            "ps": 0.1333,
+            "rootkit": 0.2308,
+            "saint": 0.0063,
+            "satan": 0.0068,
+            "sendmail": 0.1429,
+            "smurf": 0.2271,
+            "snmpgetattack": 0.0169,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0678,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.6923
+          }
+        },
+        "quantile_99": {
+          "precision": 0.5892,
+          "recall": 0.0144,
+          "f1": 0.0281,
+          "fpr": 0.0133,
+          "accuracy": 0.4332,
+          "tp": 185,
+          "tn": 9582,
+          "fp": 129,
+          "fn": 12648,
+          "threshold": 38.923897,
+          "val_f1": 0.0247,
+          "val_fpr": 0.0077,
+          "f1_gap": 0.0034,
+          "fpr_gap": 0.0056,
+          "alerts_per_10k_normal": 132.8,
+          "precision_prev1": 0.0108,
+          "precision_prev10": 0.1076,
+          "recall_by_group": {
+            "seen": 0.0128,
+            "unseen": 0.0184,
+            "DoS": 0.0098,
+            "Probe": 0.0326,
+            "R2L": 0.0076,
+            "U2R": 0.1642,
+            "apache2": 0.0,
+            "back": 0.0139,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.0081,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.5603,
+            "land": 0.7143,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0205,
+            "mscan": 0.0,
+            "multihop": 0.1111,
+            "named": 0.1176,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0244,
+            "portsweep": 0.0,
+            "processtable": 0.0745,
+            "ps": 0.0667,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.4167,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0053,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.5,
+            "xterm": 0.5385
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.7967,
+          "recall": 0.8812,
+          "f1": 0.8368,
+          "fpr": 0.2972,
+          "accuracy": 0.8043,
+          "tp": 11308,
+          "tn": 6825,
+          "fp": 2886,
+          "fn": 1525,
+          "threshold": -0.351994,
+          "val_f1": 0.8768,
+          "val_fpr": 0.2124,
+          "f1_gap": -0.04,
+          "fpr_gap": 0.0848,
+          "alerts_per_10k_normal": 2971.9,
+          "precision_prev1": 0.0291,
+          "precision_prev10": 0.2478,
+          "recall_by_group": {
+            "seen": 0.9263,
+            "unseen": 0.7717,
+            "DoS": 0.9119,
+            "Probe": 0.9595,
+            "R2L": 0.7373,
+            "U2R": 0.8209,
+            "apache2": 0.6323,
+            "back": 0.9136,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.7985,
+            "httptunnel": 0.1654,
+            "imap": 0.0,
+            "ipsweep": 0.9716,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.9966,
+            "mscan": 0.9588,
+            "multihop": 0.6111,
+            "named": 0.8235,
+            "neptune": 0.9972,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9268,
+            "portsweep": 0.8662,
+            "processtable": 0.8788,
+            "ps": 0.5333,
+            "rootkit": 0.8462,
+            "saint": 0.9436,
+            "satan": 0.981,
+            "sendmail": 0.7857,
+            "smurf": 0.6211,
+            "snmpgetattack": 0.2135,
+            "snmpguess": 0.4864,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.5,
+            "warezmaster": 0.9248,
+            "worm": 0.0,
+            "xlock": 0.7778,
+            "xsnoop": 0.75,
+            "xterm": 0.8462
           }
         }
       },
@@ -3571,6 +6645,198 @@
             "xsnoop": 0.75,
             "xterm": 0.9231
           }
+        },
+        "quantile_95": {
+          "precision": 0.914,
+          "recall": 0.1417,
+          "f1": 0.2453,
+          "fpr": 0.0176,
+          "accuracy": 0.5038,
+          "tp": 1818,
+          "tn": 9540,
+          "fp": 171,
+          "fn": 11015,
+          "threshold": 158.577314,
+          "val_f1": 0.1451,
+          "val_fpr": 0.0236,
+          "f1_gap": 0.1002,
+          "fpr_gap": -0.006,
+          "alerts_per_10k_normal": 176.1,
+          "precision_prev1": 0.0752,
+          "precision_prev10": 0.472,
+          "recall_by_group": {
+            "seen": 0.1755,
+            "unseen": 0.0597,
+            "DoS": 0.0046,
+            "Probe": 0.3073,
+            "R2L": 0.3459,
+            "U2R": 0.6269,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.85,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.3794,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.004,
+            "multihop": 0.3889,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0274,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.2195,
+            "portsweep": 0.1911,
+            "processtable": 0.0,
+            "ps": 0.4,
+            "rootkit": 0.2308,
+            "saint": 0.5705,
+            "satan": 0.5891,
+            "sendmail": 0.7143,
+            "smurf": 0.015,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.6667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.5307,
+            "worm": 0.0,
+            "xlock": 0.4444,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "quantile_99": {
+          "precision": 0.8061,
+          "recall": 0.0123,
+          "f1": 0.0243,
+          "fpr": 0.0039,
+          "accuracy": 0.4361,
+          "tp": 158,
+          "tn": 9673,
+          "fp": 38,
+          "fn": 12675,
+          "threshold": 254.237087,
+          "val_f1": 0.0367,
+          "val_fpr": 0.0024,
+          "f1_gap": -0.0124,
+          "fpr_gap": 0.0015,
+          "alerts_per_10k_normal": 39.1,
+          "precision_prev1": 0.0308,
+          "precision_prev10": 0.259,
+          "recall_by_group": {
+            "seen": 0.0144,
+            "unseen": 0.0072,
+            "DoS": 0.0017,
+            "Probe": 0.0,
+            "R2L": 0.0392,
+            "U2R": 0.4776,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.4,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.078,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.2222,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.3333,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.1429,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.5,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0011,
+            "worm": 0.0,
+            "xlock": 0.2222,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8585,
+          "recall": 0.8522,
+          "f1": 0.8553,
+          "fpr": 0.1857,
+          "accuracy": 0.8359,
+          "tp": 10936,
+          "tn": 7908,
+          "fp": 1803,
+          "fn": 1897,
+          "threshold": -38.653784,
+          "val_f1": 0.855,
+          "val_fpr": 0.253,
+          "f1_gap": 0.0003,
+          "fpr_gap": -0.0673,
+          "alerts_per_10k_normal": 1856.7,
+          "precision_prev1": 0.0443,
+          "precision_prev10": 0.3377,
+          "recall_by_group": {
+            "seen": 0.8764,
+            "unseen": 0.7936,
+            "DoS": 0.9328,
+            "Probe": 0.9827,
+            "R2L": 0.5359,
+            "U2R": 0.7761,
+            "apache2": 0.9905,
+            "back": 0.2702,
+            "buffer_overflow": 1.0,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.4297,
+            "httptunnel": 0.9248,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.2696,
+            "mscan": 0.9699,
+            "multihop": 0.5,
+            "named": 0.5882,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.7333,
+            "rootkit": 0.2308,
+            "saint": 0.9718,
+            "satan": 0.9986,
+            "sendmail": 0.9286,
+            "smurf": 0.9805,
+            "snmpgetattack": 0.1124,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.5,
+            "warezmaster": 0.8718,
+            "worm": 0.0,
+            "xlock": 0.5556,
+            "xsnoop": 0.75,
+            "xterm": 0.9231
+          }
         }
       },
       "Random Forest": {
@@ -3779,6 +7045,198 @@
             "warezmaster": 0.9873,
             "worm": 0.5,
             "xlock": 0.7778,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
+        },
+        "quantile_95": {
+          "precision": 0.989,
+          "recall": 0.4118,
+          "f1": 0.5815,
+          "fpr": 0.0061,
+          "accuracy": 0.6626,
+          "tp": 5285,
+          "tn": 9652,
+          "fp": 59,
+          "fn": 7548,
+          "threshold": 1.0,
+          "val_f1": 0.9714,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3899,
+          "fpr_gap": 0.0061,
+          "alerts_per_10k_normal": 60.8,
+          "precision_prev1": 0.4064,
+          "precision_prev10": 0.8828,
+          "recall_by_group": {
+            "seen": 0.5609,
+            "unseen": 0.0507,
+            "DoS": 0.5965,
+            "Probe": 0.3449,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0975,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9149,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.8939,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.3902,
+            "portsweep": 0.6561,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5956,
+            "satan": 0.5619,
+            "sendmail": 0.0,
+            "smurf": 0.3519,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.989,
+          "recall": 0.4118,
+          "f1": 0.5815,
+          "fpr": 0.0061,
+          "accuracy": 0.6626,
+          "tp": 5285,
+          "tn": 9652,
+          "fp": 59,
+          "fn": 7548,
+          "threshold": 1.0,
+          "val_f1": 0.9714,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3899,
+          "fpr_gap": 0.0061,
+          "alerts_per_10k_normal": 60.8,
+          "precision_prev1": 0.4064,
+          "precision_prev10": 0.8828,
+          "recall_by_group": {
+            "seen": 0.5609,
+            "unseen": 0.0507,
+            "DoS": 0.5965,
+            "Probe": 0.3449,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0975,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9149,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.8939,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.3902,
+            "portsweep": 0.6561,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5956,
+            "satan": 0.5619,
+            "sendmail": 0.0,
+            "smurf": 0.3519,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8982,
+          "recall": 0.9781,
+          "f1": 0.9364,
+          "fpr": 0.1465,
+          "accuracy": 0.9244,
+          "tp": 12552,
+          "tn": 8288,
+          "fp": 1423,
+          "fn": 281,
+          "threshold": 0.007673,
+          "val_f1": 0.959,
+          "val_fpr": 0.0745,
+          "f1_gap": -0.0226,
+          "fpr_gap": 0.072,
+          "alerts_per_10k_normal": 1465.3,
+          "precision_prev1": 0.0632,
+          "precision_prev10": 0.4258,
+          "recall_by_group": {
+            "seen": 0.9936,
+            "unseen": 0.9405,
+            "DoS": 0.9999,
+            "Probe": 1.0,
+            "R2L": 0.9043,
+            "U2R": 0.9403,
+            "apache2": 1.0,
+            "back": 1.0,
+            "buffer_overflow": 1.0,
+            "ftp_write": 1.0,
+            "guess_passwd": 0.9626,
+            "httptunnel": 0.985,
+            "imap": 1.0,
+            "ipsweep": 1.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 1.0,
+            "mscan": 1.0,
+            "multihop": 0.9444,
+            "named": 1.0,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 1.0,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.9333,
+            "rootkit": 0.7692,
+            "saint": 1.0,
+            "satan": 1.0,
+            "sendmail": 1.0,
+            "smurf": 1.0,
+            "snmpgetattack": 0.0449,
+            "snmpguess": 0.852,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9915,
+            "worm": 0.5,
+            "xlock": 1.0,
             "xsnoop": 1.0,
             "xterm": 1.0
           }
@@ -3996,6 +7454,198 @@
             "xsnoop": 0.25,
             "xterm": 0.4615
           }
+        },
+        "quantile_95": {
+          "precision": 0.9974,
+          "recall": 0.0609,
+          "f1": 0.1149,
+          "fpr": 0.0002,
+          "accuracy": 0.4654,
+          "tp": 782,
+          "tn": 9709,
+          "fp": 2,
+          "fn": 12051,
+          "threshold": 0.211259,
+          "val_f1": 0.1942,
+          "val_fpr": 0.0001,
+          "f1_gap": -0.0793,
+          "fpr_gap": 0.0001,
+          "alerts_per_10k_normal": 2.1,
+          "precision_prev1": 0.7493,
+          "precision_prev10": 0.9705,
+          "recall_by_group": {
+            "seen": 0.0662,
+            "unseen": 0.0483,
+            "DoS": 0.0241,
+            "Probe": 0.2482,
+            "R2L": 0.0003,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.004,
+            "multihop": 0.0556,
+            "named": 0.0,
+            "neptune": 0.038,
+            "nmap": 0.0137,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0382,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5549,
+            "satan": 0.5619,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 1.0,
+          "recall": 0.0293,
+          "f1": 0.0569,
+          "fpr": 0.0,
+          "accuracy": 0.4474,
+          "tp": 376,
+          "tn": 9711,
+          "fp": 0,
+          "fn": 12457,
+          "threshold": 0.23615,
+          "val_f1": 0.0422,
+          "val_fpr": 0.0,
+          "f1_gap": 0.0147,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 1.0,
+          "precision_prev10": 1.0,
+          "recall_by_group": {
+            "seen": 0.0308,
+            "unseen": 0.0256,
+            "DoS": 0.0001,
+            "Probe": 0.1549,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.0002,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.3009,
+            "satan": 0.3796,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8953,
+          "recall": 0.8579,
+          "f1": 0.8762,
+          "fpr": 0.1325,
+          "accuracy": 0.862,
+          "tp": 11010,
+          "tn": 8424,
+          "fp": 1287,
+          "fn": 1823,
+          "threshold": -0.062126,
+          "val_f1": 0.8707,
+          "val_fpr": 0.2299,
+          "f1_gap": 0.0055,
+          "fpr_gap": -0.0974,
+          "alerts_per_10k_normal": 1325.3,
+          "precision_prev1": 0.0614,
+          "precision_prev10": 0.4184,
+          "recall_by_group": {
+            "seen": 0.8709,
+            "unseen": 0.8267,
+            "DoS": 0.971,
+            "Probe": 0.9975,
+            "R2L": 0.4499,
+            "U2R": 0.791,
+            "apache2": 0.9973,
+            "back": 0.961,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1576,
+            "httptunnel": 0.9699,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.5256,
+            "mscan": 1.0,
+            "multihop": 0.6111,
+            "named": 0.9412,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9756,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.6,
+            "rootkit": 0.4615,
+            "saint": 0.9875,
+            "satan": 1.0,
+            "sendmail": 0.8571,
+            "smurf": 0.9218,
+            "snmpgetattack": 0.1011,
+            "snmpguess": 0.006,
+            "sqlattack": 1.0,
+            "teardrop": 0.5,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9523,
+            "worm": 0.0,
+            "xlock": 0.8889,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
         }
       },
       "Local Outlier Factor": {
@@ -4206,6 +7856,198 @@
             "xlock": 0.4444,
             "xsnoop": 0.5,
             "xterm": 0.7692
+          }
+        },
+        "quantile_95": {
+          "precision": 0.8085,
+          "recall": 0.1122,
+          "f1": 0.1971,
+          "fpr": 0.0351,
+          "accuracy": 0.4795,
+          "tp": 1440,
+          "tn": 9370,
+          "fp": 341,
+          "fn": 11393,
+          "threshold": 4.017087,
+          "val_f1": 0.1549,
+          "val_fpr": 0.0189,
+          "f1_gap": 0.0422,
+          "fpr_gap": 0.0162,
+          "alerts_per_10k_normal": 351.1,
+          "precision_prev1": 0.0313,
+          "precision_prev10": 0.262,
+          "recall_by_group": {
+            "seen": 0.1209,
+            "unseen": 0.0912,
+            "DoS": 0.1239,
+            "Probe": 0.0735,
+            "R2L": 0.1081,
+            "U2R": 0.3881,
+            "apache2": 0.0,
+            "back": 0.1727,
+            "buffer_overflow": 0.25,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1186,
+            "httptunnel": 0.0977,
+            "imap": 0.0,
+            "ipsweep": 0.7163,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.116,
+            "mscan": 0.009,
+            "multihop": 0.2778,
+            "named": 0.1765,
+            "neptune": 0.0846,
+            "nmap": 0.5068,
+            "perl": 0.5,
+            "phf": 0.5,
+            "pod": 0.5366,
+            "portsweep": 0.121,
+            "processtable": 0.365,
+            "ps": 0.2,
+            "rootkit": 0.2308,
+            "saint": 0.0063,
+            "satan": 0.0136,
+            "sendmail": 0.1429,
+            "smurf": 0.215,
+            "snmpgetattack": 0.0169,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.1335,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "quantile_99": {
+          "precision": 0.723,
+          "recall": 0.0203,
+          "f1": 0.0396,
+          "fpr": 0.0103,
+          "accuracy": 0.4379,
+          "tp": 261,
+          "tn": 9611,
+          "fp": 100,
+          "fn": 12572,
+          "threshold": 38.169245,
+          "val_f1": 0.0292,
+          "val_fpr": 0.0057,
+          "f1_gap": 0.0104,
+          "fpr_gap": 0.0046,
+          "alerts_per_10k_normal": 103.0,
+          "precision_prev1": 0.0196,
+          "precision_prev10": 0.18,
+          "recall_by_group": {
+            "seen": 0.0176,
+            "unseen": 0.0269,
+            "DoS": 0.0135,
+            "Probe": 0.0384,
+            "R2L": 0.0184,
+            "U2R": 0.209,
+            "apache2": 0.0,
+            "back": 0.0139,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.0049,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 0.7143,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0205,
+            "mscan": 0.0,
+            "multihop": 0.1111,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0732,
+            "portsweep": 0.0,
+            "processtable": 0.1139,
+            "ps": 0.0667,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.003,
+            "sqlattack": 1.0,
+            "teardrop": 0.3333,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0403,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.5,
+            "xterm": 0.6154
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.7928,
+          "recall": 0.8949,
+          "f1": 0.8408,
+          "fpr": 0.309,
+          "accuracy": 0.807,
+          "tp": 11484,
+          "tn": 6710,
+          "fp": 3001,
+          "fn": 1349,
+          "threshold": -0.395972,
+          "val_f1": 0.8714,
+          "val_fpr": 0.2253,
+          "f1_gap": -0.0306,
+          "fpr_gap": 0.0837,
+          "alerts_per_10k_normal": 3090.3,
+          "precision_prev1": 0.0284,
+          "precision_prev10": 0.2434,
+          "recall_by_group": {
+            "seen": 0.929,
+            "unseen": 0.8123,
+            "DoS": 0.9303,
+            "Probe": 0.9603,
+            "R2L": 0.7497,
+            "U2R": 0.8358,
+            "apache2": 0.7015,
+            "back": 0.9053,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.8083,
+            "httptunnel": 0.1654,
+            "imap": 0.0,
+            "ipsweep": 0.9716,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.9966,
+            "mscan": 0.9608,
+            "multihop": 0.7222,
+            "named": 0.8235,
+            "neptune": 0.9979,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 0.8599,
+            "processtable": 1.0,
+            "ps": 0.6,
+            "rootkit": 0.7692,
+            "saint": 0.9436,
+            "satan": 0.9823,
+            "sendmail": 0.7857,
+            "smurf": 0.6226,
+            "snmpgetattack": 0.2135,
+            "snmpguess": 0.5257,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9343,
+            "worm": 0.0,
+            "xlock": 0.7778,
+            "xsnoop": 0.75,
+            "xterm": 0.9231
           }
         }
       },
@@ -4419,6 +8261,198 @@
             "xsnoop": 0.75,
             "xterm": 0.9231
           }
+        },
+        "quantile_95": {
+          "precision": 0.9154,
+          "recall": 0.1442,
+          "f1": 0.2491,
+          "fpr": 0.0176,
+          "accuracy": 0.5052,
+          "tp": 1850,
+          "tn": 9540,
+          "fp": 171,
+          "fn": 10983,
+          "threshold": 149.447386,
+          "val_f1": 0.1438,
+          "val_fpr": 0.0242,
+          "f1_gap": 0.1053,
+          "fpr_gap": -0.0066,
+          "alerts_per_10k_normal": 176.1,
+          "precision_prev1": 0.0764,
+          "precision_prev10": 0.4763,
+          "recall_by_group": {
+            "seen": 0.1764,
+            "unseen": 0.0661,
+            "DoS": 0.0043,
+            "Probe": 0.3218,
+            "R2L": 0.3456,
+            "U2R": 0.6269,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.85,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.3794,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0281,
+            "multihop": 0.3889,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0274,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.3171,
+            "portsweep": 0.2293,
+            "processtable": 0.0,
+            "ps": 0.4,
+            "rootkit": 0.2308,
+            "saint": 0.5737,
+            "satan": 0.5946,
+            "sendmail": 0.7143,
+            "smurf": 0.006,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.6667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.5307,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "quantile_99": {
+          "precision": 0.8027,
+          "recall": 0.0139,
+          "f1": 0.0274,
+          "fpr": 0.0045,
+          "accuracy": 0.4367,
+          "tp": 179,
+          "tn": 9667,
+          "fp": 44,
+          "fn": 12654,
+          "threshold": 225.094119,
+          "val_f1": 0.0367,
+          "val_fpr": 0.0024,
+          "f1_gap": -0.0093,
+          "fpr_gap": 0.0021,
+          "alerts_per_10k_normal": 45.3,
+          "precision_prev1": 0.0302,
+          "precision_prev10": 0.2549,
+          "recall_by_group": {
+            "seen": 0.0172,
+            "unseen": 0.0061,
+            "DoS": 0.002,
+            "Probe": 0.0,
+            "R2L": 0.0468,
+            "U2R": 0.4328,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.4,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.0967,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.2222,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.1333,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.1429,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.6667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0011,
+            "worm": 0.0,
+            "xlock": 0.1111,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8825,
+          "recall": 0.8416,
+          "f1": 0.8616,
+          "fpr": 0.1481,
+          "accuracy": 0.846,
+          "tp": 10800,
+          "tn": 8273,
+          "fp": 1438,
+          "fn": 2033,
+          "threshold": -22.201482,
+          "val_f1": 0.8755,
+          "val_fpr": 0.2019,
+          "f1_gap": -0.0139,
+          "fpr_gap": -0.0538,
+          "alerts_per_10k_normal": 1480.8,
+          "precision_prev1": 0.0543,
+          "precision_prev10": 0.3871,
+          "recall_by_group": {
+            "seen": 0.8677,
+            "unseen": 0.7784,
+            "DoS": 0.9205,
+            "Probe": 0.9698,
+            "R2L": 0.5314,
+            "U2R": 0.7761,
+            "apache2": 0.9824,
+            "back": 0.0836,
+            "buffer_overflow": 1.0,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.4249,
+            "httptunnel": 0.9173,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.215,
+            "mscan": 0.9428,
+            "multihop": 0.5,
+            "named": 0.5882,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.7333,
+            "rootkit": 0.2308,
+            "saint": 0.9592,
+            "satan": 0.9986,
+            "sendmail": 0.9286,
+            "smurf": 0.9774,
+            "snmpgetattack": 0.1011,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.8676,
+            "worm": 0.0,
+            "xlock": 0.5556,
+            "xsnoop": 0.75,
+            "xterm": 0.9231
+          }
         }
       },
       "Random Forest": {
@@ -4627,6 +8661,198 @@
             "warezmaster": 0.9958,
             "worm": 0.0,
             "xlock": 0.7778,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9904,
+          "recall": 0.4086,
+          "f1": 0.5785,
+          "fpr": 0.0053,
+          "accuracy": 0.6611,
+          "tp": 5243,
+          "tn": 9660,
+          "fp": 51,
+          "fn": 7590,
+          "threshold": 1.0,
+          "val_f1": 0.9709,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3924,
+          "fpr_gap": 0.0053,
+          "alerts_per_10k_normal": 52.5,
+          "precision_prev1": 0.44,
+          "precision_prev10": 0.8963,
+          "recall_by_group": {
+            "seen": 0.5568,
+            "unseen": 0.0496,
+            "DoS": 0.5958,
+            "Probe": 0.3296,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.1226,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9291,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.8896,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.439,
+            "portsweep": 0.6178,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5831,
+            "satan": 0.5224,
+            "sendmail": 0.0,
+            "smurf": 0.3579,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9904,
+          "recall": 0.4086,
+          "f1": 0.5785,
+          "fpr": 0.0053,
+          "accuracy": 0.6611,
+          "tp": 5243,
+          "tn": 9660,
+          "fp": 51,
+          "fn": 7590,
+          "threshold": 1.0,
+          "val_f1": 0.9709,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3924,
+          "fpr_gap": 0.0053,
+          "alerts_per_10k_normal": 52.5,
+          "precision_prev1": 0.44,
+          "precision_prev10": 0.8963,
+          "recall_by_group": {
+            "seen": 0.5568,
+            "unseen": 0.0496,
+            "DoS": 0.5958,
+            "Probe": 0.3296,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.1226,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9291,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.8896,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.439,
+            "portsweep": 0.6178,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5831,
+            "satan": 0.5224,
+            "sendmail": 0.0,
+            "smurf": 0.3579,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9036,
+          "recall": 0.9681,
+          "f1": 0.9347,
+          "fpr": 0.1364,
+          "accuracy": 0.923,
+          "tp": 12423,
+          "tn": 8386,
+          "fp": 1325,
+          "fn": 410,
+          "threshold": 0.012673,
+          "val_f1": 0.969,
+          "val_fpr": 0.0558,
+          "f1_gap": -0.0343,
+          "fpr_gap": 0.0806,
+          "alerts_per_10k_normal": 1364.4,
+          "precision_prev1": 0.0669,
+          "precision_prev10": 0.4408,
+          "recall_by_group": {
+            "seen": 0.9884,
+            "unseen": 0.9187,
+            "DoS": 0.9996,
+            "Probe": 1.0,
+            "R2L": 0.8596,
+            "U2R": 0.9701,
+            "apache2": 0.9986,
+            "back": 1.0,
+            "buffer_overflow": 1.0,
+            "ftp_write": 1.0,
+            "guess_passwd": 0.9204,
+            "httptunnel": 0.985,
+            "imap": 1.0,
+            "ipsweep": 1.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 1.0,
+            "mscan": 1.0,
+            "multihop": 0.8889,
+            "named": 1.0,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 1.0,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.9333,
+            "rootkit": 0.9231,
+            "saint": 1.0,
+            "satan": 1.0,
+            "sendmail": 0.8571,
+            "smurf": 1.0,
+            "snmpgetattack": 0.0337,
+            "snmpguess": 0.6254,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9958,
+            "worm": 0.0,
+            "xlock": 0.8889,
             "xsnoop": 1.0,
             "xterm": 1.0
           }
@@ -4844,6 +9070,198 @@
             "xsnoop": 0.5,
             "xterm": 0.4615
           }
+        },
+        "quantile_95": {
+          "precision": 0.9987,
+          "recall": 0.0611,
+          "f1": 0.1151,
+          "fpr": 0.0001,
+          "accuracy": 0.4655,
+          "tp": 784,
+          "tn": 9710,
+          "fp": 1,
+          "fn": 12049,
+          "threshold": 0.203844,
+          "val_f1": 0.1954,
+          "val_fpr": 0.0002,
+          "f1_gap": -0.0803,
+          "fpr_gap": -0.0001,
+          "alerts_per_10k_normal": 1.0,
+          "precision_prev1": 0.857,
+          "precision_prev10": 0.9851,
+          "recall_by_group": {
+            "seen": 0.0663,
+            "unseen": 0.0485,
+            "DoS": 0.032,
+            "Probe": 0.2247,
+            "R2L": 0.0003,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.004,
+            "multihop": 0.0556,
+            "named": 0.0,
+            "neptune": 0.0498,
+            "nmap": 0.0274,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0064,
+            "processtable": 0.0058,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5455,
+            "satan": 0.4939,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9975,
+          "recall": 0.0313,
+          "f1": 0.0607,
+          "fpr": 0.0001,
+          "accuracy": 0.4485,
+          "tp": 402,
+          "tn": 9710,
+          "fp": 1,
+          "fn": 12431,
+          "threshold": 0.213696,
+          "val_f1": 0.0417,
+          "val_fpr": 0.0002,
+          "f1_gap": 0.019,
+          "fpr_gap": -0.0001,
+          "alerts_per_10k_normal": 1.0,
+          "precision_prev1": 0.7545,
+          "precision_prev10": 0.9713,
+          "recall_by_group": {
+            "seen": 0.0336,
+            "unseen": 0.0259,
+            "DoS": 0.0021,
+            "Probe": 0.159,
+            "R2L": 0.0003,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.002,
+            "multihop": 0.0556,
+            "named": 0.0,
+            "neptune": 0.0028,
+            "nmap": 0.0274,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.2978,
+            "satan": 0.3891,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8863,
+          "recall": 0.8549,
+          "f1": 0.8703,
+          "fpr": 0.145,
+          "accuracy": 0.855,
+          "tp": 10971,
+          "tn": 8303,
+          "fp": 1408,
+          "fn": 1862,
+          "threshold": -0.069753,
+          "val_f1": 0.8639,
+          "val_fpr": 0.2489,
+          "f1_gap": 0.0064,
+          "fpr_gap": -0.1039,
+          "alerts_per_10k_normal": 1449.9,
+          "precision_prev1": 0.0562,
+          "precision_prev10": 0.3958,
+          "recall_by_group": {
+            "seen": 0.8649,
+            "unseen": 0.8307,
+            "DoS": 0.9642,
+            "Probe": 0.9979,
+            "R2L": 0.453,
+            "U2R": 0.8209,
+            "apache2": 0.9973,
+            "back": 0.844,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1527,
+            "httptunnel": 0.9699,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.5427,
+            "mscan": 1.0,
+            "multihop": 0.6111,
+            "named": 0.9412,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9756,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.6667,
+            "rootkit": 0.6154,
+            "saint": 0.9906,
+            "satan": 1.0,
+            "sendmail": 0.8571,
+            "smurf": 0.9038,
+            "snmpgetattack": 0.1461,
+            "snmpguess": 0.0091,
+            "sqlattack": 1.0,
+            "teardrop": 0.3333,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9587,
+            "worm": 0.0,
+            "xlock": 0.8889,
+            "xsnoop": 1.0,
+            "xterm": 0.9231
+          }
         }
       },
       "Local Outlier Factor": {
@@ -5054,6 +9472,198 @@
             "xlock": 0.4444,
             "xsnoop": 0.5,
             "xterm": 0.7692
+          }
+        },
+        "quantile_95": {
+          "precision": 0.7552,
+          "recall": 0.0846,
+          "f1": 0.1522,
+          "fpr": 0.0362,
+          "accuracy": 0.4633,
+          "tp": 1086,
+          "tn": 9359,
+          "fp": 352,
+          "fn": 11747,
+          "threshold": 4.341256,
+          "val_f1": 0.1468,
+          "val_fpr": 0.0228,
+          "f1_gap": 0.0054,
+          "fpr_gap": 0.0134,
+          "alerts_per_10k_normal": 362.5,
+          "precision_prev1": 0.023,
+          "precision_prev10": 0.206,
+          "recall_by_group": {
+            "seen": 0.0883,
+            "unseen": 0.0757,
+            "DoS": 0.0836,
+            "Probe": 0.0669,
+            "R2L": 0.0957,
+            "U2R": 0.3582,
+            "apache2": 0.0393,
+            "back": 0.1058,
+            "buffer_overflow": 0.25,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1113,
+            "httptunnel": 0.0902,
+            "imap": 0.0,
+            "ipsweep": 0.7447,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0956,
+            "mscan": 0.011,
+            "multihop": 0.2778,
+            "named": 0.1765,
+            "neptune": 0.0359,
+            "nmap": 0.4932,
+            "perl": 0.5,
+            "phf": 0.5,
+            "pod": 0.4878,
+            "portsweep": 0.0191,
+            "processtable": 0.2496,
+            "ps": 0.1333,
+            "rootkit": 0.2308,
+            "saint": 0.0063,
+            "satan": 0.0068,
+            "sendmail": 0.1429,
+            "smurf": 0.2286,
+            "snmpgetattack": 0.0169,
+            "snmpguess": 0.0151,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.107,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.6923
+          }
+        },
+        "quantile_99": {
+          "precision": 0.6304,
+          "recall": 0.0158,
+          "f1": 0.0309,
+          "fpr": 0.0123,
+          "accuracy": 0.4345,
+          "tp": 203,
+          "tn": 9592,
+          "fp": 119,
+          "fn": 12630,
+          "threshold": 40.854852,
+          "val_f1": 0.0204,
+          "val_fpr": 0.0097,
+          "f1_gap": 0.0105,
+          "fpr_gap": 0.0026,
+          "alerts_per_10k_normal": 122.5,
+          "precision_prev1": 0.0129,
+          "precision_prev10": 0.1254,
+          "recall_by_group": {
+            "seen": 0.0149,
+            "unseen": 0.0181,
+            "DoS": 0.0098,
+            "Probe": 0.0384,
+            "R2L": 0.009,
+            "U2R": 0.1642,
+            "apache2": 0.0,
+            "back": 0.0223,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.0081,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 0.7143,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0205,
+            "mscan": 0.0,
+            "multihop": 0.1111,
+            "named": 0.1176,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0244,
+            "portsweep": 0.0,
+            "processtable": 0.073,
+            "ps": 0.0667,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.25,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0095,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.5,
+            "xterm": 0.5385
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8036,
+          "recall": 0.8772,
+          "f1": 0.8388,
+          "fpr": 0.2833,
+          "accuracy": 0.8081,
+          "tp": 11257,
+          "tn": 6960,
+          "fp": 2751,
+          "fn": 1576,
+          "threshold": -0.338441,
+          "val_f1": 0.8848,
+          "val_fpr": 0.1942,
+          "f1_gap": -0.046,
+          "fpr_gap": 0.0891,
+          "alerts_per_10k_normal": 2832.9,
+          "precision_prev1": 0.0303,
+          "precision_prev10": 0.256,
+          "recall_by_group": {
+            "seen": 0.9161,
+            "unseen": 0.7829,
+            "DoS": 0.9141,
+            "Probe": 0.9467,
+            "R2L": 0.7258,
+            "U2R": 0.7761,
+            "apache2": 0.6784,
+            "back": 0.8802,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.7823,
+            "httptunnel": 0.1654,
+            "imap": 0.0,
+            "ipsweep": 0.9645,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.9898,
+            "mscan": 0.9458,
+            "multihop": 0.5556,
+            "named": 0.7647,
+            "neptune": 0.9931,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 0.8599,
+            "processtable": 0.9124,
+            "ps": 0.5333,
+            "rootkit": 0.6154,
+            "saint": 0.9436,
+            "satan": 0.9592,
+            "sendmail": 0.7857,
+            "smurf": 0.6075,
+            "snmpgetattack": 0.2079,
+            "snmpguess": 0.4924,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.5,
+            "warezmaster": 0.9121,
+            "worm": 0.0,
+            "xlock": 0.7778,
+            "xsnoop": 0.75,
+            "xterm": 0.8462
           }
         }
       },
@@ -5267,6 +9877,198 @@
             "xsnoop": 0.75,
             "xterm": 0.9231
           }
+        },
+        "quantile_95": {
+          "precision": 0.9297,
+          "recall": 0.1547,
+          "f1": 0.2652,
+          "fpr": 0.0154,
+          "accuracy": 0.5122,
+          "tp": 1985,
+          "tn": 9561,
+          "fp": 150,
+          "fn": 10848,
+          "threshold": 143.252237,
+          "val_f1": 0.1499,
+          "val_fpr": 0.0213,
+          "f1_gap": 0.1153,
+          "fpr_gap": -0.0059,
+          "alerts_per_10k_normal": 154.5,
+          "precision_prev1": 0.0919,
+          "precision_prev10": 0.5267,
+          "recall_by_group": {
+            "seen": 0.1801,
+            "unseen": 0.0931,
+            "DoS": 0.0071,
+            "Probe": 0.3689,
+            "R2L": 0.3456,
+            "U2R": 0.6269,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.85,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.3794,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.1295,
+            "multihop": 0.3889,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0274,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.5854,
+            "portsweep": 0.2675,
+            "processtable": 0.0,
+            "ps": 0.4,
+            "rootkit": 0.2308,
+            "saint": 0.5737,
+            "satan": 0.6041,
+            "sendmail": 0.7143,
+            "smurf": 0.0211,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.6667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.5307,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "quantile_99": {
+          "precision": 0.7624,
+          "recall": 0.012,
+          "f1": 0.0236,
+          "fpr": 0.0049,
+          "accuracy": 0.4355,
+          "tp": 154,
+          "tn": 9663,
+          "fp": 48,
+          "fn": 12679,
+          "threshold": 219.099543,
+          "val_f1": 0.0376,
+          "val_fpr": 0.002,
+          "f1_gap": -0.014,
+          "fpr_gap": 0.0029,
+          "alerts_per_10k_normal": 49.4,
+          "precision_prev1": 0.0239,
+          "precision_prev10": 0.2124,
+          "recall_by_group": {
+            "seen": 0.0144,
+            "unseen": 0.0061,
+            "DoS": 0.002,
+            "Probe": 0.0,
+            "R2L": 0.0388,
+            "U2R": 0.403,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.3,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.078,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.2222,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.1333,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.1429,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.6667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0011,
+            "worm": 0.0,
+            "xlock": 0.1111,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8803,
+          "recall": 0.8423,
+          "f1": 0.8609,
+          "fpr": 0.1514,
+          "accuracy": 0.845,
+          "tp": 10809,
+          "tn": 8241,
+          "fp": 1470,
+          "fn": 2024,
+          "threshold": -22.728793,
+          "val_f1": 0.8771,
+          "val_fpr": 0.1956,
+          "f1_gap": -0.0162,
+          "fpr_gap": -0.0442,
+          "alerts_per_10k_normal": 1513.7,
+          "precision_prev1": 0.0532,
+          "precision_prev10": 0.382,
+          "recall_by_group": {
+            "seen": 0.8679,
+            "unseen": 0.7803,
+            "DoS": 0.9208,
+            "Probe": 0.9727,
+            "R2L": 0.5317,
+            "U2R": 0.7612,
+            "apache2": 0.9824,
+            "back": 0.0864,
+            "buffer_overflow": 1.0,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.4249,
+            "httptunnel": 0.9173,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.2184,
+            "mscan": 0.9498,
+            "multihop": 0.5,
+            "named": 0.5882,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.6667,
+            "rootkit": 0.2308,
+            "saint": 0.9592,
+            "satan": 0.9986,
+            "sendmail": 0.9286,
+            "smurf": 0.9774,
+            "snmpgetattack": 0.1011,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.8686,
+            "worm": 0.0,
+            "xlock": 0.5556,
+            "xsnoop": 0.75,
+            "xterm": 0.9231
+          }
         }
       },
       "Random Forest": {
@@ -5475,6 +10277,198 @@
             "warezmaster": 0.9873,
             "worm": 0.0,
             "xlock": 0.8889,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9902,
+          "recall": 0.4088,
+          "f1": 0.5787,
+          "fpr": 0.0054,
+          "accuracy": 0.6612,
+          "tp": 5246,
+          "tn": 9659,
+          "fp": 52,
+          "fn": 7587,
+          "threshold": 1.0,
+          "val_f1": 0.9726,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3939,
+          "fpr_gap": 0.0054,
+          "alerts_per_10k_normal": 53.5,
+          "precision_prev1": 0.4354,
+          "precision_prev10": 0.8945,
+          "recall_by_group": {
+            "seen": 0.5565,
+            "unseen": 0.0509,
+            "DoS": 0.5917,
+            "Probe": 0.3437,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.1198,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.922,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.8853,
+            "nmap": 0.137,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.3659,
+            "portsweep": 0.5987,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5987,
+            "satan": 0.5537,
+            "sendmail": 0.0,
+            "smurf": 0.3474,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9902,
+          "recall": 0.4088,
+          "f1": 0.5787,
+          "fpr": 0.0054,
+          "accuracy": 0.6612,
+          "tp": 5246,
+          "tn": 9659,
+          "fp": 52,
+          "fn": 7587,
+          "threshold": 1.0,
+          "val_f1": 0.9726,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3939,
+          "fpr_gap": 0.0054,
+          "alerts_per_10k_normal": 53.5,
+          "precision_prev1": 0.4354,
+          "precision_prev10": 0.8945,
+          "recall_by_group": {
+            "seen": 0.5565,
+            "unseen": 0.0509,
+            "DoS": 0.5917,
+            "Probe": 0.3437,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.1198,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.922,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.8853,
+            "nmap": 0.137,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.3659,
+            "portsweep": 0.5987,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5987,
+            "satan": 0.5537,
+            "sendmail": 0.0,
+            "smurf": 0.3474,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9061,
+          "recall": 0.974,
+          "f1": 0.9388,
+          "fpr": 0.1335,
+          "accuracy": 0.9277,
+          "tp": 12499,
+          "tn": 8415,
+          "fp": 1296,
+          "fn": 334,
+          "threshold": 0.015,
+          "val_f1": 0.9695,
+          "val_fpr": 0.0548,
+          "f1_gap": -0.0307,
+          "fpr_gap": 0.0787,
+          "alerts_per_10k_normal": 1334.6,
+          "precision_prev1": 0.0687,
+          "precision_prev10": 0.4478,
+          "recall_by_group": {
+            "seen": 0.9945,
+            "unseen": 0.9243,
+            "DoS": 0.9996,
+            "Probe": 1.0,
+            "R2L": 0.887,
+            "U2R": 0.9254,
+            "apache2": 0.9986,
+            "back": 1.0,
+            "buffer_overflow": 1.0,
+            "ftp_write": 1.0,
+            "guess_passwd": 0.9699,
+            "httptunnel": 0.9925,
+            "imap": 1.0,
+            "ipsweep": 1.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 1.0,
+            "mscan": 1.0,
+            "multihop": 0.9444,
+            "named": 1.0,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 1.0,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.8667,
+            "rootkit": 0.7692,
+            "saint": 1.0,
+            "satan": 1.0,
+            "sendmail": 0.7143,
+            "smurf": 1.0,
+            "snmpgetattack": 0.0393,
+            "snmpguess": 0.6888,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9905,
+            "worm": 0.0,
+            "xlock": 1.0,
             "xsnoop": 1.0,
             "xterm": 1.0
           }
@@ -5692,6 +10686,198 @@
             "xsnoop": 0.25,
             "xterm": 0.4615
           }
+        },
+        "quantile_95": {
+          "precision": 0.9981,
+          "recall": 0.0403,
+          "f1": 0.0774,
+          "fpr": 0.0001,
+          "accuracy": 0.4536,
+          "tp": 517,
+          "tn": 9710,
+          "fp": 1,
+          "fn": 12316,
+          "threshold": 0.19205,
+          "val_f1": 0.1951,
+          "val_fpr": 0.0005,
+          "f1_gap": -0.1177,
+          "fpr_gap": -0.0004,
+          "alerts_per_10k_normal": 1.0,
+          "precision_prev1": 0.7981,
+          "precision_prev10": 0.9775,
+          "recall_by_group": {
+            "seen": 0.0525,
+            "unseen": 0.0107,
+            "DoS": 0.0232,
+            "Probe": 0.1417,
+            "R2L": 0.0003,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.004,
+            "multihop": 0.0556,
+            "named": 0.0,
+            "neptune": 0.0365,
+            "nmap": 1.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0064,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.1129,
+            "satan": 0.3116,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9963,
+          "recall": 0.0212,
+          "f1": 0.0415,
+          "fpr": 0.0001,
+          "accuracy": 0.4428,
+          "tp": 272,
+          "tn": 9710,
+          "fp": 1,
+          "fn": 12561,
+          "threshold": 0.196318,
+          "val_f1": 0.0419,
+          "val_fpr": 0.0004,
+          "f1_gap": -0.0004,
+          "fpr_gap": -0.0003,
+          "alerts_per_10k_normal": 1.0,
+          "precision_prev1": 0.6752,
+          "precision_prev10": 0.9581,
+          "recall_by_group": {
+            "seen": 0.0275,
+            "unseen": 0.0059,
+            "DoS": 0.002,
+            "Probe": 0.1057,
+            "R2L": 0.0003,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.003,
+            "multihop": 0.0556,
+            "named": 0.0,
+            "neptune": 0.0026,
+            "nmap": 0.9315,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0064,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.0596,
+            "satan": 0.2245,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8757,
+          "recall": 0.8633,
+          "f1": 0.8695,
+          "fpr": 0.1619,
+          "accuracy": 0.8525,
+          "tp": 11079,
+          "tn": 8139,
+          "fp": 1572,
+          "fn": 1754,
+          "threshold": -0.081074,
+          "val_f1": 0.8573,
+          "val_fpr": 0.2725,
+          "f1_gap": 0.0122,
+          "fpr_gap": -0.1106,
+          "alerts_per_10k_normal": 1618.8,
+          "precision_prev1": 0.0511,
+          "precision_prev10": 0.3721,
+          "recall_by_group": {
+            "seen": 0.8768,
+            "unseen": 0.8307,
+            "DoS": 0.9721,
+            "Probe": 0.9979,
+            "R2L": 0.4693,
+            "U2R": 0.8507,
+            "apache2": 0.9973,
+            "back": 0.8635,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.173,
+            "httptunnel": 0.9774,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.4983,
+            "mscan": 1.0,
+            "multihop": 0.6667,
+            "named": 1.0,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9756,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.7333,
+            "rootkit": 0.6923,
+            "saint": 0.9906,
+            "satan": 1.0,
+            "sendmail": 0.9286,
+            "smurf": 0.9985,
+            "snmpgetattack": 0.1517,
+            "snmpguess": 0.0302,
+            "sqlattack": 1.0,
+            "teardrop": 0.5,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9682,
+            "worm": 0.0,
+            "xlock": 1.0,
+            "xsnoop": 1.0,
+            "xterm": 0.9231
+          }
         }
       },
       "Local Outlier Factor": {
@@ -5902,6 +11088,198 @@
             "xlock": 0.4444,
             "xsnoop": 0.5,
             "xterm": 0.7692
+          }
+        },
+        "quantile_95": {
+          "precision": 0.7577,
+          "recall": 0.086,
+          "f1": 0.1545,
+          "fpr": 0.0364,
+          "accuracy": 0.4641,
+          "tp": 1104,
+          "tn": 9358,
+          "fp": 353,
+          "fn": 11729,
+          "threshold": 4.574345,
+          "val_f1": 0.1477,
+          "val_fpr": 0.0223,
+          "f1_gap": 0.0068,
+          "fpr_gap": 0.0141,
+          "alerts_per_10k_normal": 363.5,
+          "precision_prev1": 0.0233,
+          "precision_prev10": 0.2082,
+          "recall_by_group": {
+            "seen": 0.0938,
+            "unseen": 0.0672,
+            "DoS": 0.0918,
+            "Probe": 0.0657,
+            "R2L": 0.0821,
+            "U2R": 0.3433,
+            "apache2": 0.0339,
+            "back": 0.0279,
+            "buffer_overflow": 0.2,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.095,
+            "httptunnel": 0.0977,
+            "imap": 0.0,
+            "ipsweep": 0.7234,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0512,
+            "mscan": 0.01,
+            "multihop": 0.2778,
+            "named": 0.1765,
+            "neptune": 0.0633,
+            "nmap": 0.5068,
+            "perl": 0.5,
+            "phf": 0.5,
+            "pod": 0.4878,
+            "portsweep": 0.0191,
+            "processtable": 0.2248,
+            "ps": 0.1333,
+            "rootkit": 0.2308,
+            "saint": 0.0063,
+            "satan": 0.0068,
+            "sendmail": 0.1429,
+            "smurf": 0.2211,
+            "snmpgetattack": 0.0225,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0837,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.6923
+          }
+        },
+        "quantile_99": {
+          "precision": 0.5903,
+          "recall": 0.0143,
+          "f1": 0.0278,
+          "fpr": 0.0131,
+          "accuracy": 0.4332,
+          "tp": 183,
+          "tn": 9584,
+          "fp": 127,
+          "fn": 12650,
+          "threshold": 41.696184,
+          "val_f1": 0.0205,
+          "val_fpr": 0.0096,
+          "f1_gap": 0.0073,
+          "fpr_gap": 0.0035,
+          "alerts_per_10k_normal": 130.8,
+          "precision_prev1": 0.0109,
+          "precision_prev10": 0.1081,
+          "recall_by_group": {
+            "seen": 0.0146,
+            "unseen": 0.0133,
+            "DoS": 0.0068,
+            "Probe": 0.0384,
+            "R2L": 0.009,
+            "U2R": 0.194,
+            "apache2": 0.0,
+            "back": 0.0167,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.0081,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 0.7143,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0205,
+            "mscan": 0.0,
+            "multihop": 0.1111,
+            "named": 0.1176,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0244,
+            "portsweep": 0.0,
+            "processtable": 0.0438,
+            "ps": 0.0667,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.25,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0095,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.5,
+            "xterm": 0.5385
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.7949,
+          "recall": 0.8952,
+          "f1": 0.842,
+          "fpr": 0.3053,
+          "accuracy": 0.8088,
+          "tp": 11488,
+          "tn": 6746,
+          "fp": 2965,
+          "fn": 1345,
+          "threshold": -0.370519,
+          "val_f1": 0.8742,
+          "val_fpr": 0.2214,
+          "f1_gap": -0.0322,
+          "fpr_gap": 0.0839,
+          "alerts_per_10k_normal": 3053.2,
+          "precision_prev1": 0.0288,
+          "precision_prev10": 0.2457,
+          "recall_by_group": {
+            "seen": 0.93,
+            "unseen": 0.8109,
+            "DoS": 0.929,
+            "Probe": 0.9558,
+            "R2L": 0.7591,
+            "U2R": 0.806,
+            "apache2": 0.8073,
+            "back": 0.883,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.8359,
+            "httptunnel": 0.1654,
+            "imap": 0.0,
+            "ipsweep": 0.9716,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 1.0,
+            "mscan": 0.9568,
+            "multihop": 0.6111,
+            "named": 0.7647,
+            "neptune": 0.9976,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 0.8662,
+            "processtable": 0.8876,
+            "ps": 0.5333,
+            "rootkit": 0.7692,
+            "saint": 0.9436,
+            "satan": 0.9714,
+            "sendmail": 0.7857,
+            "smurf": 0.6195,
+            "snmpgetattack": 0.2303,
+            "snmpguess": 0.5166,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.5,
+            "warezmaster": 0.929,
+            "worm": 0.0,
+            "xlock": 0.8889,
+            "xsnoop": 0.75,
+            "xterm": 0.8462
           }
         }
       },
@@ -6115,6 +11493,198 @@
             "xsnoop": 0.75,
             "xterm": 0.9231
           }
+        },
+        "quantile_95": {
+          "precision": 0.9139,
+          "recall": 0.139,
+          "f1": 0.2413,
+          "fpr": 0.0173,
+          "accuracy": 0.5024,
+          "tp": 1784,
+          "tn": 9543,
+          "fp": 168,
+          "fn": 11049,
+          "threshold": 191.239323,
+          "val_f1": 0.1412,
+          "val_fpr": 0.0255,
+          "f1_gap": 0.1001,
+          "fpr_gap": -0.0082,
+          "alerts_per_10k_normal": 173.0,
+          "precision_prev1": 0.0751,
+          "precision_prev10": 0.4717,
+          "recall_by_group": {
+            "seen": 0.1721,
+            "unseen": 0.0589,
+            "DoS": 0.0039,
+            "Probe": 0.2962,
+            "R2L": 0.3452,
+            "U2R": 0.6269,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.85,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.3794,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.004,
+            "multihop": 0.3889,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0274,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.1707,
+            "portsweep": 0.1465,
+            "processtable": 0.0,
+            "ps": 0.4,
+            "rootkit": 0.2308,
+            "saint": 0.5643,
+            "satan": 0.5646,
+            "sendmail": 0.7143,
+            "smurf": 0.0105,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.6667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.5297,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "quantile_99": {
+          "precision": 0.8263,
+          "recall": 0.0152,
+          "f1": 0.0298,
+          "fpr": 0.0042,
+          "accuracy": 0.4376,
+          "tp": 195,
+          "tn": 9670,
+          "fp": 41,
+          "fn": 12638,
+          "threshold": 306.526679,
+          "val_f1": 0.0344,
+          "val_fpr": 0.0034,
+          "f1_gap": -0.0046,
+          "fpr_gap": 0.0008,
+          "alerts_per_10k_normal": 42.2,
+          "precision_prev1": 0.0351,
+          "precision_prev10": 0.2857,
+          "recall_by_group": {
+            "seen": 0.0184,
+            "unseen": 0.0075,
+            "DoS": 0.0016,
+            "Probe": 0.0,
+            "R2L": 0.0492,
+            "U2R": 0.6119,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.8,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1007,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.2222,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.4,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.2143,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.4167,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0011,
+            "worm": 0.0,
+            "xlock": 0.1111,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8632,
+          "recall": 0.8445,
+          "f1": 0.8537,
+          "fpr": 0.1768,
+          "accuracy": 0.8353,
+          "tp": 10837,
+          "tn": 7994,
+          "fp": 1717,
+          "fn": 1996,
+          "threshold": -39.80366,
+          "val_f1": 0.8579,
+          "val_fpr": 0.2414,
+          "f1_gap": -0.0042,
+          "fpr_gap": -0.0646,
+          "alerts_per_10k_normal": 1768.1,
+          "precision_prev1": 0.046,
+          "precision_prev10": 0.3467,
+          "recall_by_group": {
+            "seen": 0.8685,
+            "unseen": 0.7861,
+            "DoS": 0.921,
+            "Probe": 0.9818,
+            "R2L": 0.5328,
+            "U2R": 0.7761,
+            "apache2": 0.9837,
+            "back": 0.0947,
+            "buffer_overflow": 1.0,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.4273,
+            "httptunnel": 0.9098,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.2116,
+            "mscan": 0.9699,
+            "multihop": 0.5,
+            "named": 0.5882,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.7333,
+            "rootkit": 0.2308,
+            "saint": 0.9655,
+            "satan": 0.9986,
+            "sendmail": 0.9286,
+            "smurf": 0.9774,
+            "snmpgetattack": 0.1067,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.8686,
+            "worm": 0.0,
+            "xlock": 0.5556,
+            "xsnoop": 0.75,
+            "xterm": 0.9231
+          }
         }
       },
       "Random Forest": {
@@ -6321,6 +11891,198 @@
             "teardrop": 1.0,
             "udpstorm": 1.0,
             "warezmaster": 0.9883,
+            "worm": 0.0,
+            "xlock": 0.7778,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
+        },
+        "quantile_95": {
+          "precision": 0.99,
+          "recall": 0.4305,
+          "f1": 0.6,
+          "fpr": 0.0058,
+          "accuracy": 0.6733,
+          "tp": 5524,
+          "tn": 9655,
+          "fp": 56,
+          "fn": 7309,
+          "threshold": 1.0,
+          "val_f1": 0.9721,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3721,
+          "fpr_gap": 0.0058,
+          "alerts_per_10k_normal": 57.7,
+          "precision_prev1": 0.4299,
+          "precision_prev10": 0.8924,
+          "recall_by_group": {
+            "seen": 0.5875,
+            "unseen": 0.0501,
+            "DoS": 0.6299,
+            "Probe": 0.3408,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.1031,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9362,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.9025,
+            "nmap": 0.0137,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.4634,
+            "portsweep": 0.6433,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5893,
+            "satan": 0.5483,
+            "sendmail": 0.0,
+            "smurf": 0.6586,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.99,
+          "recall": 0.4305,
+          "f1": 0.6,
+          "fpr": 0.0058,
+          "accuracy": 0.6733,
+          "tp": 5524,
+          "tn": 9655,
+          "fp": 56,
+          "fn": 7309,
+          "threshold": 1.0,
+          "val_f1": 0.9721,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3721,
+          "fpr_gap": 0.0058,
+          "alerts_per_10k_normal": 57.7,
+          "precision_prev1": 0.4299,
+          "precision_prev10": 0.8924,
+          "recall_by_group": {
+            "seen": 0.5875,
+            "unseen": 0.0501,
+            "DoS": 0.6299,
+            "Probe": 0.3408,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.1031,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9362,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.9025,
+            "nmap": 0.0137,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.4634,
+            "portsweep": 0.6433,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5893,
+            "satan": 0.5483,
+            "sendmail": 0.0,
+            "smurf": 0.6586,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9053,
+          "recall": 0.9659,
+          "f1": 0.9346,
+          "fpr": 0.1335,
+          "accuracy": 0.9231,
+          "tp": 12395,
+          "tn": 8415,
+          "fp": 1296,
+          "fn": 438,
+          "threshold": 0.015,
+          "val_f1": 0.97,
+          "val_fpr": 0.0538,
+          "f1_gap": -0.0354,
+          "fpr_gap": 0.0797,
+          "alerts_per_10k_normal": 1334.6,
+          "precision_prev1": 0.0681,
+          "precision_prev10": 0.4457,
+          "recall_by_group": {
+            "seen": 0.9855,
+            "unseen": 0.9184,
+            "DoS": 0.9981,
+            "Probe": 1.0,
+            "R2L": 0.8544,
+            "U2R": 0.9403,
+            "apache2": 1.0,
+            "back": 1.0,
+            "buffer_overflow": 1.0,
+            "ftp_write": 1.0,
+            "guess_passwd": 0.9017,
+            "httptunnel": 0.9774,
+            "imap": 1.0,
+            "ipsweep": 1.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.959,
+            "mscan": 1.0,
+            "multihop": 0.9444,
+            "named": 1.0,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 1.0,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.9333,
+            "rootkit": 0.7692,
+            "saint": 1.0,
+            "satan": 1.0,
+            "sendmail": 0.7143,
+            "smurf": 1.0,
+            "snmpgetattack": 0.0449,
+            "snmpguess": 0.6616,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9926,
             "worm": 0.0,
             "xlock": 0.7778,
             "xsnoop": 1.0,
@@ -6540,6 +12302,198 @@
             "xsnoop": 0.25,
             "xterm": 0.4615
           }
+        },
+        "quantile_95": {
+          "precision": 0.9966,
+          "recall": 0.0226,
+          "f1": 0.0442,
+          "fpr": 0.0001,
+          "accuracy": 0.4436,
+          "tp": 290,
+          "tn": 9710,
+          "fp": 1,
+          "fn": 12543,
+          "threshold": 0.209835,
+          "val_f1": 0.1936,
+          "val_fpr": 0.0002,
+          "f1_gap": -0.1494,
+          "fpr_gap": -0.0001,
+          "alerts_per_10k_normal": 1.0,
+          "precision_prev1": 0.6891,
+          "precision_prev10": 0.9606,
+          "recall_by_group": {
+            "seen": 0.0296,
+            "unseen": 0.0056,
+            "DoS": 0.0295,
+            "Probe": 0.0289,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.002,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.0466,
+            "nmap": 0.0137,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.0596,
+            "satan": 0.0653,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9917,
+          "recall": 0.0093,
+          "f1": 0.0184,
+          "fpr": 0.0001,
+          "accuracy": 0.436,
+          "tp": 119,
+          "tn": 9710,
+          "fp": 1,
+          "fn": 12714,
+          "threshold": 0.212871,
+          "val_f1": 0.0416,
+          "val_fpr": 0.0002,
+          "f1_gap": -0.0232,
+          "fpr_gap": -0.0001,
+          "alerts_per_10k_normal": 1.0,
+          "precision_prev1": 0.4763,
+          "precision_prev10": 0.9091,
+          "recall_by_group": {
+            "seen": 0.0108,
+            "unseen": 0.0056,
+            "DoS": 0.0068,
+            "Probe": 0.0281,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 0.4286,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.002,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.0103,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.0596,
+            "satan": 0.0639,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8852,
+          "recall": 0.8584,
+          "f1": 0.8716,
+          "fpr": 0.1472,
+          "accuracy": 0.856,
+          "tp": 11016,
+          "tn": 8282,
+          "fp": 1429,
+          "fn": 1817,
+          "threshold": -0.063752,
+          "val_f1": 0.8696,
+          "val_fpr": 0.2385,
+          "f1_gap": 0.002,
+          "fpr_gap": -0.0913,
+          "alerts_per_10k_normal": 1471.5,
+          "precision_prev1": 0.0556,
+          "precision_prev10": 0.3933,
+          "recall_by_group": {
+            "seen": 0.8694,
+            "unseen": 0.8317,
+            "DoS": 0.9674,
+            "Probe": 0.9979,
+            "R2L": 0.46,
+            "U2R": 0.8358,
+            "apache2": 0.9973,
+            "back": 0.8607,
+            "buffer_overflow": 0.9,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1633,
+            "httptunnel": 0.9774,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.5392,
+            "mscan": 1.0,
+            "multihop": 0.6667,
+            "named": 1.0,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9756,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.7333,
+            "rootkit": 0.6154,
+            "saint": 0.9906,
+            "satan": 1.0,
+            "sendmail": 0.9286,
+            "smurf": 0.9248,
+            "snmpgetattack": 0.1461,
+            "snmpguess": 0.0091,
+            "sqlattack": 1.0,
+            "teardrop": 0.75,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9619,
+            "worm": 0.0,
+            "xlock": 0.8889,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
         }
       },
       "Local Outlier Factor": {
@@ -6750,6 +12704,198 @@
             "xlock": 0.4444,
             "xsnoop": 0.75,
             "xterm": 0.7692
+          }
+        },
+        "quantile_95": {
+          "precision": 0.8028,
+          "recall": 0.1205,
+          "f1": 0.2096,
+          "fpr": 0.0391,
+          "accuracy": 0.4825,
+          "tp": 1547,
+          "tn": 9331,
+          "fp": 380,
+          "fn": 11286,
+          "threshold": 4.247416,
+          "val_f1": 0.1503,
+          "val_fpr": 0.0211,
+          "f1_gap": 0.0593,
+          "fpr_gap": 0.018,
+          "alerts_per_10k_normal": 391.3,
+          "precision_prev1": 0.0302,
+          "precision_prev10": 0.255,
+          "recall_by_group": {
+            "seen": 0.14,
+            "unseen": 0.0733,
+            "DoS": 0.1481,
+            "Probe": 0.0677,
+            "R2L": 0.088,
+            "U2R": 0.3582,
+            "apache2": 0.0339,
+            "back": 0.0947,
+            "buffer_overflow": 0.25,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.1097,
+            "httptunnel": 0.0977,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0683,
+            "mscan": 0.011,
+            "multihop": 0.2778,
+            "named": 0.1765,
+            "neptune": 0.1437,
+            "nmap": 0.5068,
+            "perl": 0.5,
+            "phf": 0.5,
+            "pod": 0.4878,
+            "portsweep": 0.1019,
+            "processtable": 0.2526,
+            "ps": 0.1333,
+            "rootkit": 0.2308,
+            "saint": 0.0063,
+            "satan": 0.0068,
+            "sendmail": 0.1429,
+            "smurf": 0.218,
+            "snmpgetattack": 0.0169,
+            "snmpguess": 0.0151,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0847,
+            "worm": 0.0,
+            "xlock": 0.3333,
+            "xsnoop": 0.5,
+            "xterm": 0.6923
+          }
+        },
+        "quantile_99": {
+          "precision": 0.5973,
+          "recall": 0.017,
+          "f1": 0.033,
+          "fpr": 0.0151,
+          "accuracy": 0.4339,
+          "tp": 218,
+          "tn": 9564,
+          "fp": 147,
+          "fn": 12615,
+          "threshold": 31.715735,
+          "val_f1": 0.0219,
+          "val_fpr": 0.009,
+          "f1_gap": 0.0111,
+          "fpr_gap": 0.0061,
+          "alerts_per_10k_normal": 151.4,
+          "precision_prev1": 0.0112,
+          "precision_prev10": 0.1109,
+          "recall_by_group": {
+            "seen": 0.0154,
+            "unseen": 0.0208,
+            "DoS": 0.0114,
+            "Probe": 0.0384,
+            "R2L": 0.009,
+            "U2R": 0.209,
+            "apache2": 0.0,
+            "back": 0.0279,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.3333,
+            "guess_passwd": 0.0081,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 0.7143,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0205,
+            "mscan": 0.0,
+            "multihop": 0.1111,
+            "named": 0.1176,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.0244,
+            "portsweep": 0.0,
+            "processtable": 0.0832,
+            "ps": 0.0667,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.0,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.5,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0095,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.5,
+            "xterm": 0.6154
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.7987,
+          "recall": 0.8855,
+          "f1": 0.8399,
+          "fpr": 0.2949,
+          "accuracy": 0.8078,
+          "tp": 11364,
+          "tn": 6847,
+          "fp": 2864,
+          "fn": 1469,
+          "threshold": -0.359794,
+          "val_f1": 0.8847,
+          "val_fpr": 0.1949,
+          "f1_gap": -0.0448,
+          "fpr_gap": 0.1,
+          "alerts_per_10k_normal": 2949.2,
+          "precision_prev1": 0.0294,
+          "precision_prev10": 0.2502,
+          "recall_by_group": {
+            "seen": 0.9256,
+            "unseen": 0.7885,
+            "DoS": 0.9193,
+            "Probe": 0.9583,
+            "R2L": 0.7383,
+            "U2R": 0.8358,
+            "apache2": 0.7585,
+            "back": 0.883,
+            "buffer_overflow": 0.95,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.8067,
+            "httptunnel": 0.1654,
+            "imap": 0.0,
+            "ipsweep": 0.9716,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 1.0,
+            "mscan": 0.9568,
+            "multihop": 0.6111,
+            "named": 0.7647,
+            "neptune": 0.9979,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9268,
+            "portsweep": 0.8599,
+            "processtable": 0.8365,
+            "ps": 0.5333,
+            "rootkit": 0.8462,
+            "saint": 0.9436,
+            "satan": 0.981,
+            "sendmail": 0.7143,
+            "smurf": 0.618,
+            "snmpgetattack": 0.2135,
+            "snmpguess": 0.4864,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.5,
+            "warezmaster": 0.9184,
+            "worm": 0.0,
+            "xlock": 0.8889,
+            "xsnoop": 0.75,
+            "xterm": 0.9231
           }
         }
       },
@@ -6963,6 +13109,198 @@
             "xsnoop": 0.75,
             "xterm": 0.8462
           }
+        },
+        "quantile_95": {
+          "precision": 0.9144,
+          "recall": 0.1407,
+          "f1": 0.2439,
+          "fpr": 0.0174,
+          "accuracy": 0.5034,
+          "tp": 1806,
+          "tn": 9542,
+          "fp": 169,
+          "fn": 11027,
+          "threshold": 205.660475,
+          "val_f1": 0.1422,
+          "val_fpr": 0.025,
+          "f1_gap": 0.1017,
+          "fpr_gap": -0.0076,
+          "alerts_per_10k_normal": 174.0,
+          "precision_prev1": 0.0755,
+          "precision_prev10": 0.4733,
+          "recall_by_group": {
+            "seen": 0.1744,
+            "unseen": 0.0592,
+            "DoS": 0.0063,
+            "Probe": 0.2974,
+            "R2L": 0.3456,
+            "U2R": 0.6269,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.85,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.3794,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.6596,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.004,
+            "multihop": 0.3889,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0274,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.1707,
+            "portsweep": 0.1465,
+            "processtable": 0.0,
+            "ps": 0.4,
+            "rootkit": 0.2308,
+            "saint": 0.5643,
+            "satan": 0.5687,
+            "sendmail": 0.7143,
+            "smurf": 0.0376,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.6667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.5297,
+            "worm": 0.0,
+            "xlock": 0.4444,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9357,
+          "recall": 0.0419,
+          "f1": 0.0803,
+          "fpr": 0.0038,
+          "accuracy": 0.453,
+          "tp": 538,
+          "tn": 9674,
+          "fp": 37,
+          "fn": 12295,
+          "threshold": 367.955809,
+          "val_f1": 0.0292,
+          "val_fpr": 0.0057,
+          "f1_gap": 0.0511,
+          "fpr_gap": -0.0019,
+          "alerts_per_10k_normal": 38.1,
+          "precision_prev1": 0.1,
+          "precision_prev10": 0.5501,
+          "recall_by_group": {
+            "seen": 0.0558,
+            "unseen": 0.0083,
+            "DoS": 0.0012,
+            "Probe": 0.0,
+            "R2L": 0.1692,
+            "U2R": 0.6119,
+            "apache2": 0.0,
+            "back": 0.0,
+            "buffer_overflow": 0.8,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.3794,
+            "httptunnel": 0.0075,
+            "imap": 0.0,
+            "ipsweep": 0.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.2222,
+            "named": 0.1765,
+            "neptune": 0.0,
+            "nmap": 0.0,
+            "perl": 1.0,
+            "phf": 0.5,
+            "pod": 0.0,
+            "portsweep": 0.0,
+            "processtable": 0.0,
+            "ps": 0.4,
+            "rootkit": 0.2308,
+            "saint": 0.0,
+            "satan": 0.0,
+            "sendmail": 0.3571,
+            "smurf": 0.0,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 1.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0011,
+            "worm": 0.0,
+            "xlock": 0.2222,
+            "xsnoop": 0.5,
+            "xterm": 0.7692
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8512,
+          "recall": 0.8512,
+          "f1": 0.8512,
+          "fpr": 0.1966,
+          "accuracy": 0.8306,
+          "tp": 10923,
+          "tn": 7802,
+          "fp": 1909,
+          "fn": 1910,
+          "threshold": -52.724565,
+          "val_f1": 0.8526,
+          "val_fpr": 0.261,
+          "f1_gap": -0.0014,
+          "fpr_gap": -0.0644,
+          "alerts_per_10k_normal": 1965.8,
+          "precision_prev1": 0.0419,
+          "precision_prev10": 0.3248,
+          "recall_by_group": {
+            "seen": 0.8754,
+            "unseen": 0.7925,
+            "DoS": 0.9302,
+            "Probe": 0.9851,
+            "R2L": 0.5362,
+            "U2R": 0.7761,
+            "apache2": 0.9878,
+            "back": 0.2423,
+            "buffer_overflow": 1.0,
+            "ftp_write": 0.6667,
+            "guess_passwd": 0.4289,
+            "httptunnel": 0.9098,
+            "imap": 1.0,
+            "ipsweep": 0.9858,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 0.2491,
+            "mscan": 0.9759,
+            "multihop": 0.5,
+            "named": 0.5882,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 0.9512,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.7333,
+            "rootkit": 0.2308,
+            "saint": 0.9718,
+            "satan": 0.9986,
+            "sendmail": 0.9286,
+            "smurf": 0.9789,
+            "snmpgetattack": 0.118,
+            "snmpguess": 0.0181,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 0.0,
+            "warezmaster": 0.875,
+            "worm": 0.0,
+            "xlock": 0.5556,
+            "xsnoop": 0.75,
+            "xterm": 0.9231
+          }
         }
       },
       "Random Forest": {
@@ -7169,6 +13507,198 @@
             "teardrop": 1.0,
             "udpstorm": 1.0,
             "warezmaster": 0.9915,
+            "worm": 0.0,
+            "xlock": 1.0,
+            "xsnoop": 1.0,
+            "xterm": 1.0
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9892,
+          "recall": 0.4343,
+          "f1": 0.6036,
+          "fpr": 0.0063,
+          "accuracy": 0.6753,
+          "tp": 5574,
+          "tn": 9650,
+          "fp": 61,
+          "fn": 7259,
+          "threshold": 1.0,
+          "val_f1": 0.9727,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3691,
+          "fpr_gap": 0.0063,
+          "alerts_per_10k_normal": 62.8,
+          "precision_prev1": 0.4112,
+          "precision_prev10": 0.8848,
+          "recall_by_group": {
+            "seen": 0.5932,
+            "unseen": 0.0496,
+            "DoS": 0.6369,
+            "Probe": 0.3399,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0919,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9433,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.9152,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.3902,
+            "portsweep": 0.6242,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5831,
+            "satan": 0.5524,
+            "sendmail": 0.0,
+            "smurf": 0.6586,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9892,
+          "recall": 0.4343,
+          "f1": 0.6036,
+          "fpr": 0.0063,
+          "accuracy": 0.6753,
+          "tp": 5574,
+          "tn": 9650,
+          "fp": 61,
+          "fn": 7259,
+          "threshold": 1.0,
+          "val_f1": 0.9727,
+          "val_fpr": 0.0,
+          "f1_gap": -0.3691,
+          "fpr_gap": 0.0063,
+          "alerts_per_10k_normal": 62.8,
+          "precision_prev1": 0.4112,
+          "precision_prev10": 0.8848,
+          "recall_by_group": {
+            "seen": 0.5932,
+            "unseen": 0.0496,
+            "DoS": 0.6369,
+            "Probe": 0.3399,
+            "R2L": 0.0,
+            "U2R": 0.0,
+            "apache2": 0.0,
+            "back": 0.0919,
+            "buffer_overflow": 0.0,
+            "ftp_write": 0.0,
+            "guess_passwd": 0.0,
+            "httptunnel": 0.0,
+            "imap": 0.0,
+            "ipsweep": 0.9433,
+            "land": 0.0,
+            "loadmodule": 0.0,
+            "mailbomb": 0.0,
+            "mscan": 0.0,
+            "multihop": 0.0,
+            "named": 0.0,
+            "neptune": 0.9152,
+            "nmap": 0.0,
+            "perl": 0.0,
+            "phf": 0.0,
+            "pod": 0.3902,
+            "portsweep": 0.6242,
+            "processtable": 0.0,
+            "ps": 0.0,
+            "rootkit": 0.0,
+            "saint": 0.5831,
+            "satan": 0.5524,
+            "sendmail": 0.0,
+            "smurf": 0.6586,
+            "snmpgetattack": 0.0,
+            "snmpguess": 0.0,
+            "sqlattack": 0.0,
+            "teardrop": 0.1667,
+            "udpstorm": 0.0,
+            "warezmaster": 0.0,
+            "worm": 0.0,
+            "xlock": 0.0,
+            "xsnoop": 0.0,
+            "xterm": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.905,
+          "recall": 0.9648,
+          "f1": 0.9339,
+          "fpr": 0.1339,
+          "accuracy": 0.9223,
+          "tp": 12381,
+          "tn": 8411,
+          "fp": 1300,
+          "fn": 452,
+          "threshold": 0.015,
+          "val_f1": 0.9691,
+          "val_fpr": 0.0555,
+          "f1_gap": -0.0352,
+          "fpr_gap": 0.0784,
+          "alerts_per_10k_normal": 1338.7,
+          "precision_prev1": 0.0679,
+          "precision_prev10": 0.4447,
+          "recall_by_group": {
+            "seen": 0.9858,
+            "unseen": 0.9139,
+            "DoS": 0.9995,
+            "Probe": 1.0,
+            "R2L": 0.8464,
+            "U2R": 0.9254,
+            "apache2": 0.9973,
+            "back": 1.0,
+            "buffer_overflow": 1.0,
+            "ftp_write": 1.0,
+            "guess_passwd": 0.9033,
+            "httptunnel": 0.9774,
+            "imap": 1.0,
+            "ipsweep": 1.0,
+            "land": 1.0,
+            "loadmodule": 1.0,
+            "mailbomb": 1.0,
+            "mscan": 1.0,
+            "multihop": 0.9444,
+            "named": 1.0,
+            "neptune": 1.0,
+            "nmap": 1.0,
+            "perl": 1.0,
+            "phf": 1.0,
+            "pod": 1.0,
+            "portsweep": 1.0,
+            "processtable": 1.0,
+            "ps": 0.8667,
+            "rootkit": 0.7692,
+            "saint": 1.0,
+            "satan": 1.0,
+            "sendmail": 0.7857,
+            "smurf": 1.0,
+            "snmpgetattack": 0.0393,
+            "snmpguess": 0.577,
+            "sqlattack": 1.0,
+            "teardrop": 1.0,
+            "udpstorm": 1.0,
+            "warezmaster": 0.9936,
             "worm": 0.0,
             "xlock": 1.0,
             "xsnoop": 1.0,

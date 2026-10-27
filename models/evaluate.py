@@ -118,7 +118,10 @@ VAL_FRACTION = 0.2
 OCSVM_MAX_TRAIN = 15_000
 SUMMARY_METRICS = ("f1", "precision", "recall", "fpr", "accuracy")
 FPR_TARGETS = {"fpr_1pct": 0.01, "fpr_5pct": 0.05}
-OP_SETTINGS = ["val_threshold", *FPR_TARGETS]
+# label-free: alert on the top share of validation flows, whatever their label
+QUANTILES = {"quantile_95": 0.95, "quantile_99": 0.99}
+# leaky on purpose: the threshold is chosen on test labels, to show how much that mistake would inflate F1
+OP_SETTINGS = ["val_threshold", *FPR_TARGETS, *QUANTILES, "oracle_test_max_f1"]
 # attack base rates for the re-weighted precision (Axelsson)
 PREVALENCES = {"precision_prev1": 0.01, "precision_prev10": 0.10}
 OP_METRICS = SUMMARY_METRICS + ("val_f1", "val_fpr", "f1_gap", "fpr_gap",
@@ -257,6 +260,10 @@ def fpr_threshold(scores_normal: np.ndarray, fpr: float) -> float:
     return float(np.nextafter(s[k], np.inf))
 
 
+def quantile_threshold(scores_val: np.ndarray, q: float) -> float:
+    return float(np.quantile(scores_val, q))
+
+
 def precision_at_prevalence(recall: float, fpr: float, prevalence: float) -> float:
     tp, fp = recall * prevalence, fpr * (1 - prevalence)
     return tp / (tp + fp) if tp + fp > 0 else 0.0
@@ -300,6 +307,9 @@ def evaluate_model(key, X_tr, y_tr, X_val, y_val, X_test, y_test, groups, seed, 
     thresholds = {"val_threshold": pick_threshold(y_val, s_val)}
     for name, fpr in FPR_TARGETS.items():
         thresholds[name] = fpr_threshold(s_val[y_val == 0], fpr)
+    for name, q in QUANTILES.items():
+        thresholds[name] = quantile_threshold(s_val, q)
+    thresholds["oracle_test_max_f1"] = pick_threshold(y_test, s_test)
 
     result = {
         "params": params,
@@ -411,6 +421,10 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
             "threshold": "max F1 on the validation split, applied unchanged to KDDTest+",
             "fixed_fpr_thresholds": "highest-recall threshold with at most 1% / 5% false alarms on the "
                                     "validation normal rows, applied unchanged to KDDTest+",
+            "oracle_test_max_f1": "LEAK, reported only to measure it: max-F1 threshold chosen on KDDTest+ labels",
+            "quantile_thresholds": "label-free: the 95th / 99th percentile of the scores of ALL validation flows "
+                                   "(no labels used), so about 5% / 1% of validation flows alert; the false-alarm "
+                                   "rate on normal traffic is whatever that gives",
             "precision_prev": "recall * p / (recall * p + fpr * (1 - p)) for attack base rate p = 1% and 10%; "
                               "assumes the test recall and fpr carry over to that base rate",
             "gaps": "test minus validation; f1_gap also moves with the attack prevalence, fpr_gap does not",
@@ -441,14 +455,15 @@ def plot_pr_curves(y_true, scores_by_model: dict, seed_results: dict, out_path: 
         color = f"C{i}"
         ax.plot(recalls, precisions, color=color, lw=2,
                 label=f"{name} (PR-AUC {res['pr_auc']:.3f})")
-        v, d = res["val_threshold"], res["default"]
+        v, f = res["val_threshold"], res["fpr_5pct"]
         ax.scatter([v["recall"]], [v["precision"]], color=color, s=90, zorder=5,
                    edgecolor="black")
-        ax.scatter([d["recall"]], [d["precision"]], color=color, s=70, marker="x", zorder=5)
+        ax.scatter([f["recall"]], [f["precision"]], color=color, s=70, marker="s", zorder=5)
 
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
-    ax.set_title("KDDTest+ (circle: validation threshold, x: model default)", fontsize=11)
+    ax.set_title("KDDTest+ (circle: max-F1 threshold, square: 5% validation false-alarm target)",
+                 fontsize=10)
     ax.legend(loc="lower left", fontsize=9)
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(0.0, 1.05)

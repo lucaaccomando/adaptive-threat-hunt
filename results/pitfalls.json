@@ -1,0 +1,265 @@
+{
+  "test_attack_prevalence": 0.5692,
+  "source_files": {
+    "default": "benchmark.json",
+    "normal_only": "benchmark_normal_only.json",
+    "onehot": "benchmark_onehot.json"
+  },
+  "rows": [
+    {
+      "pitfall": "threshold chosen on test labels",
+      "model": "Isolation Forest",
+      "metric": "F1",
+      "with_mistake": 0.8383,
+      "without_mistake": 0.8352,
+      "shift": 0.0031,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "threshold chosen on test labels",
+      "model": "Local Outlier Factor",
+      "metric": "F1",
+      "with_mistake": 0.7321,
+      "without_mistake": 0.7259,
+      "shift": 0.0062,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "threshold chosen on test labels",
+      "model": "One-Class SVM",
+      "metric": "F1",
+      "with_mistake": 0.7989,
+      "without_mistake": 0.7911,
+      "shift": 0.0078,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "threshold chosen on test labels",
+      "model": "Random Forest",
+      "metric": "F1",
+      "with_mistake": 0.9357,
+      "without_mistake": 0.7964,
+      "shift": 0.1393,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "max-F1 threshold reported as the operating point",
+      "model": "Isolation Forest",
+      "metric": "test FPR",
+      "with_mistake": 0.3604,
+      "without_mistake": 0.0135,
+      "shift": 0.3469,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "max-F1 threshold reported as the operating point",
+      "model": "Local Outlier Factor",
+      "metric": "test FPR",
+      "with_mistake": 0.9973,
+      "without_mistake": 0.1121,
+      "shift": 0.8852,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "max-F1 threshold reported as the operating point",
+      "model": "One-Class SVM",
+      "metric": "test FPR",
+      "with_mistake": 0.1189,
+      "without_mistake": 0.0655,
+      "shift": 0.0534,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "max-F1 threshold reported as the operating point",
+      "model": "Random Forest",
+      "metric": "test FPR",
+      "with_mistake": 0.028,
+      "without_mistake": 0.1264,
+      "shift": -0.0984,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "F1 at the test base rate instead of a 1% base rate",
+      "model": "Isolation Forest",
+      "metric": "precision",
+      "with_mistake": 0.7702,
+      "without_mistake": 0.0251,
+      "shift": 0.7451,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "F1 at the test base rate instead of a 1% base rate",
+      "model": "Local Outlier Factor",
+      "metric": "precision",
+      "with_mistake": 0.5698,
+      "without_mistake": 0.01,
+      "shift": 0.5598,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "F1 at the test base rate instead of a 1% base rate",
+      "model": "One-Class SVM",
+      "metric": "precision",
+      "with_mistake": 0.8881,
+      "without_mistake": 0.0572,
+      "shift": 0.8309,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "F1 at the test base rate instead of a 1% base rate",
+      "model": "Random Forest",
+      "metric": "precision",
+      "with_mistake": 0.9696,
+      "without_mistake": 0.1962,
+      "shift": 0.7734,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "default threshold instead of a validation-chosen one",
+      "model": "Isolation Forest",
+      "metric": "F1",
+      "with_mistake": 0.4581,
+      "without_mistake": 0.8352,
+      "shift": -0.3771,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "default threshold instead of a validation-chosen one",
+      "model": "Local Outlier Factor",
+      "metric": "F1",
+      "with_mistake": 0.608,
+      "without_mistake": 0.7259,
+      "shift": -0.1179,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "default threshold instead of a validation-chosen one",
+      "model": "One-Class SVM",
+      "metric": "F1",
+      "with_mistake": 0.4256,
+      "without_mistake": 0.7911,
+      "shift": -0.3655,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "default threshold instead of a validation-chosen one",
+      "model": "Random Forest",
+      "metric": "F1",
+      "with_mistake": 0.7486,
+      "without_mistake": 0.7964,
+      "shift": -0.0478,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "training on all flows instead of normal flows (unsupervised)",
+      "model": "Isolation Forest",
+      "metric": "unseen recall at max F1",
+      "with_mistake": 0.8684,
+      "without_mistake": 0.7492,
+      "shift": 0.1192,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "training on all flows instead of normal flows (unsupervised)",
+      "model": "Local Outlier Factor",
+      "metric": "unseen recall at max F1",
+      "with_mistake": 1.0,
+      "without_mistake": 0.7356,
+      "shift": 0.2644,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "training on all flows instead of normal flows (unsupervised)",
+      "model": "One-Class SVM",
+      "metric": "unseen recall at max F1",
+      "with_mistake": 0.5958,
+      "without_mistake": 0.3709,
+      "shift": 0.2249,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "fixed false-alarm target drifts under the shift",
+      "model": "Isolation Forest",
+      "metric": "test FPR at 5% target",
+      "with_mistake": 0.0135,
+      "without_mistake": 0.05,
+      "shift": -0.0365,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "fixed false-alarm target drifts under the shift",
+      "model": "Local Outlier Factor",
+      "metric": "test FPR at 5% target",
+      "with_mistake": 0.1121,
+      "without_mistake": 0.05,
+      "shift": 0.0621,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "fixed false-alarm target drifts under the shift",
+      "model": "One-Class SVM",
+      "metric": "test FPR at 5% target",
+      "with_mistake": 0.0655,
+      "without_mistake": 0.05,
+      "shift": 0.0155,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "fixed false-alarm target drifts under the shift",
+      "model": "Random Forest",
+      "metric": "test FPR at 5% target",
+      "with_mistake": 0.1264,
+      "without_mistake": 0.05,
+      "shift": 0.0764,
+      "source": "benchmark.json"
+    },
+    {
+      "pitfall": "one-hot instead of dropped categorical columns (sensitivity)",
+      "model": "Isolation Forest",
+      "metric": "F1 at max F1",
+      "with_mistake": 0.8619,
+      "without_mistake": 0.8352,
+      "shift": 0.0267,
+      "source": "benchmark_onehot.json"
+    },
+    {
+      "pitfall": "one-hot instead of dropped categorical columns (sensitivity)",
+      "model": "Local Outlier Factor",
+      "metric": "F1 at max F1",
+      "with_mistake": 0.7257,
+      "without_mistake": 0.7259,
+      "shift": -0.0002,
+      "source": "benchmark_onehot.json"
+    },
+    {
+      "pitfall": "one-hot instead of dropped categorical columns (sensitivity)",
+      "model": "One-Class SVM",
+      "metric": "F1 at max F1",
+      "with_mistake": 0.7115,
+      "without_mistake": 0.7911,
+      "shift": -0.0796,
+      "source": "benchmark_onehot.json"
+    },
+    {
+      "pitfall": "one-hot instead of dropped categorical columns (sensitivity)",
+      "model": "Random Forest",
+      "metric": "F1 at max F1",
+      "with_mistake": 0.775,
+      "without_mistake": 0.7964,
+      "shift": -0.0214,
+      "source": "benchmark_onehot.json"
+    },
+    {
+      "pitfall": "a flag-all detector reported as a result",
+      "model": "Local Outlier Factor",
+      "metric": "F1 at max F1",
+      "with_mistake": 0.7259,
+      "without_mistake": 0.7255,
+      "shift": 0.0004,
+      "source": "benchmark.json"
+    }
+  ],
+  "not_yet": [
+    "one dataset vs two (P0-10, needs a second dataset)"
+  ]
+}

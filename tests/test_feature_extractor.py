@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from scapy.all import IP, TCP, Ether, Raw, wrpcap
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from feature_extractor.extract import (
@@ -57,10 +58,65 @@ def test_pcapng_magic_constant():
     assert _PCAPNG_MAGIC == b"\x0a\x0d\x0d\x0a"
 
 
-def test_extract_falls_back_on_missing_file(tmp_path):
+def _tcp(src, dst, sport, dport, t, payload=b""):
+    p = IP(src=src, dst=dst) / TCP(sport=sport, dport=dport) / Raw(payload)
+    p.time = t
+    return p
+
+
+def test_extract_raises_on_missing_file(tmp_path):
     from feature_extractor.extract import extract_from_pcap
-    missing = tmp_path / "nonexistent.pcap"
-    df = extract_from_pcap(missing)
-    # should fall back to demo data rather than crash
-    assert isinstance(df, pd.DataFrame)
-    assert len(df) >= 2
+    with pytest.raises(FileNotFoundError):
+        extract_from_pcap(tmp_path / "nonexistent.pcap")
+
+
+def test_both_directions_form_one_flow(tmp_path):
+    from feature_extractor.extract import extract_from_pcap
+    path = tmp_path / "two_way.pcap"
+    wrpcap(str(path), [
+        _tcp("10.0.0.1", "10.0.0.2", 1234, 80, 100.0, b"aaaa"),
+        _tcp("10.0.0.2", "10.0.0.1", 80, 1234, 100.5, b"bb"),
+        _tcp("10.0.0.1", "10.0.0.2", 1234, 80, 101.0),
+    ])
+    df = extract_from_pcap(path)
+    assert len(df) == 1
+    assert df.loc[0, "pkt_count"] == 3
+    assert abs(df.loc[0, "duration_ms"] - 1000.0) < 1e-6
+    assert df.loc[0, "payload_entropy"] > 0
+
+
+def test_idle_gap_starts_a_new_flow(tmp_path):
+    from feature_extractor.extract import extract_from_pcap, IDLE_TIMEOUT_S
+    path = tmp_path / "reused_port.pcap"
+    wrpcap(str(path), [
+        _tcp("10.0.0.1", "10.0.0.2", 1234, 80, 100.0),
+        _tcp("10.0.0.1", "10.0.0.2", 1234, 80, 100.0 + IDLE_TIMEOUT_S + 80.0),
+    ])
+    df = extract_from_pcap(path)
+    assert len(df) == 2
+    assert (df["pkt_count"] == 1).all()
+
+
+def test_capture_without_ip_is_an_error(tmp_path):
+    from feature_extractor.extract import extract_from_pcap
+    path = tmp_path / "no_ip.pcap"
+    pkt = Ether() / Raw(b"not ip")
+    pkt.time = 1.0
+    wrpcap(str(path), [pkt])
+    with pytest.raises(ValueError):
+        extract_from_pcap(path)
+
+
+def test_demo_flag_writes_fake_rows(tmp_path, monkeypatch):
+    from feature_extractor.extract import main
+    out = tmp_path / "features.csv"
+    monkeypatch.setattr(sys, "argv", ["extract.py", "--demo", "--out", str(out)])
+    main()
+    assert len(pd.read_csv(out)) == 2
+
+
+def test_no_pcap_and_no_demo_is_a_usage_error(monkeypatch):
+    from feature_extractor.extract import main
+    monkeypatch.setattr(sys, "argv", ["extract.py"])
+    with pytest.raises(SystemExit):
+        main()

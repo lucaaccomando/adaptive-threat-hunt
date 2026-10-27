@@ -24,6 +24,7 @@ from evaluate import (
     operating_point,
     pick_threshold,
     precision_at_prevalence,
+    quantile_threshold,
     run_benchmark,
 )
 
@@ -108,6 +109,8 @@ def test_threshold_ignores_test_labels(tmp_path):
 
     for name in ("Isolation Forest", "Random Forest"):
         for setting in OP_SETTINGS:
+            if setting == "oracle_test_max_f1":
+                continue
             a = res_a["per_seed"]["0"][name][setting]
             b = res_b["per_seed"]["0"][name][setting]
             assert a["threshold"] == b["threshold"]
@@ -175,6 +178,13 @@ def test_ablation_flags(tmp_path):
     iforest = lambda r: r["per_seed"]["0"]["Isolation Forest"]["val_threshold"]
     assert rf(normal) == rf(base)
     assert iforest(normal)["threshold"] != iforest(base)["threshold"]
+
+
+def test_quantile_threshold_alerts_top_share_of_scores():
+    scores = np.arange(100, dtype=float)
+    thr = quantile_threshold(scores, 0.95)
+    assert (scores >= thr).sum() == 5
+    assert quantile_threshold(scores, 0.99) > thr
 
 
 def test_attack_groups_seen_and_unseen():

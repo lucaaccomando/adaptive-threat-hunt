@@ -2772,7 +2772,7 @@
       }
     }
   },
-  "robustness": {
+  "rank_stability": {
     "drop_k1": {
       "x_rank_rho_vs_primary": 0.968,
       "y_rank_rho_vs_primary": 0.985,

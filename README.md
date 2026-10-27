@@ -28,8 +28,15 @@ Three hypotheses, to be tested rather than assumed:
 - Done: a leave-one-attack-type-out study on KDDTrain+ (`models/leave_one_out.py`). It gives recall at a
   matched false-alarm rate, which the KDDTest+ table cannot.
 - Done: the detection map (`models/detection_map.py`). Positions, recall and rank correlations are computed.
-- Not done: a second dataset, label-free thresholds, a hybrid detector, and a table of evaluation
-  pitfalls.
+- Done: label-free thresholds (quantiles of validation scores, `models/evaluate.py`). On this data they do
+  not target a false-alarm rate, and the README says why.
+- Done: a forest-plus-anomaly-detector evaluation at a fixed false-alarm budget (`models/hybrid.py`).
+  It measured no gain on the test set.
+- Done: a table of evaluation pitfalls (`models/pitfalls.py`).
+- Not done: a second dataset, and a label-free threshold that targets a false-alarm rate (needs a
+  benign-only capture).
+
+The full details, with every table and its source file, are in [`RESULTS.md`](RESULTS.md).
 
 ## Results so far (NSL-KDD)
 
@@ -150,6 +157,21 @@ What this says about the three hypotheses:
 - The x ranking is stable across neighbour counts (Spearman 0.97 at k=1, 0.99 at k=20). Encoding the
   categorical columns as one-hot moves it more (0.88 to 0.92), so the map depends partly on that choice.
 
+### Label-free thresholds and the hybrid
+
+A threshold set from the scores of all validation flows, with no labels, depends on how many attacks the
+validation set contains, not on a false-alarm target. On this data the 95th percentile of validation scores
+gives a test false-alarm rate of 0.0% to 0.6% for the detectors shown, and recall of 0.05 to 0.42. The
+validation set is 47% attacks, so the percentile lands where the attacks are. A label-free rule that targets
+a false-alarm rate needs a validation set known to be benign, which NSL-KDD does not have.
+
+Forest plus anomaly detector, at a 5% false-alarm budget on validation normal flows: the forest alone has a
+12.6% test false-alarm rate and 0.913 unseen recall. Forest plus normal-only Isolation Forest has 10.7% and
+0.866. Splitting the budget shrinks the forest's share, and the recall it loses is larger than what the
+detector adds. Per type, normal-only Isolation Forest adds nothing above 0.01 recall; normal-only One-Class SVM
+adds sendmail (+0.17) and loses recall on four other types. The hybrid is an evaluation of a combination,
+not a new detector, and it shows no gain on this test set.
+
 ## Limitations
 
 - NSL-KDD is derived from DARPA 1998 traffic simulation. It is dated, and its attacks are simulated. These
@@ -161,8 +183,9 @@ What this says about the three hypotheses:
   are therefore not yet fair.
 - Results use 38 numeric features. The three categorical columns are dropped in the main results. The
   capture pipeline uses a different, 8-feature set, so these results say nothing about it.
-- The capture pipeline is experimental. When no pcap is given, `feature_extractor/extract.py` writes two
-  demo rows instead of failing. Fixing that is the next step on the list, and the path is not evaluated.
+- The capture pipeline (`feature_extractor/extract.py`, then `train.py` and `score.py`) runs on a pcap and fails
+  on a missing or empty capture. It was checked on a synthetic capture only, and it is not evaluated against
+  labelled traffic.
 - The map pools two operating points, so its pooled correlations mix a 5% matched false-alarm rate with
   drifted ones. With 13 to 30 types, the intervals are wide.
 - One dataset. A second dataset with genuinely new attacks is planned.
@@ -197,10 +220,12 @@ Reproduce the results:
 python models/evaluate.py                    # default protocol, about 5 minutes
 python models/evaluate.py --train-on normal  # unsupervised models trained on normal flows only
 python models/detection_map.py               # attack-type positions on the map
+python models/hybrid.py                      # forest plus anomaly detector at a fixed budget
+python models/pitfalls.py                    # evaluation pitfalls, read from the benchmark JSON
 ```
 
-These write `results/benchmark.json`, `results/benchmark_normal_only.json` and
-`results/detection_map.json`, with a figure for each. The leave-one-attack-type-out study is
+These write `results/benchmark.json`, `results/benchmark_normal_only.json`, `results/detection_map.json`,
+`results/hybrid.json` and `results/pitfalls.json`, with figures for the benchmark and the map. The leave-one-attack-type-out study is
 `python models/leave_one_out.py`. It takes about 1.5 hours and writes `results/leave_one_out.json`.
 
 The commands above have not been tested from a fresh clone yet.

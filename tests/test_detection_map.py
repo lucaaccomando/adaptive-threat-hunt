@@ -107,4 +107,4 @@ def test_main_runs_end_to_end_on_small_data(tmp_path):
     assert set(res["points"]) == {"drop_k1", "drop_k5", "onehot_k1", "onehot_k5"}
     assert res["points"]["drop_k5"]["apache2"]["group"] == "unseen_test"
     assert out.with_suffix(".png").exists()
-    assert set(res["robustness"]) == {"drop_k1", "onehot_k1", "onehot_k5"}
+    assert set(res["rank_stability"]) == {"drop_k1", "onehot_k1", "onehot_k5"}

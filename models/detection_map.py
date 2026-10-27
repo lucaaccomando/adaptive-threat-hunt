@@ -179,7 +179,7 @@ def analyse(points: dict, rng) -> dict:
     return out
 
 
-def robustness(points: dict, primary: str) -> dict:
+def rank_stability(points: dict, primary: str) -> dict:
     base = points[primary]
     out = {}
     for name, pts in points.items():
@@ -296,7 +296,7 @@ def main(argv: list[str] | None = None) -> None:
         "points": points,
         "duplicates": exact_duplicates(df_tr, df_te),
         "analysis": analyse(points[primary], rng),
-        "robustness": robustness(points, primary),
+        "rank_stability": rank_stability(points, primary),
     }
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -309,7 +309,7 @@ def main(argv: list[str] | None = None) -> None:
     for t, p in sorted(points[primary].items(), key=lambda kv: kv[1]["x"]):
         print(f"{t:<18}{p['group']:<13}{p['rows']:>8,}{p['x']:>9.3f}{p['y']:>9.3f}")
     print(f"\nduplicates: {results['duplicates']}")
-    print(f"robustness: {results['robustness']}")
+    print(f"rank stability: {results['rank_stability']}")
 
 
 if __name__ == "__main__":

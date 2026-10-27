@@ -1,0 +1,1758 @@
+{
+  "budget": 0.05,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": "alerts = forest alerts OR anomaly alerts on flows the forest calls normal; the false-alarm budget on validation normals is split between the two sources, and the split is chosen by validation recall; test normals only measure the false-alarm rate",
+  "share_grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "summary": {
+    "if_normal": {
+      "share_to_forest": [
+        0.75,
+        0.25,
+        0.5,
+        1.0,
+        0.5
+      ],
+      "fpr": {
+        "mean": 0.1067,
+        "std": 0.0176
+      },
+      "recall": {
+        "seen": {
+          "mean": 0.9382,
+          "std": 0.0425
+        },
+        "unseen": {
+          "mean": 0.8657,
+          "std": 0.0563
+        },
+        "DoS": {
+          "mean": 0.9858,
+          "std": 0.0187
+        },
+        "Probe": {
+          "mean": 0.9999,
+          "std": 0.0002
+        },
+        "R2L": {
+          "mean": 0.6702,
+          "std": 0.159
+        },
+        "U2R": {
+          "mean": 0.8985,
+          "std": 0.0386
+        },
+        "apache2": {
+          "mean": 0.9978,
+          "std": 0.0012
+        },
+        "back": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "buffer_overflow": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ftp_write": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "guess_passwd": {
+          "mean": 0.5914,
+          "std": 0.2611
+        },
+        "httptunnel": {
+          "mean": 0.9504,
+          "std": 0.04
+        },
+        "imap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ipsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "land": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "loadmodule": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "mailbomb": {
+          "mean": 0.7113,
+          "std": 0.3415
+        },
+        "mscan": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "multihop": {
+          "mean": 0.8555,
+          "std": 0.0497
+        },
+        "named": {
+          "mean": 0.9294,
+          "std": 0.0645
+        },
+        "neptune": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "nmap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "perl": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "phf": {
+          "mean": 0.7,
+          "std": 0.2739
+        },
+        "pod": {
+          "mean": 0.9951,
+          "std": 0.0109
+        },
+        "portsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "processtable": {
+          "mean": 0.974,
+          "std": 0.0581
+        },
+        "ps": {
+          "mean": 0.8133,
+          "std": 0.073
+        },
+        "rootkit": {
+          "mean": 0.7077,
+          "std": 0.1003
+        },
+        "saint": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "satan": {
+          "mean": 0.9997,
+          "std": 0.0006
+        },
+        "sendmail": {
+          "mean": 0.5714,
+          "std": 0.1821
+        },
+        "smurf": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "snmpgetattack": {
+          "mean": 0.0157,
+          "std": 0.0145
+        },
+        "snmpguess": {
+          "mean": 0.3891,
+          "std": 0.2034
+        },
+        "sqlattack": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "teardrop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "udpstorm": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "warezmaster": {
+          "mean": 0.9464,
+          "std": 0.0683
+        },
+        "worm": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "xlock": {
+          "mean": 0.6222,
+          "std": 0.1491
+        },
+        "xsnoop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "xterm": {
+          "mean": 0.9846,
+          "std": 0.0344
+        }
+      }
+    },
+    "ocsvm_normal": {
+      "share_to_forest": [
+        0.75,
+        0.5,
+        0.75,
+        1.0,
+        0.5
+      ],
+      "fpr": {
+        "mean": 0.1208,
+        "std": 0.0062
+      },
+      "recall": {
+        "seen": {
+          "mean": 0.9609,
+          "std": 0.0223
+        },
+        "unseen": {
+          "mean": 0.891,
+          "std": 0.0218
+        },
+        "DoS": {
+          "mean": 0.9945,
+          "std": 0.0037
+        },
+        "Probe": {
+          "mean": 0.9999,
+          "std": 0.0002
+        },
+        "R2L": {
+          "mean": 0.7514,
+          "std": 0.0885
+        },
+        "U2R": {
+          "mean": 0.9194,
+          "std": 0.0134
+        },
+        "apache2": {
+          "mean": 0.9978,
+          "std": 0.0012
+        },
+        "back": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "buffer_overflow": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ftp_write": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "guess_passwd": {
+          "mean": 0.7321,
+          "std": 0.1581
+        },
+        "httptunnel": {
+          "mean": 0.9669,
+          "std": 0.0125
+        },
+        "imap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ipsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "land": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "loadmodule": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "mailbomb": {
+          "mean": 0.8724,
+          "std": 0.0916
+        },
+        "mscan": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "multihop": {
+          "mean": 0.8666,
+          "std": 0.0497
+        },
+        "named": {
+          "mean": 0.953,
+          "std": 0.0263
+        },
+        "neptune": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "nmap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "perl": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "phf": {
+          "mean": 0.7,
+          "std": 0.2739
+        },
+        "pod": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "portsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "processtable": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ps": {
+          "mean": 0.8533,
+          "std": 0.0558
+        },
+        "rootkit": {
+          "mean": 0.7538,
+          "std": 0.0344
+        },
+        "saint": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "satan": {
+          "mean": 0.9997,
+          "std": 0.0006
+        },
+        "sendmail": {
+          "mean": 0.9571,
+          "std": 0.0958
+        },
+        "smurf": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "snmpgetattack": {
+          "mean": 0.0213,
+          "std": 0.0122
+        },
+        "snmpguess": {
+          "mean": 0.4435,
+          "std": 0.1576
+        },
+        "sqlattack": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "teardrop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "udpstorm": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "warezmaster": {
+          "mean": 0.9801,
+          "std": 0.0081
+        },
+        "worm": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "xlock": {
+          "mean": 0.8445,
+          "std": 0.1267
+        },
+        "xsnoop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "xterm": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    },
+    "if_mixed": {
+      "share_to_forest": [
+        0.75,
+        0.25,
+        0.5,
+        1.0,
+        0.5
+      ],
+      "fpr": {
+        "mean": 0.1071,
+        "std": 0.0172
+      },
+      "recall": {
+        "seen": {
+          "mean": 0.9382,
+          "std": 0.0425
+        },
+        "unseen": {
+          "mean": 0.8655,
+          "std": 0.0568
+        },
+        "DoS": {
+          "mean": 0.9858,
+          "std": 0.0187
+        },
+        "Probe": {
+          "mean": 0.9998,
+          "std": 0.0002
+        },
+        "R2L": {
+          "mean": 0.6701,
+          "std": 0.1595
+        },
+        "U2R": {
+          "mean": 0.8985,
+          "std": 0.0386
+        },
+        "apache2": {
+          "mean": 0.9978,
+          "std": 0.0012
+        },
+        "back": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "buffer_overflow": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ftp_write": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "guess_passwd": {
+          "mean": 0.5916,
+          "std": 0.2608
+        },
+        "httptunnel": {
+          "mean": 0.9443,
+          "std": 0.0533
+        },
+        "imap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ipsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "land": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "loadmodule": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "mailbomb": {
+          "mean": 0.7113,
+          "std": 0.3415
+        },
+        "mscan": {
+          "mean": 0.9998,
+          "std": 0.0004
+        },
+        "multihop": {
+          "mean": 0.8555,
+          "std": 0.0497
+        },
+        "named": {
+          "mean": 0.9294,
+          "std": 0.0645
+        },
+        "neptune": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "nmap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "perl": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "phf": {
+          "mean": 0.7,
+          "std": 0.2739
+        },
+        "pod": {
+          "mean": 0.9951,
+          "std": 0.0109
+        },
+        "portsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "processtable": {
+          "mean": 0.974,
+          "std": 0.0581
+        },
+        "ps": {
+          "mean": 0.8133,
+          "std": 0.073
+        },
+        "rootkit": {
+          "mean": 0.7077,
+          "std": 0.1003
+        },
+        "saint": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "satan": {
+          "mean": 0.9997,
+          "std": 0.0006
+        },
+        "sendmail": {
+          "mean": 0.5714,
+          "std": 0.1821
+        },
+        "smurf": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "snmpgetattack": {
+          "mean": 0.0157,
+          "std": 0.0145
+        },
+        "snmpguess": {
+          "mean": 0.3891,
+          "std": 0.2034
+        },
+        "sqlattack": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "teardrop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "udpstorm": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "warezmaster": {
+          "mean": 0.9462,
+          "std": 0.0687
+        },
+        "worm": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "xlock": {
+          "mean": 0.6667,
+          "std": 0.1361
+        },
+        "xsnoop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "xterm": {
+          "mean": 0.9846,
+          "std": 0.0344
+        }
+      }
+    },
+    "forest_alone": {
+      "share_to_forest": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "fpr": {
+        "mean": 0.1264,
+        "std": 0.0012
+      },
+      "recall": {
+        "seen": {
+          "mean": 0.9788,
+          "std": 0.0065
+        },
+        "unseen": {
+          "mean": 0.9132,
+          "std": 0.0042
+        },
+        "DoS": {
+          "mean": 0.9988,
+          "std": 0.0011
+        },
+        "Probe": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "R2L": {
+          "mean": 0.8251,
+          "std": 0.017
+        },
+        "U2R": {
+          "mean": 0.9313,
+          "std": 0.017
+        },
+        "apache2": {
+          "mean": 0.9984,
+          "std": 0.0011
+        },
+        "back": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "buffer_overflow": {
+          "mean": 0.99,
+          "std": 0.0224
+        },
+        "ftp_write": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "guess_passwd": {
+          "mean": 0.8557,
+          "std": 0.0489
+        },
+        "httptunnel": {
+          "mean": 0.9759,
+          "std": 0.0063
+        },
+        "imap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ipsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "land": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "loadmodule": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "mailbomb": {
+          "mean": 0.9809,
+          "std": 0.0297
+        },
+        "mscan": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "multihop": {
+          "mean": 0.9,
+          "std": 0.0465
+        },
+        "named": {
+          "mean": 0.9765,
+          "std": 0.0322
+        },
+        "neptune": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "nmap": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "perl": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "phf": {
+          "mean": 0.8,
+          "std": 0.2739
+        },
+        "pod": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "portsweep": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "processtable": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "ps": {
+          "mean": 0.8933,
+          "std": 0.0365
+        },
+        "rootkit": {
+          "mean": 0.7846,
+          "std": 0.0344
+        },
+        "saint": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "satan": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "sendmail": {
+          "mean": 0.7857,
+          "std": 0.1129
+        },
+        "smurf": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "snmpgetattack": {
+          "mean": 0.0326,
+          "std": 0.0047
+        },
+        "snmpguess": {
+          "mean": 0.5916,
+          "std": 0.0519
+        },
+        "sqlattack": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "teardrop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "udpstorm": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "warezmaster": {
+          "mean": 0.99,
+          "std": 0.0037
+        },
+        "worm": {
+          "mean": 0.1,
+          "std": 0.2236
+        },
+        "xlock": {
+          "mean": 0.8445,
+          "std": 0.0994
+        },
+        "xsnoop": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "xterm": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    }
+  },
+  "per_seed": {
+    "if_normal": [
+      {
+        "share_to_forest": 0.75,
+        "recall": {
+          "seen": 0.9607,
+          "unseen": 0.8984,
+          "DoS": 0.9972,
+          "Probe": 1.0,
+          "R2L": 0.7536,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.7295,
+          "httptunnel": 0.9774,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.942,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.7143,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0337,
+          "snmpguess": 0.4713,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9809,
+          "worm": 0.0,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1149
+      },
+      {
+        "share_to_forest": 0.25,
+        "recall": {
+          "seen": 0.8666,
+          "unseen": 0.7701,
+          "DoS": 0.9528,
+          "Probe": 1.0,
+          "R2L": 0.4069,
+          "U2R": 0.8358,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.1584,
+          "httptunnel": 0.8797,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.1195,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.8235,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 0.9756,
+          "portsweep": 1.0,
+          "processtable": 0.8701,
+          "ps": 0.7333,
+          "rootkit": 0.5385,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.2857,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0,
+          "snmpguess": 0.1118,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.8252,
+          "worm": 0.0,
+          "xlock": 0.4444,
+          "xsnoop": 1.0,
+          "xterm": 0.9231
+        },
+        "fpr": 0.079
+      },
+      {
+        "share_to_forest": 0.5,
+        "recall": {
+          "seen": 0.9414,
+          "unseen": 0.8749,
+          "DoS": 0.9889,
+          "Probe": 1.0,
+          "R2L": 0.6842,
+          "U2R": 0.8955,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.5987,
+          "httptunnel": 0.9624,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.7304,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.6923,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.5,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0112,
+          "snmpguess": 0.426,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9672,
+          "worm": 0.0,
+          "xlock": 0.5556,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1049
+      },
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9774,
+          "unseen": 0.9141,
+          "DoS": 0.9969,
+          "Probe": 1.0,
+          "R2L": 0.8267,
+          "U2R": 0.9403,
+          "apache2": 1.0,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8465,
+          "httptunnel": 0.9699,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9283,
+          "mscan": 1.0,
+          "multihop": 0.9444,
+          "named": 1.0,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.9333,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.7143,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0281,
+          "snmpguess": 0.6526,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9883,
+          "worm": 0.0,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1267
+      },
+      {
+        "share_to_forest": 0.5,
+        "recall": {
+          "seen": 0.9451,
+          "unseen": 0.8709,
+          "DoS": 0.993,
+          "Probe": 0.9996,
+          "R2L": 0.6797,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.6239,
+          "httptunnel": 0.9624,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.8362,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 0.9986,
+          "sendmail": 0.6429,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0056,
+          "snmpguess": 0.284,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9703,
+          "worm": 0.0,
+          "xlock": 0.5556,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1079
+      }
+    ],
+    "ocsvm_normal": [
+      {
+        "share_to_forest": 0.75,
+        "recall": {
+          "seen": 0.9731,
+          "unseen": 0.8997,
+          "DoS": 0.9972,
+          "Probe": 1.0,
+          "R2L": 0.7945,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8213,
+          "httptunnel": 0.9774,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.942,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 1.0,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0337,
+          "snmpguess": 0.4713,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9809,
+          "worm": 0.0,
+          "xlock": 0.8889,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1211
+      },
+      {
+        "share_to_forest": 0.5,
+        "recall": {
+          "seen": 0.9293,
+          "unseen": 0.8637,
+          "DoS": 0.9887,
+          "Probe": 1.0,
+          "R2L": 0.6315,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.5053,
+          "httptunnel": 0.9474,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.727,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8667,
+          "rootkit": 0.6923,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.7857,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0112,
+          "snmpguess": 0.29,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9735,
+          "worm": 0.0,
+          "xlock": 0.6667,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1136
+      },
+      {
+        "share_to_forest": 0.75,
+        "recall": {
+          "seen": 0.9792,
+          "unseen": 0.9032,
+          "DoS": 0.9966,
+          "Probe": 1.0,
+          "R2L": 0.8191,
+          "U2R": 0.9254,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8603,
+          "httptunnel": 0.9774,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9283,
+          "mscan": 1.0,
+          "multihop": 0.8889,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8667,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 1.0,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0281,
+          "snmpguess": 0.5196,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9873,
+          "worm": 0.0,
+          "xlock": 1.0,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.124
+      },
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9774,
+          "unseen": 0.9155,
+          "DoS": 0.9969,
+          "Probe": 1.0,
+          "R2L": 0.8284,
+          "U2R": 0.9403,
+          "apache2": 1.0,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8465,
+          "httptunnel": 0.9699,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9283,
+          "mscan": 1.0,
+          "multihop": 0.9444,
+          "named": 1.0,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.9333,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 1.0,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0281,
+          "snmpguess": 0.6526,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9883,
+          "worm": 0.0,
+          "xlock": 0.8889,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1292
+      },
+      {
+        "share_to_forest": 0.5,
+        "recall": {
+          "seen": 0.9455,
+          "unseen": 0.8728,
+          "DoS": 0.993,
+          "Probe": 0.9996,
+          "R2L": 0.6835,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.6271,
+          "httptunnel": 0.9624,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.8362,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 0.9986,
+          "sendmail": 1.0,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0056,
+          "snmpguess": 0.284,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9703,
+          "worm": 0.0,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1162
+      }
+    ],
+    "if_mixed": [
+      {
+        "share_to_forest": 0.75,
+        "recall": {
+          "seen": 0.9607,
+          "unseen": 0.8984,
+          "DoS": 0.9972,
+          "Probe": 1.0,
+          "R2L": 0.7536,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.7295,
+          "httptunnel": 0.9774,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.942,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.7143,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0337,
+          "snmpguess": 0.4713,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9809,
+          "worm": 0.0,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1147
+      },
+      {
+        "share_to_forest": 0.25,
+        "recall": {
+          "seen": 0.8666,
+          "unseen": 0.7688,
+          "DoS": 0.9528,
+          "Probe": 0.9996,
+          "R2L": 0.4055,
+          "U2R": 0.8358,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.1592,
+          "httptunnel": 0.8496,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.1195,
+          "mscan": 0.999,
+          "multihop": 0.8333,
+          "named": 0.8235,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 0.9756,
+          "portsweep": 1.0,
+          "processtable": 0.8701,
+          "ps": 0.7333,
+          "rootkit": 0.5385,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.2857,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0,
+          "snmpguess": 0.1118,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.8242,
+          "worm": 0.0,
+          "xlock": 0.4444,
+          "xsnoop": 1.0,
+          "xterm": 0.9231
+        },
+        "fpr": 0.0801
+      },
+      {
+        "share_to_forest": 0.5,
+        "recall": {
+          "seen": 0.9414,
+          "unseen": 0.8752,
+          "DoS": 0.9889,
+          "Probe": 1.0,
+          "R2L": 0.6846,
+          "U2R": 0.8955,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.5987,
+          "httptunnel": 0.9624,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.7304,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.6923,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.5,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0112,
+          "snmpguess": 0.426,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9672,
+          "worm": 0.0,
+          "xlock": 0.6667,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1054
+      },
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9774,
+          "unseen": 0.9141,
+          "DoS": 0.9969,
+          "Probe": 1.0,
+          "R2L": 0.8267,
+          "U2R": 0.9403,
+          "apache2": 1.0,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8465,
+          "httptunnel": 0.9699,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9283,
+          "mscan": 1.0,
+          "multihop": 0.9444,
+          "named": 1.0,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.9333,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.7143,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0281,
+          "snmpguess": 0.6526,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9883,
+          "worm": 0.0,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1269
+      },
+      {
+        "share_to_forest": 0.5,
+        "recall": {
+          "seen": 0.9451,
+          "unseen": 0.8712,
+          "DoS": 0.993,
+          "Probe": 0.9996,
+          "R2L": 0.6801,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.6239,
+          "httptunnel": 0.9624,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.8362,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 0.9986,
+          "sendmail": 0.6429,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0056,
+          "snmpguess": 0.284,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9703,
+          "worm": 0.0,
+          "xlock": 0.6667,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1086
+      }
+    ],
+    "forest_alone": [
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9777,
+          "unseen": 0.9179,
+          "DoS": 0.9996,
+          "Probe": 1.0,
+          "R2L": 0.826,
+          "U2R": 0.9104,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 0.95,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8497,
+          "httptunnel": 0.985,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 1.0,
+          "mscan": 1.0,
+          "multihop": 0.8889,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8667,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.9286,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0393,
+          "snmpguess": 0.6193,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9873,
+          "worm": 0.5,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1273
+      },
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9749,
+          "unseen": 0.9155,
+          "DoS": 0.9992,
+          "Probe": 1.0,
+          "R2L": 0.8142,
+          "U2R": 0.9552,
+          "apache2": 0.9986,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8229,
+          "httptunnel": 0.9699,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9898,
+          "mscan": 1.0,
+          "multihop": 0.8333,
+          "named": 1.0,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.9333,
+          "rootkit": 0.8462,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.8571,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0337,
+          "snmpguess": 0.6073,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9958,
+          "worm": 0.0,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.128
+      },
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9901,
+          "unseen": 0.9069,
+          "DoS": 0.9992,
+          "Probe": 1.0,
+          "R2L": 0.8516,
+          "U2R": 0.9254,
+          "apache2": 0.9986,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.9399,
+          "httptunnel": 0.9774,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9898,
+          "mscan": 1.0,
+          "multihop": 0.9444,
+          "named": 0.9412,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8667,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.6429,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0281,
+          "snmpguess": 0.5227,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9873,
+          "worm": 0.0,
+          "xlock": 0.8889,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1255
+      },
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9774,
+          "unseen": 0.9141,
+          "DoS": 0.9969,
+          "Probe": 1.0,
+          "R2L": 0.8267,
+          "U2R": 0.9403,
+          "apache2": 1.0,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8465,
+          "httptunnel": 0.9699,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9283,
+          "mscan": 1.0,
+          "multihop": 0.9444,
+          "named": 1.0,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 0.5,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.9333,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.7143,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0281,
+          "snmpguess": 0.6526,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9883,
+          "worm": 0.0,
+          "xlock": 0.7778,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.126
+      },
+      {
+        "share_to_forest": 1.0,
+        "recall": {
+          "seen": 0.9741,
+          "unseen": 0.9115,
+          "DoS": 0.9993,
+          "Probe": 1.0,
+          "R2L": 0.8069,
+          "U2R": 0.9254,
+          "apache2": 0.9973,
+          "back": 1.0,
+          "buffer_overflow": 1.0,
+          "ftp_write": 1.0,
+          "guess_passwd": 0.8197,
+          "httptunnel": 0.9774,
+          "imap": 1.0,
+          "ipsweep": 1.0,
+          "land": 1.0,
+          "loadmodule": 1.0,
+          "mailbomb": 0.9966,
+          "mscan": 1.0,
+          "multihop": 0.8889,
+          "named": 1.0,
+          "neptune": 1.0,
+          "nmap": 1.0,
+          "perl": 1.0,
+          "phf": 1.0,
+          "pod": 1.0,
+          "portsweep": 1.0,
+          "processtable": 1.0,
+          "ps": 0.8667,
+          "rootkit": 0.7692,
+          "saint": 1.0,
+          "satan": 1.0,
+          "sendmail": 0.7857,
+          "smurf": 1.0,
+          "snmpgetattack": 0.0337,
+          "snmpguess": 0.5559,
+          "sqlattack": 1.0,
+          "teardrop": 1.0,
+          "udpstorm": 1.0,
+          "warezmaster": 0.9915,
+          "worm": 0.0,
+          "xlock": 1.0,
+          "xsnoop": 1.0,
+          "xterm": 1.0
+        },
+        "fpr": 0.1253
+      }
+    ]
+  }
+}

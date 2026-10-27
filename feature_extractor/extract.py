@@ -1,46 +1,24 @@
 #!/usr/bin/env python3
-# extracts flow-level features from a pcap file using scapy
-# if scapy isn't installed or no pcap is given, falls back to two demo rows
+# extracts flow-level features from a pcap file using scapy. a flow is both directions of one
+# 5-tuple; it ends after 120 s without packets, so a reused port starts a new flow.
+# fails with an error on a missing, unreadable or empty capture; --demo writes two fake rows.
 #
 # usage:
 #   python feature_extractor/extract.py --pcap data/capture.pcap --out data/features.csv
+#   python feature_extractor/extract.py --demo --out data/features.csv
 
 import argparse
 import math
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
-try:
-    from scapy.all import rdpcap, IP, TCP, UDP, Raw
-    from scapy.utils import PcapNgReader
-except ImportError:
-    try:
-        from scapy.all import rdpcap, IP, TCP, UDP, Raw
-        PcapNgReader = None
-    except Exception as e:
-        rdpcap = None
-        PcapNgReader = None
-        IP = TCP = UDP = Raw = object
-        print(f"warning: scapy not available ({e}), will use demo data instead")
-except Exception as e:
-    rdpcap = None
-    PcapNgReader = None
-    IP = TCP = UDP = Raw = object
-    print(f"warning: scapy not available ({e}), will use demo data instead")
-
+from scapy.all import IP, TCP, UDP, Raw, PcapReader
+from scapy.utils import PcapNgReader
 
 _PCAPNG_MAGIC = b"\x0a\x0d\x0d\x0a"
-
-
-def _read_packets(pcap_path: Path):
-    with open(pcap_path, "rb") as f:
-        magic = f.read(4)
-    if magic == _PCAPNG_MAGIC and PcapNgReader is not None:
-        with PcapNgReader(str(pcap_path)) as reader:
-            return reader.read_all()
-    return rdpcap(str(pcap_path))
+IDLE_TIMEOUT_S = 120.0
 
 
 def entropy_bytes(b: bytes) -> float:
@@ -55,7 +33,6 @@ def entropy_bytes(b: bytes) -> float:
 
 
 def demo_features():
-    # just two fake flows so the rest of the pipeline doesn't break without real data
     return pd.DataFrame([
         {"src": "10.0.0.1", "dst": "10.0.0.2", "sport": 1234, "dport": 80, "proto": 6,
          "pkt_count": 10, "bytes": 1500, "duration_ms": 120, "avg_pkt_size": 150,
@@ -66,22 +43,31 @@ def demo_features():
     ])
 
 
-def extract_from_pcap(pcap_path: Path) -> pd.DataFrame:
-    if rdpcap is None:
-        return demo_features()
+def read_packets(pcap_path: Path):
+    with open(pcap_path, "rb") as f:
+        magic = f.read(4)
+    reader_cls = PcapNgReader if magic == _PCAPNG_MAGIC else PcapReader
+    with reader_cls(str(pcap_path)) as reader:
+        yield from reader
 
-    try:
-        pkts = _read_packets(pcap_path)
-    except Exception as e:
-        print(f"warning: failed to read {pcap_path} ({e}), using demo data")
-        return demo_features()
 
-    if not pkts:
-        return demo_features()
+def _flow_row(f: dict) -> dict:
+    times = sorted(f["times"])
+    n = len(times)
+    duration_ms = (times[-1] - times[0]) * 1000 if n > 1 else 0.0
+    iats = np.diff(times) * 1000 if n > 1 else np.array([0.0])
+    return {
+        "src": f["src"], "dst": f["dst"], "sport": f["sport"], "dport": f["dport"], "proto": f["proto"],
+        "pkt_count": n, "bytes": f["bytes"], "duration_ms": duration_ms,
+        "avg_pkt_size": f["bytes"] / n, "iat_mean_ms": float(iats.mean()),
+        "iat_std_ms": float(iats.std()), "payload_entropy": entropy_bytes(b"".join(f["payloads"])),
+    }
 
-    # group packets into flows by 5-tuple (src, dst, sport, dport, proto)
-    flows = {}
-    for p in pkts:
+
+def stream_flows(packets):
+    # yields a flow when it goes idle or when the capture ends
+    active = {}
+    for p in packets:
         if IP not in p:
             continue
         ts = float(p.time)
@@ -89,50 +75,48 @@ def extract_from_pcap(pcap_path: Path) -> pd.DataFrame:
         proto = 6 if TCP in p else (17 if UDP in p else 0)
         sport = p.sport if hasattr(p, "sport") else 0
         dport = p.dport if hasattr(p, "dport") else 0
-        key = (ip.src, ip.dst, sport, dport, proto)
-        entry = flows.setdefault(key, {"times": [], "bytes": 0, "payloads": []})
-        entry["times"].append(ts)
-        entry["bytes"] += len(p)
+        key = (min((ip.src, sport), (ip.dst, dport)), max((ip.src, sport), (ip.dst, dport)), proto)
+        flow = active.get(key)
+        if flow is not None and ts - flow["last"] > IDLE_TIMEOUT_S:
+            yield _flow_row(flow)
+            flow = None
+        if flow is None:
+            flow = active[key] = {"src": ip.src, "dst": ip.dst, "sport": sport, "dport": dport,
+                                  "proto": proto, "times": [], "bytes": 0, "payloads": [], "last": ts}
+        flow["times"].append(ts)
+        flow["last"] = ts
+        flow["bytes"] += len(p)
         if Raw in p:
-            entry["payloads"].append(bytes(p[Raw].load))
+            flow["payloads"].append(bytes(p[Raw].load))
+    for flow in active.values():
+        yield _flow_row(flow)
 
-    # compute stats for each flow
-    rows = []
-    for (src, dst, sport, dport, proto), e in flows.items():
-        times = sorted(e["times"])
-        pkt_count = len(times)
-        duration_ms = (times[-1] - times[0]) * 1000 if pkt_count > 1 else 0.0
-        iats = [(times[i + 1] - times[i]) * 1000 for i in range(len(times) - 1)] if pkt_count > 1 else [0.0]
-        iat_mean_ms = float(np.mean(iats))
-        iat_std_ms = float(np.std(iats, ddof=0))
-        avg_pkt_size = e["bytes"] / pkt_count if pkt_count else 0.0
-        payload = b"".join(e["payloads"])
-        payload_entropy = entropy_bytes(payload)
-        rows.append({
-            "src": src, "dst": dst, "sport": sport, "dport": dport, "proto": proto,
-            "pkt_count": pkt_count, "bytes": e["bytes"], "duration_ms": duration_ms,
-            "avg_pkt_size": avg_pkt_size, "iat_mean_ms": iat_mean_ms,
-            "iat_std_ms": iat_std_ms, "payload_entropy": payload_entropy,
-        })
 
-    return pd.DataFrame(rows) if rows else demo_features()
+def extract_from_pcap(pcap_path: Path) -> pd.DataFrame:
+    if not pcap_path.is_file():
+        raise FileNotFoundError(f"no capture at {pcap_path}")
+    rows = list(stream_flows(read_packets(pcap_path)))
+    if not rows:
+        raise ValueError(f"no IPv4 flows found in {pcap_path}")
+    return pd.DataFrame(rows)
 
 
 def main():
     ap = argparse.ArgumentParser(description="extract flow features from a pcap file")
     ap.add_argument("--pcap", type=str, default="", help="path to pcap/pcapng file")
     ap.add_argument("--out", type=str, default="data/features.csv", help="output CSV path")
+    ap.add_argument("--demo", action="store_true", help="write two fake flows (pipeline test only)")
     args = ap.parse_args()
+    if not args.pcap and not args.demo:
+        ap.error("give --pcap FILE, or --demo for two fake flows")
+
+    try:
+        df = demo_features() if args.demo else extract_from_pcap(Path(args.pcap))
+    except (OSError, ValueError) as e:
+        sys.exit(f"error: {e}")
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-
-    if args.pcap:
-        df = extract_from_pcap(Path(args.pcap))
-    else:
-        print("no pcap provided, using demo data")
-        df = demo_features()
-
     df.to_csv(out, index=False)
     print(f"wrote {len(df)} rows to {out}")
 
