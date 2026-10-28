@@ -12,9 +12,10 @@ def _m(v):
 
 def _model(f1, fpr, prec, prec1, unseen):
     op = {"f1": _m(f1), "fpr": _m(fpr), "precision": _m(prec), "precision_prev1": _m(prec1),
-          "recall_by_group": {"unseen": _m(unseen)}}
+          "recall": _m(unseen), "recall_by_group": {"unseen": _m(unseen)}}
     return {"oracle_test_max_f1": {"f1": _m(f1 + 0.01)}, "val_threshold": op,
-            "fpr_5pct": {"fpr": _m(fpr + 0.02)}, "default": {"f1": _m(f1 - 0.05)}}
+            "fpr_5pct": {"fpr": _m(fpr + 0.02), "recall": _m(unseen), "recall_by_group": {"unseen": _m(unseen)}},
+            "default": {"f1": _m(f1 - 0.05)}}
 
 
 def _run(prevalence, value):
@@ -28,10 +29,16 @@ def test_pitfalls_read_fields_and_write_json(tmp_path):
 
     out = tmp_path / "pitfalls.json"
     main(["--results", str(tmp_path), "--out", str(out)])
+    res = json.loads(out.read_text())
+    assert len(res["rows"]) == 4 + 4 + 4 + 4 + 3 + 4 + 4 + 1
+    assert len(res["not_yet"]) == 1
 
+    (tmp_path / "cicids2017_benchmark.json").write_text(json.dumps(_run(0.5, 0.8)))
+    main(["--results", str(tmp_path), "--out", str(out)])
     res = json.loads(out.read_text())
     assert res["test_attack_prevalence"] == 0.5
-    assert len(res["rows"]) == 4 + 4 + 4 + 4 + 3 + 4 + 4 + 1
+    assert len(res["rows"]) == 4 + 4 + 4 + 4 + 3 + 4 + 4 + 1 + 4 + 4
+    assert res["not_yet"] == []
     leak = next(r for r in res["rows"] if r["pitfall"].startswith("threshold chosen on test")
                 and r["model"] == "Random Forest")
     assert leak["with_mistake"] == 0.81 and leak["without_mistake"] == 0.8

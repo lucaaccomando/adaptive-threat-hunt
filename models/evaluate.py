@@ -447,7 +447,8 @@ def run_benchmark(keys, train_path, test_path, seeds, contamination,
     return results, first_scores, y_test
 
 
-def plot_pr_curves(y_true, scores_by_model: dict, seed_results: dict, out_path: Path) -> None:
+def plot_pr_curves(y_true, scores_by_model: dict, seed_results: dict, out_path: Path,
+                   dataset: str = "KDDTest+") -> None:
     fig, ax = plt.subplots(figsize=(7, 5))
     for i, (name, scores) in enumerate(scores_by_model.items()):
         precisions, recalls, _ = precision_recall_curve(y_true, scores)
@@ -462,7 +463,7 @@ def plot_pr_curves(y_true, scores_by_model: dict, seed_results: dict, out_path: 
 
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
-    ax.set_title("KDDTest+ (circle: max-F1 threshold, square: 5% validation false-alarm target)",
+    ax.set_title(f"{dataset} (circle: max-F1 threshold, square: 5% validation false-alarm target)",
                  fontsize=10)
     ax.legend(loc="lower left", fontsize=9)
     ax.set_xlim(0.0, 1.0)

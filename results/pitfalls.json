@@ -257,9 +257,79 @@
       "without_mistake": 0.7255,
       "shift": 0.0004,
       "source": "benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: recall on new attack types at the 5% target",
+      "model": "Isolation Forest",
+      "metric": "recall",
+      "with_mistake": 0.5518,
+      "without_mistake": 0.0106,
+      "shift": 0.5412,
+      "source": "cicids2017_benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: recall on new attack types at the 5% target",
+      "model": "Local Outlier Factor",
+      "metric": "recall",
+      "with_mistake": 0.3983,
+      "without_mistake": 0.6082,
+      "shift": -0.2099,
+      "source": "cicids2017_benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: recall on new attack types at the 5% target",
+      "model": "One-Class SVM",
+      "metric": "recall",
+      "with_mistake": 0.2339,
+      "without_mistake": 0.2987,
+      "shift": -0.0648,
+      "source": "cicids2017_benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: recall on new attack types at the 5% target",
+      "model": "Random Forest",
+      "metric": "recall",
+      "with_mistake": 0.9132,
+      "without_mistake": 0.9874,
+      "shift": -0.0742,
+      "source": "cicids2017_benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: test FPR at the 5% target",
+      "model": "Isolation Forest",
+      "metric": "test FPR",
+      "with_mistake": 0.0135,
+      "without_mistake": 0.0438,
+      "shift": -0.0303,
+      "source": "cicids2017_benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: test FPR at the 5% target",
+      "model": "Local Outlier Factor",
+      "metric": "test FPR",
+      "with_mistake": 0.1121,
+      "without_mistake": 0.0553,
+      "shift": 0.0568,
+      "source": "cicids2017_benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: test FPR at the 5% target",
+      "model": "One-Class SVM",
+      "metric": "test FPR",
+      "with_mistake": 0.0655,
+      "without_mistake": 0.0455,
+      "shift": 0.02,
+      "source": "cicids2017_benchmark.json"
+    },
+    {
+      "pitfall": "conclusion from NSL-KDD alone: test FPR at the 5% target",
+      "model": "Random Forest",
+      "metric": "test FPR",
+      "with_mistake": 0.1264,
+      "without_mistake": 0.0451,
+      "shift": 0.0813,
+      "source": "cicids2017_benchmark.json"
     }
   ],
-  "not_yet": [
-    "one dataset vs two (P0-10, needs a second dataset)"
-  ]
+  "not_yet": []
 }

@@ -1,0 +1,6517 @@
+{
+  "dataset": "CIC-IDS2017, improved release (Engelen et al.), train Monday-Wednesday, test Thursday-Friday",
+  "n_features": 82,
+  "ablation": {
+    "train_on": "normal",
+    "transform": "slog1p",
+    "note": "train_on=normal only changes the unsupervised models; rf always sees both classes"
+  },
+  "protocol": {
+    "sample": "per seed, normal flows capped at 80,000 (train and validation pool) and 40,000 (test), every attack type at 8,000 / 10,000; sampling is part of the seed",
+    "split": "10-minute blocks of Monday-Wednesday go 80% / 20% to train / validation, new assignment per seed; Thursday-Friday is the test set",
+    "novelty": "every attack type in the test set is absent from Monday-Wednesday",
+    "labels": "'... - Attempted' flows are relabelled benign, as the authors recommend",
+    "features": "82 numeric CICFlowMeter columns; identifiers, ports, time stamp and label columns dropped",
+    "transform": "none, or sign(x) * log1p(|x|) on every column (slog1p), applied before scaling",
+    "thresholds": "as in evaluate.py: max F1, 1% / 5% false alarms on validation normals, quantiles, oracle",
+    "scaler": "fit on the training split only",
+    "std": "sample std over seeds (ddof=1)"
+  },
+  "test_groups": {
+    "flows_per_group_seed0": {
+      "Botnet": 736,
+      "DDoS": 10000,
+      "Infiltration": 36,
+      "Infiltration - Portscan": 10000,
+      "Portscan": 10000,
+      "Web Attack - Brute Force": 73,
+      "Web Attack - SQL Injection": 13,
+      "Web Attack - XSS": 18,
+      "Web attack": 104,
+      "Probe": 20000
+    }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "summary": {
+    "Isolation Forest": {
+      "roc_auc": {
+        "mean": 0.9508,
+        "std": 0.007
+      },
+      "pr_auc": {
+        "mean": 0.9106,
+        "std": 0.0177
+      },
+      "val_pr_auc": {
+        "mean": 0.6436,
+        "std": 0.0989
+      },
+      "default": {
+        "f1": {
+          "mean": 0.7956,
+          "std": 0.0391
+        },
+        "precision": {
+          "mean": 0.8525,
+          "std": 0.0137
+        },
+        "recall": {
+          "mean": 0.7469,
+          "std": 0.0589
+        },
+        "fpr": {
+          "mean": 0.0993,
+          "std": 0.0043
+        },
+        "accuracy": {
+          "mean": 0.8337,
+          "std": 0.027
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.8708,
+          "std": 0.0158
+        },
+        "precision": {
+          "mean": 0.7829,
+          "std": 0.0278
+        },
+        "recall": {
+          "mean": 0.9817,
+          "std": 0.0098
+        },
+        "fpr": {
+          "mean": 0.2112,
+          "std": 0.0344
+        },
+        "accuracy": {
+          "mean": 0.8729,
+          "std": 0.0179
+        },
+        "val_f1": {
+          "mean": 0.7806,
+          "std": 0.0673
+        },
+        "val_fpr": {
+          "mean": 0.2265,
+          "std": 0.0409
+        },
+        "f1_gap": {
+          "mean": 0.0903,
+          "std": 0.0618
+        },
+        "fpr_gap": {
+          "mean": -0.0154,
+          "std": 0.0083
+        },
+        "alerts_per_10k_normal": {
+          "mean": 2111.88,
+          "std": 344.2955
+        },
+        "precision_prev1": {
+          "mean": 0.0458,
+          "std": 0.0078
+        },
+        "precision_prev10": {
+          "mean": 0.344,
+          "std": 0.0389
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.2889,
+            "std": 0.3994
+          },
+          "DDoS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9973,
+            "std": 0.0017
+          },
+          "Portscan": {
+            "mean": 0.9999,
+            "std": 0.0001
+          },
+          "Web Attack - Brute Force": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0154,
+            "std": 0.0344
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.8769,
+            "std": 0.0043
+          },
+          "Probe": {
+            "mean": 0.9986,
+            "std": 0.0009
+          }
+        }
+      },
+      "fpr_1pct": {
+        "f1": {
+          "mean": 0.3466,
+          "std": 0.3746
+        },
+        "precision": {
+          "mean": 0.6354,
+          "std": 0.4443
+        },
+        "recall": {
+          "mean": 0.2701,
+          "std": 0.3109
+        },
+        "fpr": {
+          "mean": 0.0103,
+          "std": 0.0065
+        },
+        "accuracy": {
+          "mean": 0.6762,
+          "std": 0.1319
+        },
+        "val_f1": {
+          "mean": 0.0639,
+          "std": 0.1365
+        },
+        "val_fpr": {
+          "mean": 0.0099,
+          "std": 0.0001
+        },
+        "f1_gap": {
+          "mean": 0.2826,
+          "std": 0.3022
+        },
+        "fpr_gap": {
+          "mean": 0.0004,
+          "std": 0.0064
+        },
+        "alerts_per_10k_normal": {
+          "mean": 103.3,
+          "std": 64.4901
+        },
+        "precision_prev1": {
+          "mean": 0.1367,
+          "std": 0.1312
+        },
+        "precision_prev10": {
+          "mean": 0.4629,
+          "std": 0.4
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0041,
+            "std": 0.0056
+          },
+          "DDoS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.2833,
+            "std": 0.1047
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.4332,
+            "std": 0.4388
+          },
+          "Portscan": {
+            "mean": 0.3993,
+            "std": 0.5468
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.4162,
+            "std": 0.4799
+          }
+        }
+      },
+      "fpr_5pct": {
+        "f1": {
+          "mean": 0.7568,
+          "std": 0.0011
+        },
+        "precision": {
+          "mean": 0.9098,
+          "std": 0.0061
+        },
+        "recall": {
+          "mean": 0.6479,
+          "std": 0.0024
+        },
+        "fpr": {
+          "mean": 0.0496,
+          "std": 0.0039
+        },
+        "accuracy": {
+          "mean": 0.8186,
+          "std": 0.0014
+        },
+        "val_f1": {
+          "mean": 0.2452,
+          "std": 0.1695
+        },
+        "val_fpr": {
+          "mean": 0.05,
+          "std": 0.0001
+        },
+        "f1_gap": {
+          "mean": 0.5115,
+          "std": 0.169
+        },
+        "fpr_gap": {
+          "mean": -0.0003,
+          "std": 0.0039
+        },
+        "alerts_per_10k_normal": {
+          "mean": 496.44,
+          "std": 38.9557
+        },
+        "precision_prev1": {
+          "mean": 0.1169,
+          "std": 0.0074
+        },
+        "precision_prev10": {
+          "mean": 0.5924,
+          "std": 0.0178
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0598,
+            "std": 0.0
+          },
+          "DDoS": {
+            "mean": 0.0035,
+            "std": 0.0069
+          },
+          "Infiltration": {
+            "mean": 0.9333,
+            "std": 0.0152
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9897,
+            "std": 0.0005
+          },
+          "Portscan": {
+            "mean": 0.999,
+            "std": 0.0003
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0055,
+            "std": 0.0075
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.2333,
+            "std": 0.2466
+          },
+          "Web attack": {
+            "mean": 0.0442,
+            "std": 0.0474
+          },
+          "Probe": {
+            "mean": 0.9943,
+            "std": 0.0002
+          }
+        }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.7642,
+          "std": 0.0078
+        },
+        "precision": {
+          "mean": 0.9361,
+          "std": 0.03
+        },
+        "recall": {
+          "mean": 0.646,
+          "std": 0.0036
+        },
+        "fpr": {
+          "mean": 0.0345,
+          "std": 0.0174
+        },
+        "accuracy": {
+          "mean": 0.8263,
+          "std": 0.0084
+        },
+        "val_f1": {
+          "mean": 0.1581,
+          "std": 0.091
+        },
+        "val_fpr": {
+          "mean": 0.0323,
+          "std": 0.0177
+        },
+        "f1_gap": {
+          "mean": 0.6062,
+          "std": 0.0842
+        },
+        "fpr_gap": {
+          "mean": 0.0022,
+          "std": 0.0044
+        },
+        "alerts_per_10k_normal": {
+          "mean": 345.34,
+          "std": 173.9756
+        },
+        "precision_prev1": {
+          "mean": 0.1849,
+          "std": 0.0802
+        },
+        "precision_prev10": {
+          "mean": 0.6897,
+          "std": 0.1097
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0394,
+            "std": 0.0258
+          },
+          "DDoS": {
+            "mean": 0.003,
+            "std": 0.0067
+          },
+          "Infiltration": {
+            "mean": 0.6333,
+            "std": 0.3188
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9875,
+            "std": 0.0023
+          },
+          "Portscan": {
+            "mean": 0.9987,
+            "std": 0.0005
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0027,
+            "std": 0.0061
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0667,
+            "std": 0.1205
+          },
+          "Web attack": {
+            "mean": 0.0135,
+            "std": 0.0251
+          },
+          "Probe": {
+            "mean": 0.9931,
+            "std": 0.0013
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.5337,
+          "std": 0.2658
+        },
+        "precision": {
+          "mean": 0.9387,
+          "std": 0.0581
+        },
+        "recall": {
+          "mean": 0.4055,
+          "std": 0.2364
+        },
+        "fpr": {
+          "mean": 0.0138,
+          "std": 0.0077
+        },
+        "accuracy": {
+          "mean": 0.7332,
+          "std": 0.0998
+        },
+        "val_f1": {
+          "mean": 0.0246,
+          "std": 0.0375
+        },
+        "val_fpr": {
+          "mean": 0.0108,
+          "std": 0.0049
+        },
+        "f1_gap": {
+          "mean": 0.5091,
+          "std": 0.257
+        },
+        "fpr_gap": {
+          "mean": 0.003,
+          "std": 0.0075
+        },
+        "alerts_per_10k_normal": {
+          "mean": 138.4,
+          "std": 76.9119
+        },
+        "precision_prev1": {
+          "mean": 0.2297,
+          "std": 0.1074
+        },
+        "precision_prev10": {
+          "mean": 0.7229,
+          "std": 0.173
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0139,
+            "std": 0.0211
+          },
+          "DDoS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.3833,
+            "std": 0.1501
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.5924,
+            "std": 0.291
+          },
+          "Portscan": {
+            "mean": 0.657,
+            "std": 0.4751
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.6247,
+            "std": 0.3643
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.8993,
+          "std": 0.0066
+        },
+        "precision": {
+          "mean": 0.8363,
+          "std": 0.0116
+        },
+        "recall": {
+          "mean": 0.9727,
+          "std": 0.0011
+        },
+        "fpr": {
+          "mean": 0.1471,
+          "std": 0.0126
+        },
+        "accuracy": {
+          "mean": 0.9051,
+          "std": 0.0069
+        },
+        "val_f1": {
+          "mean": 0.687,
+          "std": 0.1114
+        },
+        "val_fpr": {
+          "mean": 0.1601,
+          "std": 0.018
+        },
+        "f1_gap": {
+          "mean": 0.2123,
+          "std": 0.1085
+        },
+        "fpr_gap": {
+          "mean": -0.013,
+          "std": 0.0093
+        },
+        "alerts_per_10k_normal": {
+          "mean": 1470.94,
+          "std": 125.8622
+        },
+        "precision_prev1": {
+          "mean": 0.0629,
+          "std": 0.0051
+        },
+        "precision_prev10": {
+          "mean": 0.4244,
+          "std": 0.0208
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0658,
+            "std": 0.0092
+          },
+          "DDoS": {
+            "mean": 0.9908,
+            "std": 0.0032
+          },
+          "Infiltration": {
+            "mean": 0.9833,
+            "std": 0.0152
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9953,
+            "std": 0.0009
+          },
+          "Portscan": {
+            "mean": 0.9999,
+            "std": 0.0001
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.9945,
+            "std": 0.0075
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.8712,
+            "std": 0.0053
+          },
+          "Probe": {
+            "mean": 0.9976,
+            "std": 0.0004
+          }
+        }
+      }
+    },
+    "Local Outlier Factor": {
+      "roc_auc": {
+        "mean": 0.9876,
+        "std": 0.0006
+      },
+      "pr_auc": {
+        "mean": 0.9758,
+        "std": 0.0027
+      },
+      "val_pr_auc": {
+        "mean": 0.8515,
+        "std": 0.0395
+      },
+      "default": {
+        "f1": {
+          "mean": 0.9262,
+          "std": 0.0015
+        },
+        "precision": {
+          "mean": 0.8682,
+          "std": 0.0016
+        },
+        "recall": {
+          "mean": 0.9927,
+          "std": 0.0028
+        },
+        "fpr": {
+          "mean": 0.1164,
+          "std": 0.0017
+        },
+        "accuracy": {
+          "mean": 0.9311,
+          "std": 0.0014
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.9367,
+          "std": 0.0062
+        },
+        "precision": {
+          "mean": 0.8953,
+          "std": 0.017
+        },
+        "recall": {
+          "mean": 0.9822,
+          "std": 0.0082
+        },
+        "fpr": {
+          "mean": 0.089,
+          "std": 0.0167
+        },
+        "accuracy": {
+          "mean": 0.942,
+          "std": 0.0064
+        },
+        "val_f1": {
+          "mean": 0.8944,
+          "std": 0.0225
+        },
+        "val_fpr": {
+          "mean": 0.0777,
+          "std": 0.0198
+        },
+        "f1_gap": {
+          "mean": 0.0422,
+          "std": 0.0221
+        },
+        "fpr_gap": {
+          "mean": 0.0113,
+          "std": 0.0059
+        },
+        "alerts_per_10k_normal": {
+          "mean": 889.88,
+          "std": 166.5153
+        },
+        "precision_prev1": {
+          "mean": 0.1027,
+          "std": 0.0173
+        },
+        "precision_prev10": {
+          "mean": 0.5541,
+          "std": 0.0456
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.375,
+            "std": 0.3202
+          },
+          "DDoS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.8333,
+            "std": 0.0942
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9971,
+            "std": 0.0025
+          },
+          "Portscan": {
+            "mean": 0.9997,
+            "std": 0.0003
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.6,
+            "std": 0.5415
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0154,
+            "std": 0.0344
+          },
+          "Web Attack - XSS": {
+            "mean": 0.6,
+            "std": 0.5477
+          },
+          "Web attack": {
+            "mean": 0.5269,
+            "std": 0.4767
+          },
+          "Probe": {
+            "mean": 0.9984,
+            "std": 0.0014
+          }
+        }
+      },
+      "fpr_1pct": {
+        "f1": {
+          "mean": 0.8888,
+          "std": 0.0093
+        },
+        "precision": {
+          "mean": 0.9696,
+          "std": 0.0057
+        },
+        "recall": {
+          "mean": 0.8205,
+          "std": 0.0151
+        },
+        "fpr": {
+          "mean": 0.0199,
+          "std": 0.0038
+        },
+        "accuracy": {
+          "mean": 0.9106,
+          "std": 0.0068
+        },
+        "val_f1": {
+          "mean": 0.2104,
+          "std": 0.154
+        },
+        "val_fpr": {
+          "mean": 0.0099,
+          "std": 0.0001
+        },
+        "f1_gap": {
+          "mean": 0.6784,
+          "std": 0.1484
+        },
+        "fpr_gap": {
+          "mean": 0.0099,
+          "std": 0.0038
+        },
+        "alerts_per_10k_normal": {
+          "mean": 198.78,
+          "std": 38.0229
+        },
+        "precision_prev1": {
+          "mean": 0.299,
+          "std": 0.0441
+        },
+        "precision_prev10": {
+          "mean": 0.8217,
+          "std": 0.0287
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0552,
+            "std": 0.0103
+          },
+          "DDoS": {
+            "mean": 0.5412,
+            "std": 0.0466
+          },
+          "Infiltration": {
+            "mean": 0.1333,
+            "std": 0.0233
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.99,
+            "std": 0.0019
+          },
+          "Portscan": {
+            "mean": 0.9976,
+            "std": 0.0015
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.9938,
+            "std": 0.0015
+          }
+        }
+      },
+      "fpr_5pct": {
+        "f1": {
+          "mean": 0.9481,
+          "std": 0.0026
+        },
+        "precision": {
+          "mean": 0.9238,
+          "std": 0.0056
+        },
+        "recall": {
+          "mean": 0.9738,
+          "std": 0.0014
+        },
+        "fpr": {
+          "mean": 0.062,
+          "std": 0.005
+        },
+        "accuracy": {
+          "mean": 0.9536,
+          "std": 0.0025
+        },
+        "val_f1": {
+          "mean": 0.793,
+          "std": 0.0582
+        },
+        "val_fpr": {
+          "mean": 0.05,
+          "std": 0.0001
+        },
+        "f1_gap": {
+          "mean": 0.1552,
+          "std": 0.0601
+        },
+        "fpr_gap": {
+          "mean": 0.012,
+          "std": 0.0051
+        },
+        "alerts_per_10k_normal": {
+          "mean": 619.86,
+          "std": 50.2085
+        },
+        "precision_prev1": {
+          "mean": 0.1375,
+          "std": 0.0092
+        },
+        "precision_prev10": {
+          "mean": 0.6362,
+          "std": 0.0183
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0707,
+            "std": 0.0243
+          },
+          "DDoS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.6333,
+            "std": 0.1323
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9959,
+            "std": 0.0025
+          },
+          "Portscan": {
+            "mean": 0.9996,
+            "std": 0.0004
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.3918,
+            "std": 0.5365
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.3889,
+            "std": 0.5329
+          },
+          "Web attack": {
+            "mean": 0.3423,
+            "std": 0.4688
+          },
+          "Probe": {
+            "mean": 0.9978,
+            "std": 0.0015
+          }
+        }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.8915,
+          "std": 0.004
+        },
+        "precision": {
+          "mean": 0.9688,
+          "std": 0.007
+        },
+        "recall": {
+          "mean": 0.8257,
+          "std": 0.0098
+        },
+        "fpr": {
+          "mean": 0.0206,
+          "std": 0.0049
+        },
+        "accuracy": {
+          "mean": 0.9124,
+          "std": 0.0027
+        },
+        "val_f1": {
+          "mean": 0.2432,
+          "std": 0.0505
+        },
+        "val_fpr": {
+          "mean": 0.011,
+          "std": 0.0016
+        },
+        "f1_gap": {
+          "mean": 0.6482,
+          "std": 0.048
+        },
+        "fpr_gap": {
+          "mean": 0.0096,
+          "std": 0.0037
+        },
+        "alerts_per_10k_normal": {
+          "mean": 205.88,
+          "std": 48.9389
+        },
+        "precision_prev1": {
+          "mean": 0.2956,
+          "std": 0.0531
+        },
+        "precision_prev10": {
+          "mean": 0.8182,
+          "std": 0.0351
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0563,
+            "std": 0.0079
+          },
+          "DDoS": {
+            "mean": 0.5561,
+            "std": 0.0292
+          },
+          "Infiltration": {
+            "mean": 0.2,
+            "std": 0.0534
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9904,
+            "std": 0.0025
+          },
+          "Portscan": {
+            "mean": 0.9979,
+            "std": 0.0012
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.9942,
+            "std": 0.0017
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.7601,
+          "std": 0.2822
+        },
+        "precision": {
+          "mean": 0.9727,
+          "std": 0.0077
+        },
+        "recall": {
+          "mean": 0.6819,
+          "std": 0.2994
+        },
+        "fpr": {
+          "mean": 0.0157,
+          "std": 0.0087
+        },
+        "accuracy": {
+          "mean": 0.8525,
+          "std": 0.1261
+        },
+        "val_f1": {
+          "mean": 0.0322,
+          "std": 0.0223
+        },
+        "val_fpr": {
+          "mean": 0.0079,
+          "std": 0.0035
+        },
+        "f1_gap": {
+          "mean": 0.728,
+          "std": 0.3043
+        },
+        "fpr_gap": {
+          "mean": 0.0078,
+          "std": 0.0059
+        },
+        "alerts_per_10k_normal": {
+          "mean": 157.1,
+          "std": 86.7173
+        },
+        "precision_prev1": {
+          "mean": 0.3275,
+          "std": 0.0654
+        },
+        "precision_prev10": {
+          "mean": 0.8379,
+          "std": 0.0395
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0478,
+            "std": 0.0267
+          },
+          "DDoS": {
+            "mean": 0.4212,
+            "std": 0.2395
+          },
+          "Infiltration": {
+            "mean": 0.1111,
+            "std": 0.0589
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.8798,
+            "std": 0.2453
+          },
+          "Portscan": {
+            "mean": 0.8004,
+            "std": 0.4405
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.8401,
+            "std": 0.343
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.96,
+          "std": 0.0048
+        },
+        "precision": {
+          "mean": 0.9497,
+          "std": 0.0088
+        },
+        "recall": {
+          "mean": 0.9706,
+          "std": 0.0012
+        },
+        "fpr": {
+          "mean": 0.0397,
+          "std": 0.0073
+        },
+        "accuracy": {
+          "mean": 0.9648,
+          "std": 0.0044
+        },
+        "val_f1": {
+          "mean": 0.6132,
+          "std": 0.1302
+        },
+        "val_fpr": {
+          "mean": 0.027,
+          "std": 0.0083
+        },
+        "f1_gap": {
+          "mean": 0.3468,
+          "std": 0.1341
+        },
+        "fpr_gap": {
+          "mean": 0.0127,
+          "std": 0.0031
+        },
+        "alerts_per_10k_normal": {
+          "mean": 397.28,
+          "std": 73.1365
+        },
+        "precision_prev1": {
+          "mean": 0.2013,
+          "std": 0.0283
+        },
+        "precision_prev10": {
+          "mean": 0.7322,
+          "std": 0.0357
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0598,
+            "std": 0.0
+          },
+          "DDoS": {
+            "mean": 0.995,
+            "std": 0.0011
+          },
+          "Infiltration": {
+            "mean": 0.3222,
+            "std": 0.0421
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9943,
+            "std": 0.0025
+          },
+          "Portscan": {
+            "mean": 0.9995,
+            "std": 0.0005
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.3507,
+            "std": 0.4837
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.2462,
+            "std": 0.3395
+          },
+          "Probe": {
+            "mean": 0.9968,
+            "std": 0.0014
+          }
+        }
+      }
+    },
+    "One-Class SVM": {
+      "roc_auc": {
+        "mean": 0.9548,
+        "std": 0.0013
+      },
+      "pr_auc": {
+        "mean": 0.921,
+        "std": 0.0044
+      },
+      "val_pr_auc": {
+        "mean": 0.6869,
+        "std": 0.088
+      },
+      "default": {
+        "f1": {
+          "mean": 0.929,
+          "std": 0.0011
+        },
+        "precision": {
+          "mean": 0.887,
+          "std": 0.0021
+        },
+        "recall": {
+          "mean": 0.9751,
+          "std": 0.0003
+        },
+        "fpr": {
+          "mean": 0.0959,
+          "std": 0.002
+        },
+        "accuracy": {
+          "mean": 0.935,
+          "std": 0.0011
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.9089,
+          "std": 0.0305
+        },
+        "precision": {
+          "mean": 0.8523,
+          "std": 0.0553
+        },
+        "recall": {
+          "mean": 0.9752,
+          "std": 0.0009
+        },
+        "fpr": {
+          "mean": 0.1333,
+          "std": 0.0553
+        },
+        "accuracy": {
+          "mean": 0.914,
+          "std": 0.0309
+        },
+        "val_f1": {
+          "mean": 0.7569,
+          "std": 0.0478
+        },
+        "val_fpr": {
+          "mean": 0.1403,
+          "std": 0.0549
+        },
+        "f1_gap": {
+          "mean": 0.152,
+          "std": 0.0649
+        },
+        "fpr_gap": {
+          "mean": -0.0069,
+          "std": 0.0072
+        },
+        "alerts_per_10k_normal": {
+          "mean": 1333.1,
+          "std": 553.1739
+        },
+        "precision_prev1": {
+          "mean": 0.0838,
+          "std": 0.0514
+        },
+        "precision_prev10": {
+          "mean": 0.4722,
+          "std": 0.1326
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0663,
+            "std": 0.0048
+          },
+          "DDoS": {
+            "mean": 0.9998,
+            "std": 0.0001
+          },
+          "Infiltration": {
+            "mean": 0.9722,
+            "std": 0.0
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9943,
+            "std": 0.002
+          },
+          "Portscan": {
+            "mean": 0.9995,
+            "std": 0.0003
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.989,
+            "std": 0.0061
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.8673,
+            "std": 0.0043
+          },
+          "Probe": {
+            "mean": 0.9969,
+            "std": 0.0011
+          }
+        }
+      },
+      "fpr_1pct": {
+        "f1": {
+          "mean": 0.2578,
+          "std": 0.0054
+        },
+        "precision": {
+          "mean": 0.9051,
+          "std": 0.0059
+        },
+        "recall": {
+          "mean": 0.1503,
+          "std": 0.0037
+        },
+        "fpr": {
+          "mean": 0.0122,
+          "std": 0.0009
+        },
+        "accuracy": {
+          "mean": 0.6229,
+          "std": 0.0015
+        },
+        "val_f1": {
+          "mean": 0.1454,
+          "std": 0.1151
+        },
+        "val_fpr": {
+          "mean": 0.0099,
+          "std": 0.0001
+        },
+        "f1_gap": {
+          "mean": 0.1124,
+          "std": 0.1157
+        },
+        "fpr_gap": {
+          "mean": 0.0022,
+          "std": 0.001
+        },
+        "alerts_per_10k_normal": {
+          "mean": 121.72,
+          "std": 9.2656
+        },
+        "precision_prev1": {
+          "mean": 0.1112,
+          "std": 0.0068
+        },
+        "precision_prev10": {
+          "mean": 0.5788,
+          "std": 0.0168
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0598,
+            "std": 0.0
+          },
+          "DDoS": {
+            "mean": 0.0001,
+            "std": 0.0001
+          },
+          "Infiltration": {
+            "mean": 0.5611,
+            "std": 0.0908
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.4532,
+            "std": 0.0112
+          },
+          "Portscan": {
+            "mean": 0.0043,
+            "std": 0.0009
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.2288,
+            "std": 0.0058
+          }
+        }
+      },
+      "fpr_5pct": {
+        "f1": {
+          "mean": 0.9558,
+          "std": 0.0024
+        },
+        "precision": {
+          "mean": 0.9385,
+          "std": 0.0045
+        },
+        "recall": {
+          "mean": 0.9737,
+          "std": 0.0002
+        },
+        "fpr": {
+          "mean": 0.0493,
+          "std": 0.0038
+        },
+        "accuracy": {
+          "mean": 0.9607,
+          "std": 0.0022
+        },
+        "val_f1": {
+          "mean": 0.5891,
+          "std": 0.1144
+        },
+        "val_fpr": {
+          "mean": 0.05,
+          "std": 0.0001
+        },
+        "f1_gap": {
+          "mean": 0.3666,
+          "std": 0.1142
+        },
+        "fpr_gap": {
+          "mean": -0.0007,
+          "std": 0.0038
+        },
+        "alerts_per_10k_normal": {
+          "mean": 492.76,
+          "std": 37.7701
+        },
+        "precision_prev1": {
+          "mean": 0.1669,
+          "std": 0.0107
+        },
+        "precision_prev10": {
+          "mean": 0.6874,
+          "std": 0.0165
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0603,
+            "std": 0.0007
+          },
+          "DDoS": {
+            "mean": 0.9998,
+            "std": 0.0001
+          },
+          "Infiltration": {
+            "mean": 0.9722,
+            "std": 0.0
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9905,
+            "std": 0.0007
+          },
+          "Portscan": {
+            "mean": 0.9991,
+            "std": 0.0001
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.9863,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.8654,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.9948,
+            "std": 0.0004
+          }
+        }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.6455,
+          "std": 0.3517
+        },
+        "precision": {
+          "mean": 0.9316,
+          "std": 0.0296
+        },
+        "recall": {
+          "mean": 0.5798,
+          "std": 0.4046
+        },
+        "fpr": {
+          "mean": 0.0262,
+          "std": 0.0134
+        },
+        "accuracy": {
+          "mean": 0.8022,
+          "std": 0.1689
+        },
+        "val_f1": {
+          "mean": 0.1905,
+          "std": 0.0687
+        },
+        "val_fpr": {
+          "mean": 0.0243,
+          "std": 0.0118
+        },
+        "f1_gap": {
+          "mean": 0.455,
+          "std": 0.4049
+        },
+        "fpr_gap": {
+          "mean": 0.0019,
+          "std": 0.0022
+        },
+        "alerts_per_10k_normal": {
+          "mean": 262.0,
+          "std": 134.5121
+        },
+        "precision_prev1": {
+          "mean": 0.1659,
+          "std": 0.0514
+        },
+        "precision_prev10": {
+          "mean": 0.6717,
+          "std": 0.0951
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0598,
+            "std": 0.0
+          },
+          "DDoS": {
+            "mean": 0.4056,
+            "std": 0.5121
+          },
+          "Infiltration": {
+            "mean": 0.8555,
+            "std": 0.1888
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.7788,
+            "std": 0.288
+          },
+          "Portscan": {
+            "mean": 0.593,
+            "std": 0.5287
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.5863,
+            "std": 0.5352
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.6,
+            "std": 0.5477
+          },
+          "Web attack": {
+            "mean": 0.5154,
+            "std": 0.4705
+          },
+          "Probe": {
+            "mean": 0.6858,
+            "std": 0.4082
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.1562,
+          "std": 0.0667
+        },
+        "precision": {
+          "mean": 0.9043,
+          "std": 0.0214
+        },
+        "recall": {
+          "mean": 0.087,
+          "std": 0.0426
+        },
+        "fpr": {
+          "mean": 0.0075,
+          "std": 0.0053
+        },
+        "accuracy": {
+          "mean": 0.598,
+          "std": 0.0157
+        },
+        "val_f1": {
+          "mean": 0.0395,
+          "std": 0.0236
+        },
+        "val_fpr": {
+          "mean": 0.0059,
+          "std": 0.0049
+        },
+        "f1_gap": {
+          "mean": 0.1167,
+          "std": 0.0884
+        },
+        "fpr_gap": {
+          "mean": 0.0016,
+          "std": 0.0009
+        },
+        "alerts_per_10k_normal": {
+          "mean": 75.38,
+          "std": 52.7404
+        },
+        "precision_prev1": {
+          "mean": 0.1138,
+          "std": 0.0243
+        },
+        "precision_prev10": {
+          "mean": 0.5802,
+          "std": 0.0597
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0568,
+            "std": 0.0018
+          },
+          "DDoS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.4667,
+            "std": 0.1435
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.2604,
+            "std": 0.1265
+          },
+          "Portscan": {
+            "mean": 0.0022,
+            "std": 0.0045
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.1313,
+            "std": 0.0655
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.9614,
+          "std": 0.001
+        },
+        "precision": {
+          "mean": 0.9504,
+          "std": 0.0016
+        },
+        "recall": {
+          "mean": 0.9727,
+          "std": 0.0005
+        },
+        "fpr": {
+          "mean": 0.0392,
+          "std": 0.0013
+        },
+        "accuracy": {
+          "mean": 0.966,
+          "std": 0.0009
+        },
+        "val_f1": {
+          "mean": 0.2749,
+          "std": 0.1443
+        },
+        "val_fpr": {
+          "mean": 0.038,
+          "std": 0.0033
+        },
+        "f1_gap": {
+          "mean": 0.6865,
+          "std": 0.1438
+        },
+        "fpr_gap": {
+          "mean": 0.0012,
+          "std": 0.0039
+        },
+        "alerts_per_10k_normal": {
+          "mean": 391.84,
+          "std": 13.2343
+        },
+        "precision_prev1": {
+          "mean": 0.2006,
+          "std": 0.0055
+        },
+        "precision_prev10": {
+          "mean": 0.734,
+          "std": 0.0066
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0598,
+            "std": 0.0
+          },
+          "DDoS": {
+            "mean": 0.9971,
+            "std": 0.0011
+          },
+          "Infiltration": {
+            "mean": 0.9722,
+            "std": 0.0
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9902,
+            "std": 0.0009
+          },
+          "Portscan": {
+            "mean": 0.9991,
+            "std": 0.0001
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.9781,
+            "std": 0.0075
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.8596,
+            "std": 0.0053
+          },
+          "Probe": {
+            "mean": 0.9946,
+            "std": 0.0005
+          }
+        }
+      }
+    },
+    "Random Forest": {
+      "roc_auc": {
+        "mean": 0.9889,
+        "std": 0.0049
+      },
+      "pr_auc": {
+        "mean": 0.9832,
+        "std": 0.0061
+      },
+      "val_pr_auc": {
+        "mean": 0.9997,
+        "std": 0.0006
+      },
+      "default": {
+        "f1": {
+          "mean": 0.3017,
+          "std": 0.1209
+        },
+        "precision": {
+          "mean": 0.9999,
+          "std": 0.0001
+        },
+        "recall": {
+          "mean": 0.1826,
+          "std": 0.087
+        },
+        "fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "accuracy": {
+          "mean": 0.6439,
+          "std": 0.0379
+        }
+      },
+      "val_threshold": {
+        "f1": {
+          "mean": 0.5584,
+          "std": 0.1596
+        },
+        "precision": {
+          "mean": 0.9964,
+          "std": 0.0045
+        },
+        "recall": {
+          "mean": 0.4046,
+          "std": 0.1842
+        },
+        "fpr": {
+          "mean": 0.0015,
+          "std": 0.0021
+        },
+        "accuracy": {
+          "mean": 0.7398,
+          "std": 0.0792
+        },
+        "val_f1": {
+          "mean": 0.9967,
+          "std": 0.0037
+        },
+        "val_fpr": {
+          "mean": 0.0015,
+          "std": 0.002
+        },
+        "f1_gap": {
+          "mean": -0.4384,
+          "std": 0.1631
+        },
+        "fpr_gap": {
+          "mean": 0.0,
+          "std": 0.0005
+        },
+        "alerts_per_10k_normal": {
+          "mean": 14.66,
+          "std": 20.9344
+        },
+        "precision_prev1": {
+          "mean": 0.8257,
+          "std": 0.2061
+        },
+        "precision_prev10": {
+          "mean": 0.9758,
+          "std": 0.03
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.006,
+            "std": 0.0134
+          },
+          "DDoS": {
+            "mean": 0.9914,
+            "std": 0.017
+          },
+          "Infiltration": {
+            "mean": 0.3167,
+            "std": 0.4284
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.0524,
+            "std": 0.1143
+          },
+          "Portscan": {
+            "mean": 0.1999,
+            "std": 0.4445
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.3918,
+            "std": 0.5367
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.2769,
+            "std": 0.2959
+          },
+          "Web Attack - XSS": {
+            "mean": 0.3222,
+            "std": 0.4451
+          },
+          "Web attack": {
+            "mean": 0.3654,
+            "std": 0.4665
+          },
+          "Probe": {
+            "mean": 0.1262,
+            "std": 0.2794
+          }
+        }
+      },
+      "fpr_1pct": {
+        "f1": {
+          "mean": 0.8626,
+          "std": 0.1305
+        },
+        "precision": {
+          "mean": 0.98,
+          "std": 0.0056
+        },
+        "recall": {
+          "mean": 0.7883,
+          "std": 0.1972
+        },
+        "fpr": {
+          "mean": 0.0119,
+          "std": 0.0024
+        },
+        "accuracy": {
+          "mean": 0.9011,
+          "std": 0.0852
+        },
+        "val_f1": {
+          "mean": 0.9882,
+          "std": 0.003
+        },
+        "val_fpr": {
+          "mean": 0.0092,
+          "std": 0.0007
+        },
+        "f1_gap": {
+          "mean": -0.1255,
+          "std": 0.1287
+        },
+        "fpr_gap": {
+          "mean": 0.0027,
+          "std": 0.0019
+        },
+        "alerts_per_10k_normal": {
+          "mean": 119.24,
+          "std": 24.2654
+        },
+        "precision_prev1": {
+          "mean": 0.3997,
+          "std": 0.065
+        },
+        "precision_prev10": {
+          "mean": 0.8767,
+          "std": 0.0305
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0519,
+            "std": 0.0089
+          },
+          "DDoS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.8778,
+            "std": 0.0373
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.516,
+            "std": 0.4485
+          },
+          "Portscan": {
+            "mean": 0.9011,
+            "std": 0.2183
+          },
+          "Web Attack - Brute Force": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.7846,
+            "std": 0.4399
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.9731,
+            "std": 0.055
+          },
+          "Probe": {
+            "mean": 0.7085,
+            "std": 0.3045
+          }
+        }
+      },
+      "fpr_5pct": {
+        "f1": {
+          "mean": 0.9626,
+          "std": 0.0056
+        },
+        "precision": {
+          "mean": 0.9388,
+          "std": 0.0103
+        },
+        "recall": {
+          "mean": 0.9878,
+          "std": 0.0111
+        },
+        "fpr": {
+          "mean": 0.0498,
+          "std": 0.009
+        },
+        "accuracy": {
+          "mean": 0.9666,
+          "std": 0.005
+        },
+        "val_f1": {
+          "mean": 0.955,
+          "std": 0.0097
+        },
+        "val_fpr": {
+          "mean": 0.042,
+          "std": 0.0092
+        },
+        "f1_gap": {
+          "mean": 0.0077,
+          "std": 0.0127
+        },
+        "fpr_gap": {
+          "mean": 0.0078,
+          "std": 0.0058
+        },
+        "alerts_per_10k_normal": {
+          "mean": 497.68,
+          "std": 90.4556
+        },
+        "precision_prev1": {
+          "mean": 0.1706,
+          "std": 0.0295
+        },
+        "precision_prev10": {
+          "mean": 0.6899,
+          "std": 0.0403
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.5549,
+            "std": 0.4554
+          },
+          "DDoS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.9611,
+            "std": 0.0248
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9954,
+            "std": 0.0012
+          },
+          "Portscan": {
+            "mean": 0.9999,
+            "std": 0.0001
+          },
+          "Web Attack - Brute Force": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.9538,
+            "std": 0.1032
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.9942,
+            "std": 0.0129
+          },
+          "Probe": {
+            "mean": 0.9977,
+            "std": 0.0006
+          }
+        }
+      },
+      "quantile_95": {
+        "f1": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "accuracy": {
+          "mean": 0.5644,
+          "std": 0.0
+        },
+        "val_f1": {
+          "mean": 0.791,
+          "std": 0.2968
+        },
+        "val_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "f1_gap": {
+          "mean": -0.791,
+          "std": 0.2968
+        },
+        "fpr_gap": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "alerts_per_10k_normal": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision_prev1": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision_prev10": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "DDoS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Portscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "quantile_99": {
+        "f1": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "accuracy": {
+          "mean": 0.5644,
+          "std": 0.0
+        },
+        "val_f1": {
+          "mean": 0.791,
+          "std": 0.2968
+        },
+        "val_fpr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "f1_gap": {
+          "mean": -0.791,
+          "std": 0.2968
+        },
+        "fpr_gap": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "alerts_per_10k_normal": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision_prev1": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision_prev10": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "DDoS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Portscan": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - Brute Force": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web Attack - XSS": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "Probe": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        }
+      },
+      "oracle_test_max_f1": {
+        "f1": {
+          "mean": 0.9753,
+          "std": 0.0042
+        },
+        "precision": {
+          "mean": 0.972,
+          "std": 0.0098
+        },
+        "recall": {
+          "mean": 0.9788,
+          "std": 0.0106
+        },
+        "fpr": {
+          "mean": 0.0218,
+          "std": 0.008
+        },
+        "accuracy": {
+          "mean": 0.9784,
+          "std": 0.0036
+        },
+        "val_f1": {
+          "mean": 0.9809,
+          "std": 0.0101
+        },
+        "val_fpr": {
+          "mean": 0.0147,
+          "std": 0.0049
+        },
+        "f1_gap": {
+          "mean": -0.0056,
+          "std": 0.0106
+        },
+        "fpr_gap": {
+          "mean": 0.0071,
+          "std": 0.0033
+        },
+        "alerts_per_10k_normal": {
+          "mean": 218.4,
+          "std": 80.1455
+        },
+        "precision_prev1": {
+          "mean": 0.3293,
+          "std": 0.0876
+        },
+        "precision_prev10": {
+          "mean": 0.8355,
+          "std": 0.0509
+        },
+        "recall_by_group": {
+          "Botnet": {
+            "mean": 0.237,
+            "std": 0.4069
+          },
+          "DDoS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Infiltration": {
+            "mean": 0.9167,
+            "std": 0.0439
+          },
+          "Infiltration - Portscan": {
+            "mean": 0.9918,
+            "std": 0.0027
+          },
+          "Portscan": {
+            "mean": 0.9994,
+            "std": 0.0007
+          },
+          "Web Attack - Brute Force": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web Attack - SQL Injection": {
+            "mean": 0.8,
+            "std": 0.4472
+          },
+          "Web Attack - XSS": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "Web attack": {
+            "mean": 0.975,
+            "std": 0.0559
+          },
+          "Probe": {
+            "mean": 0.9956,
+            "std": 0.0017
+          }
+        }
+      }
+    }
+  },
+  "per_seed": {
+    "0": {
+      "Isolation Forest": {
+        "params": {
+          "n_estimators": 200,
+          "max_samples": 256
+        },
+        "val_pr_auc": 0.7653,
+        "roc_auc": 0.9562,
+        "pr_auc": 0.9167,
+        "default": {
+          "precision": 0.8645,
+          "recall": 0.8203,
+          "f1": 0.8418,
+          "fpr": 0.0993,
+          "accuracy": 0.8657,
+          "tp": 25328,
+          "tn": 36029,
+          "fp": 3971,
+          "fn": 5548
+        },
+        "val_threshold": {
+          "precision": 0.8266,
+          "recall": 0.9754,
+          "f1": 0.8948,
+          "fpr": 0.158,
+          "accuracy": 0.9001,
+          "tp": 30116,
+          "tn": 33681,
+          "fp": 6319,
+          "fn": 760,
+          "threshold": -0.025946,
+          "val_f1": 0.8541,
+          "val_fpr": 0.1671,
+          "f1_gap": 0.0407,
+          "fpr_gap": -0.0091,
+          "alerts_per_10k_normal": 1579.8,
+          "precision_prev1": 0.0587,
+          "precision_prev10": 0.4069,
+          "recall_by_group": {
+            "Botnet": 0.0625,
+            "DDoS": 1.0,
+            "Infiltration": 1.0,
+            "Infiltration - Portscan": 0.9944,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9971
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.96,
+          "recall": 0.5645,
+          "f1": 0.7109,
+          "fpr": 0.0182,
+          "accuracy": 0.8,
+          "tp": 17429,
+          "tn": 39273,
+          "fp": 727,
+          "fn": 13447,
+          "threshold": 0.086258,
+          "val_f1": 0.0114,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.6995,
+          "fpr_gap": 0.0083,
+          "alerts_per_10k_normal": 181.8,
+          "precision_prev1": 0.2388,
+          "precision_prev10": 0.7753,
+          "recall_by_group": {
+            "Botnet": 0.0095,
+            "DDoS": 0.0,
+            "Infiltration": 0.3889,
+            "Infiltration - Portscan": 0.7426,
+            "Portscan": 0.9982,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.8704
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9106,
+          "recall": 0.6465,
+          "f1": 0.7561,
+          "fpr": 0.049,
+          "accuracy": 0.8183,
+          "tp": 19961,
+          "tn": 38040,
+          "fp": 1960,
+          "fn": 10915,
+          "threshold": 0.034619,
+          "val_f1": 0.2875,
+          "val_fpr": 0.0499,
+          "f1_gap": 0.4686,
+          "fpr_gap": -0.0009,
+          "alerts_per_10k_normal": 490.0,
+          "precision_prev1": 0.1176,
+          "precision_prev10": 0.5945,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0002,
+            "Infiltration": 0.9167,
+            "Infiltration - Portscan": 0.9893,
+            "Portscan": 0.9989,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9941
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9479,
+          "recall": 0.6451,
+          "f1": 0.7677,
+          "fpr": 0.0273,
+          "accuracy": 0.83,
+          "tp": 19918,
+          "tn": 38906,
+          "fp": 1094,
+          "fn": 10958,
+          "threshold": 0.070382,
+          "val_f1": 0.1641,
+          "val_fpr": 0.0244,
+          "f1_gap": 0.6036,
+          "fpr_gap": 0.0029,
+          "alerts_per_10k_normal": 273.5,
+          "precision_prev1": 0.1924,
+          "precision_prev10": 0.7238,
+          "recall_by_group": {
+            "Botnet": 0.0503,
+            "DDoS": 0.0,
+            "Infiltration": 0.5833,
+            "Infiltration - Portscan": 0.9873,
+            "Portscan": 0.9987,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.993
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9592,
+          "recall": 0.5655,
+          "f1": 0.7115,
+          "fpr": 0.0186,
+          "accuracy": 0.8002,
+          "tp": 17459,
+          "tn": 39258,
+          "fp": 742,
+          "fn": 13417,
+          "threshold": 0.084791,
+          "val_f1": 0.0185,
+          "val_fpr": 0.0113,
+          "f1_gap": 0.693,
+          "fpr_gap": 0.0073,
+          "alerts_per_10k_normal": 185.5,
+          "precision_prev1": 0.2354,
+          "precision_prev10": 0.7721,
+          "recall_by_group": {
+            "Botnet": 0.0217,
+            "DDoS": 0.0,
+            "Infiltration": 0.3889,
+            "Infiltration - Portscan": 0.7445,
+            "Portscan": 0.9984,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.8714
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8528,
+          "recall": 0.972,
+          "f1": 0.9085,
+          "fpr": 0.1295,
+          "accuracy": 0.9147,
+          "tp": 30010,
+          "tn": 34820,
+          "fp": 5180,
+          "fn": 866,
+          "threshold": -0.011987,
+          "val_f1": 0.8401,
+          "val_fpr": 0.1353,
+          "f1_gap": 0.0684,
+          "fpr_gap": -0.0058,
+          "alerts_per_10k_normal": 1295.0,
+          "precision_prev1": 0.0705,
+          "precision_prev10": 0.4547,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.99,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9942,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.997
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "params": {
+          "n_neighbors": 20
+        },
+        "val_pr_auc": 0.8732,
+        "roc_auc": 0.987,
+        "pr_auc": 0.974,
+        "default": {
+          "precision": 0.8659,
+          "recall": 0.9936,
+          "f1": 0.9254,
+          "fpr": 0.1188,
+          "accuracy": 0.9302,
+          "tp": 30678,
+          "tn": 35249,
+          "fp": 4751,
+          "fn": 198
+        },
+        "val_threshold": {
+          "precision": 0.8839,
+          "recall": 0.9914,
+          "f1": 0.9346,
+          "fpr": 0.1006,
+          "accuracy": 0.9395,
+          "tp": 30612,
+          "tn": 35978,
+          "fp": 4022,
+          "fn": 264,
+          "threshold": 0.097356,
+          "val_f1": 0.8948,
+          "val_fpr": 0.0906,
+          "f1_gap": 0.0398,
+          "fpr_gap": 0.01,
+          "alerts_per_10k_normal": 1005.5,
+          "precision_prev1": 0.0906,
+          "precision_prev10": 0.5228,
+          "recall_by_group": {
+            "Botnet": 0.8111,
+            "DDoS": 1.0,
+            "Infiltration": 0.8889,
+            "Infiltration - Portscan": 0.9983,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 0.0137,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0096,
+            "Probe": 0.9991
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9782,
+          "recall": 0.814,
+          "f1": 0.8886,
+          "fpr": 0.014,
+          "accuracy": 0.9111,
+          "tp": 25133,
+          "tn": 39439,
+          "fp": 561,
+          "fn": 5743,
+          "threshold": 3.360036,
+          "val_f1": 0.404,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.4846,
+          "fpr_gap": 0.0041,
+          "alerts_per_10k_normal": 140.2,
+          "precision_prev1": 0.3696,
+          "precision_prev10": 0.8657,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5211,
+            "Infiltration": 0.1111,
+            "Infiltration - Portscan": 0.9888,
+            "Portscan": 0.9986,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9937
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9265,
+          "recall": 0.9738,
+          "f1": 0.9496,
+          "fpr": 0.0596,
+          "accuracy": 0.9549,
+          "tp": 30066,
+          "tn": 37616,
+          "fp": 2384,
+          "fn": 810,
+          "threshold": 0.529026,
+          "val_f1": 0.7441,
+          "val_fpr": 0.0499,
+          "f1_gap": 0.2055,
+          "fpr_gap": 0.0097,
+          "alerts_per_10k_normal": 596.0,
+          "precision_prev1": 0.1417,
+          "precision_prev10": 0.6448,
+          "recall_by_group": {
+            "Botnet": 0.1141,
+            "DDoS": 0.9999,
+            "Infiltration": 0.5,
+            "Infiltration - Portscan": 0.9967,
+            "Portscan": 0.9998,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9982
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9792,
+          "recall": 0.8109,
+          "f1": 0.8871,
+          "fpr": 0.0133,
+          "accuracy": 0.9101,
+          "tp": 25037,
+          "tn": 39469,
+          "fp": 531,
+          "fn": 5839,
+          "threshold": 3.473262,
+          "val_f1": 0.2029,
+          "val_fpr": 0.0098,
+          "f1_gap": 0.6842,
+          "fpr_gap": 0.0035,
+          "alerts_per_10k_normal": 132.8,
+          "precision_prev1": 0.3816,
+          "precision_prev10": 0.8716,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5119,
+            "Infiltration": 0.1111,
+            "Infiltration - Portscan": 0.9884,
+            "Portscan": 0.9986,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9935
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9803,
+          "recall": 0.7959,
+          "f1": 0.8785,
+          "fpr": 0.0123,
+          "accuracy": 0.9041,
+          "tp": 24575,
+          "tn": 39506,
+          "fp": 494,
+          "fn": 6301,
+          "threshold": 3.633614,
+          "val_f1": 0.0213,
+          "val_fpr": 0.0095,
+          "f1_gap": 0.8572,
+          "fpr_gap": 0.0028,
+          "alerts_per_10k_normal": 123.5,
+          "precision_prev1": 0.3943,
+          "precision_prev10": 0.8775,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.4659,
+            "Infiltration": 0.1111,
+            "Infiltration - Portscan": 0.9883,
+            "Portscan": 0.9985,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9934
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9414,
+          "recall": 0.9701,
+          "f1": 0.9555,
+          "fpr": 0.0466,
+          "accuracy": 0.9607,
+          "tp": 29952,
+          "tn": 38136,
+          "fp": 1864,
+          "fn": 924,
+          "threshold": 0.804777,
+          "val_f1": 0.6294,
+          "val_fpr": 0.0381,
+          "f1_gap": 0.3261,
+          "fpr_gap": 0.0085,
+          "alerts_per_10k_normal": 466.0,
+          "precision_prev1": 0.1737,
+          "precision_prev10": 0.6982,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9946,
+            "Infiltration": 0.3611,
+            "Infiltration - Portscan": 0.9952,
+            "Portscan": 0.9997,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9974
+          }
+        }
+      },
+      "One-Class SVM": {
+        "params": {
+          "gamma_mult": 1.0,
+          "nu": null
+        },
+        "val_pr_auc": 0.8029,
+        "roc_auc": 0.9557,
+        "pr_auc": 0.9224,
+        "default": {
+          "precision": 0.8885,
+          "recall": 0.9751,
+          "f1": 0.9298,
+          "fpr": 0.0945,
+          "accuracy": 0.9358,
+          "tp": 30107,
+          "tn": 36222,
+          "fp": 3778,
+          "fn": 769
+        },
+        "val_threshold": {
+          "precision": 0.8324,
+          "recall": 0.9756,
+          "f1": 0.8983,
+          "fpr": 0.1517,
+          "accuracy": 0.9038,
+          "tp": 30124,
+          "tn": 33934,
+          "fp": 6066,
+          "fn": 752,
+          "threshold": -4.424827,
+          "val_f1": 0.8283,
+          "val_fpr": 0.1613,
+          "f1_gap": 0.07,
+          "fpr_gap": -0.0096,
+          "alerts_per_10k_normal": 1516.5,
+          "precision_prev1": 0.061,
+          "precision_prev10": 0.4169,
+          "recall_by_group": {
+            "Botnet": 0.0707,
+            "DDoS": 0.9998,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9952,
+            "Portscan": 0.9997,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9974
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9067,
+          "recall": 0.1565,
+          "f1": 0.2669,
+          "fpr": 0.0124,
+          "accuracy": 0.6255,
+          "tp": 4832,
+          "tn": 39503,
+          "fp": 497,
+          "fn": 26044,
+          "threshold": 83.319354,
+          "val_f1": 0.1615,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.1054,
+          "fpr_gap": 0.0025,
+          "alerts_per_10k_normal": 124.2,
+          "precision_prev1": 0.1129,
+          "precision_prev10": 0.5832,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0,
+            "Infiltration": 0.5278,
+            "Infiltration - Portscan": 0.4716,
+            "Portscan": 0.0053,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.2384
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9382,
+          "recall": 0.9736,
+          "f1": 0.9556,
+          "fpr": 0.0495,
+          "accuracy": 0.9606,
+          "tp": 30060,
+          "tn": 38020,
+          "fp": 1980,
+          "fn": 816,
+          "threshold": 18.408559,
+          "val_f1": 0.6832,
+          "val_fpr": 0.0499,
+          "f1_gap": 0.2724,
+          "fpr_gap": -0.0004,
+          "alerts_per_10k_normal": 495.0,
+          "precision_prev1": 0.1657,
+          "precision_prev10": 0.6861,
+          "recall_by_group": {
+            "Botnet": 0.0611,
+            "DDoS": 0.9998,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.99,
+            "Portscan": 0.9992,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9946
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9526,
+          "recall": 0.6596,
+          "f1": 0.7794,
+          "fpr": 0.0254,
+          "accuracy": 0.8374,
+          "tp": 20365,
+          "tn": 38986,
+          "fp": 1014,
+          "fn": 10511,
+          "threshold": 52.85432,
+          "val_f1": 0.1638,
+          "val_fpr": 0.0235,
+          "f1_gap": 0.6156,
+          "fpr_gap": 0.0019,
+          "alerts_per_10k_normal": 253.5,
+          "precision_prev1": 0.2081,
+          "precision_prev10": 0.743,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0941,
+            "Infiltration": 0.9444,
+            "Infiltration - Portscan": 0.9879,
+            "Portscan": 0.9378,
+            "Web Attack - Brute Force": 0.9726,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8558,
+            "Probe": 0.9628
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9169,
+          "recall": 0.0671,
+          "f1": 0.1251,
+          "fpr": 0.0047,
+          "accuracy": 0.591,
+          "tp": 2073,
+          "tn": 39812,
+          "fp": 188,
+          "fn": 28803,
+          "threshold": 101.184532,
+          "val_f1": 0.0387,
+          "val_fpr": 0.0039,
+          "f1_gap": 0.0864,
+          "fpr_gap": 0.0008,
+          "alerts_per_10k_normal": 47.0,
+          "precision_prev1": 0.1261,
+          "precision_prev10": 0.6135,
+          "recall_by_group": {
+            "Botnet": 0.0557,
+            "DDoS": 0.0,
+            "Infiltration": 0.3889,
+            "Infiltration - Portscan": 0.2014,
+            "Portscan": 0.0004,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.1009
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9507,
+          "recall": 0.973,
+          "f1": 0.9617,
+          "fpr": 0.039,
+          "accuracy": 0.9662,
+          "tp": 30042,
+          "tn": 38441,
+          "fp": 1559,
+          "fn": 834,
+          "threshold": 32.147914,
+          "val_f1": 0.4256,
+          "val_fpr": 0.0379,
+          "f1_gap": 0.5361,
+          "fpr_gap": 0.0011,
+          "alerts_per_10k_normal": 389.8,
+          "precision_prev1": 0.2014,
+          "precision_prev10": 0.735,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9985,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9897,
+            "Portscan": 0.9992,
+            "Web Attack - Brute Force": 0.9726,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8558,
+            "Probe": 0.9944
+          }
+        }
+      },
+      "Random Forest": {
+        "params": {
+          "max_depth": null
+        },
+        "val_pr_auc": 0.9999,
+        "roc_auc": 0.9808,
+        "pr_auc": 0.9746,
+        "default": {
+          "precision": 1.0,
+          "recall": 0.0934,
+          "f1": 0.1708,
+          "fpr": 0.0,
+          "accuracy": 0.605,
+          "tp": 2883,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 27993
+        },
+        "val_threshold": {
+          "precision": 0.9912,
+          "recall": 0.3302,
+          "f1": 0.4953,
+          "fpr": 0.0023,
+          "accuracy": 0.7069,
+          "tp": 10194,
+          "tn": 39909,
+          "fp": 91,
+          "fn": 20682,
+          "threshold": 0.07,
+          "val_f1": 0.9975,
+          "val_fpr": 0.003,
+          "f1_gap": -0.5022,
+          "fpr_gap": -0.0007,
+          "alerts_per_10k_normal": 22.8,
+          "precision_prev1": 0.5945,
+          "precision_prev10": 0.9416,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.9998,
+            "Infiltration": 0.6667,
+            "Infiltration - Portscan": 0.0053,
+            "Portscan": 0.0023,
+            "Web Attack - Brute Force": 0.9589,
+            "Web Attack - SQL Injection": 0.7692,
+            "Web Attack - XSS": 0.8889,
+            "Web attack": 0.9231,
+            "Probe": 0.0038
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.978,
+          "recall": 0.7682,
+          "f1": 0.8605,
+          "fpr": 0.0133,
+          "accuracy": 0.8915,
+          "tp": 23720,
+          "tn": 39467,
+          "fp": 533,
+          "fn": 7156,
+          "threshold": 0.02,
+          "val_f1": 0.9922,
+          "val_fpr": 0.0098,
+          "f1_gap": -0.1317,
+          "fpr_gap": 0.0035,
+          "alerts_per_10k_normal": 133.2,
+          "precision_prev1": 0.368,
+          "precision_prev10": 0.865,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.8611,
+            "Infiltration - Portscan": 0.3547,
+            "Portscan": 0.9995,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.9231,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.9904,
+            "Probe": 0.6771
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9325,
+          "recall": 0.976,
+          "f1": 0.9537,
+          "fpr": 0.0545,
+          "accuracy": 0.9588,
+          "tp": 30134,
+          "tn": 37819,
+          "fp": 2181,
+          "fn": 742,
+          "threshold": 0.0,
+          "val_f1": 0.9617,
+          "val_fpr": 0.0496,
+          "f1_gap": -0.008,
+          "fpr_gap": 0.0049,
+          "alerts_per_10k_normal": 545.2,
+          "precision_prev1": 0.1531,
+          "precision_prev10": 0.6654,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9952,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9976
+          }
+        },
+        "quantile_95": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.9115,
+          "val_fpr": 0.0,
+          "f1_gap": -0.9115,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.9115,
+          "val_fpr": 0.0,
+          "f1_gap": -0.9115,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9688,
+          "recall": 0.9748,
+          "f1": 0.9718,
+          "fpr": 0.0242,
+          "accuracy": 0.9754,
+          "tp": 30099,
+          "tn": 39032,
+          "fp": 968,
+          "fn": 777,
+          "threshold": 0.015,
+          "val_f1": 0.9864,
+          "val_fpr": 0.0172,
+          "f1_gap": -0.0146,
+          "fpr_gap": 0.007,
+          "alerts_per_10k_normal": 242.0,
+          "precision_prev1": 0.2892,
+          "precision_prev10": 0.8174,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.8889,
+            "Infiltration - Portscan": 0.9923,
+            "Portscan": 0.9996,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.996
+          }
+        }
+      }
+    },
+    "1": {
+      "Isolation Forest": {
+        "params": {
+          "n_estimators": 200,
+          "max_samples": 256
+        },
+        "val_pr_auc": 0.6689,
+        "roc_auc": 0.95,
+        "pr_auc": 0.9093,
+        "default": {
+          "precision": 0.8422,
+          "recall": 0.7201,
+          "f1": 0.7764,
+          "fpr": 0.1042,
+          "accuracy": 0.8193,
+          "tp": 22234,
+          "tn": 35834,
+          "fp": 4166,
+          "fn": 8642
+        },
+        "val_threshold": {
+          "precision": 0.7532,
+          "recall": 0.98,
+          "f1": 0.8517,
+          "fpr": 0.2479,
+          "accuracy": 0.8514,
+          "tp": 30258,
+          "tn": 30083,
+          "fp": 9917,
+          "fn": 618,
+          "threshold": -0.063842,
+          "val_f1": 0.8094,
+          "val_fpr": 0.2728,
+          "f1_gap": 0.0423,
+          "fpr_gap": -0.0249,
+          "alerts_per_10k_normal": 2479.2,
+          "precision_prev1": 0.0384,
+          "precision_prev10": 0.3052,
+          "recall_by_group": {
+            "Botnet": 0.1984,
+            "DDoS": 1.0,
+            "Infiltration": 1.0,
+            "Infiltration - Portscan": 0.9984,
+            "Portscan": 1.0,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0769,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8846,
+            "Probe": 0.9992
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.279,
+          "recall": 0.0021,
+          "f1": 0.0042,
+          "fpr": 0.0042,
+          "accuracy": 0.5629,
+          "tp": 65,
+          "tn": 39832,
+          "fp": 168,
+          "fn": 30811,
+          "threshold": 0.097624,
+          "val_f1": 0.0,
+          "val_fpr": 0.01,
+          "f1_gap": 0.0042,
+          "fpr_gap": -0.0058,
+          "alerts_per_10k_normal": 42.0,
+          "precision_prev1": 0.005,
+          "precision_prev10": 0.0528,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.2778,
+            "Infiltration - Portscan": 0.0055,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0027
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9164,
+          "recall": 0.647,
+          "f1": 0.7585,
+          "fpr": 0.0456,
+          "accuracy": 0.8205,
+          "tp": 19978,
+          "tn": 38178,
+          "fp": 1822,
+          "fn": 10898,
+          "threshold": 0.031067,
+          "val_f1": 0.2743,
+          "val_fpr": 0.05,
+          "f1_gap": 0.4842,
+          "fpr_gap": -0.0044,
+          "alerts_per_10k_normal": 455.5,
+          "precision_prev1": 0.1255,
+          "precision_prev10": 0.6122,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0,
+            "Infiltration": 0.9167,
+            "Infiltration - Portscan": 0.9902,
+            "Portscan": 0.9992,
+            "Web Attack - Brute Force": 0.0137,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.3333,
+            "Web attack": 0.0673,
+            "Probe": 0.9947
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9521,
+          "recall": 0.6441,
+          "f1": 0.7684,
+          "fpr": 0.025,
+          "accuracy": 0.8308,
+          "tp": 19887,
+          "tn": 39000,
+          "fp": 1000,
+          "fn": 10989,
+          "threshold": 0.068286,
+          "val_f1": 0.1489,
+          "val_fpr": 0.0289,
+          "f1_gap": 0.6195,
+          "fpr_gap": -0.0039,
+          "alerts_per_10k_normal": 250.0,
+          "precision_prev1": 0.2065,
+          "precision_prev10": 0.7411,
+          "recall_by_group": {
+            "Botnet": 0.0272,
+            "DDoS": 0.0,
+            "Infiltration": 0.5,
+            "Infiltration - Portscan": 0.9862,
+            "Portscan": 0.9987,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9925
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9709,
+          "recall": 0.2643,
+          "f1": 0.4155,
+          "fpr": 0.0061,
+          "accuracy": 0.6761,
+          "tp": 8162,
+          "tn": 39755,
+          "fp": 245,
+          "fn": 22714,
+          "threshold": 0.085204,
+          "val_f1": 0.0099,
+          "val_fpr": 0.0131,
+          "f1_gap": 0.4056,
+          "fpr_gap": -0.007,
+          "alerts_per_10k_normal": 61.2,
+          "precision_prev1": 0.3036,
+          "precision_prev10": 0.8275,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.3889,
+            "Infiltration - Portscan": 0.5154,
+            "Portscan": 0.2994,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.4074
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8376,
+          "recall": 0.9727,
+          "f1": 0.9001,
+          "fpr": 0.1456,
+          "accuracy": 0.906,
+          "tp": 30033,
+          "tn": 34178,
+          "fp": 5822,
+          "fn": 843,
+          "threshold": -0.023287,
+          "val_f1": 0.5549,
+          "val_fpr": 0.168,
+          "f1_gap": 0.3452,
+          "fpr_gap": -0.0224,
+          "alerts_per_10k_normal": 1455.5,
+          "precision_prev1": 0.0632,
+          "precision_prev10": 0.4261,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9905,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.996,
+            "Portscan": 0.9998,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9979
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "params": {
+          "n_neighbors": 20
+        },
+        "val_pr_auc": 0.8648,
+        "roc_auc": 0.987,
+        "pr_auc": 0.972,
+        "default": {
+          "precision": 0.8696,
+          "recall": 0.9898,
+          "f1": 0.9258,
+          "fpr": 0.1145,
+          "accuracy": 0.9309,
+          "tp": 30561,
+          "tn": 35419,
+          "fp": 4581,
+          "fn": 315
+        },
+        "val_threshold": {
+          "precision": 0.876,
+          "recall": 0.9854,
+          "f1": 0.9275,
+          "fpr": 0.1077,
+          "accuracy": 0.9329,
+          "tp": 30425,
+          "tn": 35693,
+          "fp": 4307,
+          "fn": 451,
+          "threshold": 0.03115,
+          "val_f1": 0.8895,
+          "val_fpr": 0.1028,
+          "f1_gap": 0.038,
+          "fpr_gap": 0.0049,
+          "alerts_per_10k_normal": 1076.8,
+          "precision_prev1": 0.0846,
+          "precision_prev10": 0.5042,
+          "recall_by_group": {
+            "Botnet": 0.4293,
+            "DDoS": 1.0,
+            "Infiltration": 0.8611,
+            "Infiltration - Portscan": 0.9988,
+            "Portscan": 0.9998,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0769,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8846,
+            "Probe": 0.9993
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.964,
+          "recall": 0.8308,
+          "f1": 0.8925,
+          "fpr": 0.024,
+          "accuracy": 0.9128,
+          "tp": 25653,
+          "tn": 39041,
+          "fp": 959,
+          "fn": 5223,
+          "threshold": 2.685767,
+          "val_f1": 0.1214,
+          "val_fpr": 0.01,
+          "f1_gap": 0.7711,
+          "fpr_gap": 0.014,
+          "alerts_per_10k_normal": 239.8,
+          "precision_prev1": 0.2593,
+          "precision_prev10": 0.7938,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5694,
+            "Infiltration": 0.1111,
+            "Infiltration - Portscan": 0.9923,
+            "Portscan": 0.9988,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9956
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9282,
+          "recall": 0.9726,
+          "f1": 0.9499,
+          "fpr": 0.058,
+          "accuracy": 0.9553,
+          "tp": 30031,
+          "tn": 37678,
+          "fp": 2322,
+          "fn": 845,
+          "threshold": 0.457787,
+          "val_f1": 0.8214,
+          "val_fpr": 0.05,
+          "f1_gap": 0.1285,
+          "fpr_gap": 0.008,
+          "alerts_per_10k_normal": 580.5,
+          "precision_prev1": 0.1447,
+          "precision_prev10": 0.6506,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.6944,
+            "Infiltration - Portscan": 0.9966,
+            "Portscan": 0.9996,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9981
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9602,
+          "recall": 0.8348,
+          "f1": 0.8931,
+          "fpr": 0.0267,
+          "accuracy": 0.913,
+          "tp": 25775,
+          "tn": 38932,
+          "fp": 1068,
+          "fn": 5101,
+          "threshold": 2.059463,
+          "val_f1": 0.1919,
+          "val_fpr": 0.0139,
+          "f1_gap": 0.7012,
+          "fpr_gap": 0.0128,
+          "alerts_per_10k_normal": 267.0,
+          "precision_prev1": 0.24,
+          "precision_prev10": 0.7765,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5792,
+            "Infiltration": 0.25,
+            "Infiltration - Portscan": 0.994,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9965
+          }
+        },
+        "quantile_99": {
+          "precision": 0.965,
+          "recall": 0.8276,
+          "f1": 0.891,
+          "fpr": 0.0232,
+          "accuracy": 0.9118,
+          "tp": 25553,
+          "tn": 39074,
+          "fp": 926,
+          "fn": 5323,
+          "threshold": 2.930723,
+          "val_f1": 0.0216,
+          "val_fpr": 0.0094,
+          "f1_gap": 0.8694,
+          "fpr_gap": 0.0138,
+          "alerts_per_10k_normal": 231.5,
+          "precision_prev1": 0.2653,
+          "precision_prev10": 0.7989,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5595,
+            "Infiltration": 0.1111,
+            "Infiltration - Portscan": 0.9922,
+            "Portscan": 0.9988,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9955
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9547,
+          "recall": 0.9701,
+          "f1": 0.9623,
+          "fpr": 0.0355,
+          "accuracy": 0.9669,
+          "tp": 29953,
+          "tn": 38578,
+          "fp": 1422,
+          "fn": 923,
+          "threshold": 1.220872,
+          "val_f1": 0.5069,
+          "val_fpr": 0.0237,
+          "f1_gap": 0.4554,
+          "fpr_gap": 0.0118,
+          "alerts_per_10k_normal": 355.5,
+          "precision_prev1": 0.2161,
+          "precision_prev10": 0.752,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9948,
+            "Infiltration": 0.3333,
+            "Infiltration - Portscan": 0.9955,
+            "Portscan": 0.9994,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9974
+          }
+        }
+      },
+      "One-Class SVM": {
+        "params": {
+          "gamma_mult": 1.0,
+          "nu": null
+        },
+        "val_pr_auc": 0.7384,
+        "roc_auc": 0.9563,
+        "pr_auc": 0.9252,
+        "default": {
+          "precision": 0.885,
+          "recall": 0.9755,
+          "f1": 0.9281,
+          "fpr": 0.0978,
+          "accuracy": 0.9341,
+          "tp": 30119,
+          "tn": 36087,
+          "fp": 3913,
+          "fn": 757
+        },
+        "val_threshold": {
+          "precision": 0.8497,
+          "recall": 0.9758,
+          "f1": 0.9084,
+          "fpr": 0.1332,
+          "accuracy": 0.9143,
+          "tp": 30128,
+          "tn": 34672,
+          "fp": 5328,
+          "fn": 748,
+          "threshold": -3.361582,
+          "val_f1": 0.7487,
+          "val_fpr": 0.1455,
+          "f1_gap": 0.1597,
+          "fpr_gap": -0.0123,
+          "alerts_per_10k_normal": 1332.0,
+          "precision_prev1": 0.0689,
+          "precision_prev10": 0.4487,
+          "recall_by_group": {
+            "Botnet": 0.0693,
+            "DDoS": 0.9999,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9958,
+            "Portscan": 0.9995,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9977
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9027,
+          "recall": 0.1481,
+          "f1": 0.2545,
+          "fpr": 0.0123,
+          "accuracy": 0.6219,
+          "tp": 4573,
+          "tn": 39507,
+          "fp": 493,
+          "fn": 26303,
+          "threshold": 87.63662,
+          "val_f1": 0.178,
+          "val_fpr": 0.01,
+          "f1_gap": 0.0765,
+          "fpr_gap": 0.0023,
+          "alerts_per_10k_normal": 123.2,
+          "precision_prev1": 0.1082,
+          "precision_prev10": 0.5718,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0003,
+            "Infiltration": 0.7222,
+            "Infiltration - Portscan": 0.445,
+            "Portscan": 0.005,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.225
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9443,
+          "recall": 0.9741,
+          "f1": 0.9589,
+          "fpr": 0.0444,
+          "accuracy": 0.9637,
+          "tp": 30076,
+          "tn": 38225,
+          "fp": 1775,
+          "fn": 800,
+          "threshold": 23.418845,
+          "val_f1": 0.4856,
+          "val_fpr": 0.05,
+          "f1_gap": 0.4733,
+          "fpr_gap": -0.0056,
+          "alerts_per_10k_normal": 443.8,
+          "precision_prev1": 0.1815,
+          "precision_prev10": 0.7092,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9999,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9916,
+            "Portscan": 0.9992,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9954
+          }
+        },
+        "quantile_95": {
+          "precision": 0.8834,
+          "recall": 0.1694,
+          "f1": 0.2842,
+          "fpr": 0.0173,
+          "accuracy": 0.6284,
+          "tp": 5229,
+          "tn": 39310,
+          "fp": 690,
+          "fn": 25647,
+          "threshold": 75.500538,
+          "val_f1": 0.1784,
+          "val_fpr": 0.0186,
+          "f1_gap": 0.1058,
+          "fpr_gap": -0.0013,
+          "alerts_per_10k_normal": 172.5,
+          "precision_prev1": 0.0902,
+          "precision_prev10": 0.5217,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0051,
+            "Infiltration": 0.8611,
+            "Infiltration - Portscan": 0.4851,
+            "Portscan": 0.0252,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.2551
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9275,
+          "recall": 0.0668,
+          "f1": 0.1245,
+          "fpr": 0.004,
+          "accuracy": 0.5912,
+          "tp": 2061,
+          "tn": 39839,
+          "fp": 161,
+          "fn": 28815,
+          "threshold": 108.938101,
+          "val_f1": 0.0402,
+          "val_fpr": 0.0035,
+          "f1_gap": 0.0843,
+          "fpr_gap": 0.0005,
+          "alerts_per_10k_normal": 40.2,
+          "precision_prev1": 0.1435,
+          "precision_prev10": 0.6482,
+          "recall_by_group": {
+            "Botnet": 0.0557,
+            "DDoS": 0.0,
+            "Infiltration": 0.4167,
+            "Infiltration - Portscan": 0.2005,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.1003
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9528,
+          "recall": 0.9734,
+          "f1": 0.963,
+          "fpr": 0.0372,
+          "accuracy": 0.9674,
+          "tp": 30054,
+          "tn": 38511,
+          "fp": 1489,
+          "fn": 822,
+          "threshold": 34.662941,
+          "val_f1": 0.3285,
+          "val_fpr": 0.0399,
+          "f1_gap": 0.6345,
+          "fpr_gap": -0.0027,
+          "alerts_per_10k_normal": 372.2,
+          "precision_prev1": 0.2089,
+          "precision_prev10": 0.7439,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.998,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9914,
+            "Portscan": 0.9992,
+            "Web Attack - Brute Force": 0.9726,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8558,
+            "Probe": 0.9953
+          }
+        }
+      },
+      "Random Forest": {
+        "params": {
+          "max_depth": null
+        },
+        "val_pr_auc": 0.9986,
+        "roc_auc": 0.9934,
+        "pr_auc": 0.9897,
+        "default": {
+          "precision": 1.0,
+          "recall": 0.1297,
+          "f1": 0.2296,
+          "fpr": 0.0,
+          "accuracy": 0.6209,
+          "tp": 4005,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 26871
+        },
+        "val_threshold": {
+          "precision": 0.9916,
+          "recall": 0.7339,
+          "f1": 0.8435,
+          "fpr": 0.0048,
+          "accuracy": 0.8814,
+          "tp": 22659,
+          "tn": 39808,
+          "fp": 192,
+          "fn": 8217,
+          "threshold": 0.04,
+          "val_f1": 0.9903,
+          "val_fpr": 0.0042,
+          "f1_gap": -0.1468,
+          "fpr_gap": 0.0006,
+          "alerts_per_10k_normal": 48.0,
+          "precision_prev1": 0.607,
+          "precision_prev10": 0.9444,
+          "recall_by_group": {
+            "Botnet": 0.0299,
+            "DDoS": 1.0,
+            "Infiltration": 0.8889,
+            "Infiltration - Portscan": 0.2569,
+            "Portscan": 0.995,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.7222,
+            "Web attack": 0.8269,
+            "Probe": 0.626
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9836,
+          "recall": 0.9725,
+          "f1": 0.978,
+          "fpr": 0.0125,
+          "accuracy": 0.981,
+          "tp": 30028,
+          "tn": 39500,
+          "fp": 500,
+          "fn": 848,
+          "threshold": 0.02,
+          "val_f1": 0.9881,
+          "val_fpr": 0.0092,
+          "f1_gap": -0.0101,
+          "fpr_gap": 0.0033,
+          "alerts_per_10k_normal": 125.0,
+          "precision_prev1": 0.4401,
+          "precision_prev10": 0.8963,
+          "recall_by_group": {
+            "Botnet": 0.0462,
+            "DDoS": 1.0,
+            "Infiltration": 0.9167,
+            "Infiltration - Portscan": 0.9888,
+            "Portscan": 0.9982,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9935
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.941,
+          "recall": 0.9957,
+          "f1": 0.9676,
+          "fpr": 0.0482,
+          "accuracy": 0.9709,
+          "tp": 30743,
+          "tn": 38071,
+          "fp": 1929,
+          "fn": 133,
+          "threshold": 0.0,
+          "val_f1": 0.9614,
+          "val_fpr": 0.0487,
+          "f1_gap": 0.0062,
+          "fpr_gap": -0.0005,
+          "alerts_per_10k_normal": 482.2,
+          "precision_prev1": 0.1726,
+          "precision_prev10": 0.6964,
+          "recall_by_group": {
+            "Botnet": 0.8818,
+            "DDoS": 1.0,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9958,
+            "Portscan": 1.0,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.7692,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.9712,
+            "Probe": 0.9979
+          }
+        },
+        "quantile_95": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.2632,
+          "val_fpr": 0.0,
+          "f1_gap": -0.2632,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.2632,
+          "val_fpr": 0.0,
+          "f1_gap": -0.2632,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9836,
+          "recall": 0.9725,
+          "f1": 0.978,
+          "fpr": 0.0125,
+          "accuracy": 0.981,
+          "tp": 30028,
+          "tn": 39500,
+          "fp": 500,
+          "fn": 848,
+          "threshold": 0.025,
+          "val_f1": 0.9881,
+          "val_fpr": 0.0092,
+          "f1_gap": -0.0101,
+          "fpr_gap": 0.0033,
+          "alerts_per_10k_normal": 125.0,
+          "precision_prev1": 0.4401,
+          "precision_prev10": 0.8963,
+          "recall_by_group": {
+            "Botnet": 0.0462,
+            "DDoS": 1.0,
+            "Infiltration": 0.9167,
+            "Infiltration - Portscan": 0.9888,
+            "Portscan": 0.9982,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9935
+          }
+        }
+      }
+    },
+    "2": {
+      "Isolation Forest": {
+        "params": {
+          "n_estimators": 200,
+          "max_samples": 256
+        },
+        "val_pr_auc": 0.6304,
+        "roc_auc": 0.9534,
+        "pr_auc": 0.9134,
+        "default": {
+          "precision": 0.866,
+          "recall": 0.7924,
+          "f1": 0.8276,
+          "fpr": 0.0946,
+          "accuracy": 0.8562,
+          "tp": 24467,
+          "tn": 36214,
+          "fp": 3786,
+          "fn": 6409
+        },
+        "val_threshold": {
+          "precision": 0.7905,
+          "recall": 0.9771,
+          "f1": 0.874,
+          "fpr": 0.1998,
+          "accuracy": 0.8772,
+          "tp": 30168,
+          "tn": 32007,
+          "fp": 7993,
+          "fn": 708,
+          "threshold": -0.046463,
+          "val_f1": 0.8212,
+          "val_fpr": 0.2055,
+          "f1_gap": 0.0528,
+          "fpr_gap": -0.0057,
+          "alerts_per_10k_normal": 1998.2,
+          "precision_prev1": 0.0471,
+          "precision_prev10": 0.352,
+          "recall_by_group": {
+            "Botnet": 0.0938,
+            "DDoS": 1.0,
+            "Infiltration": 1.0,
+            "Infiltration - Portscan": 0.9972,
+            "Portscan": 1.0,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9986
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9327,
+          "recall": 0.1409,
+          "f1": 0.2448,
+          "fpr": 0.0078,
+          "accuracy": 0.6213,
+          "tp": 4351,
+          "tn": 39686,
+          "fp": 314,
+          "fn": 26525,
+          "threshold": 0.090822,
+          "val_f1": 0.0003,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.2445,
+          "fpr_gap": -0.0021,
+          "alerts_per_10k_normal": 78.5,
+          "precision_prev1": 0.1535,
+          "precision_prev10": 0.6661,
+          "recall_by_group": {
+            "Botnet": 0.0109,
+            "DDoS": 0.0,
+            "Infiltration": 0.3889,
+            "Infiltration - Portscan": 0.4329,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.2165
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.8999,
+          "recall": 0.6522,
+          "f1": 0.7562,
+          "fpr": 0.056,
+          "accuracy": 0.8168,
+          "tp": 20136,
+          "tn": 37759,
+          "fp": 2241,
+          "fn": 10740,
+          "threshold": 0.023644,
+          "val_f1": 0.0894,
+          "val_fpr": 0.0499,
+          "f1_gap": 0.6668,
+          "fpr_gap": 0.0061,
+          "alerts_per_10k_normal": 560.2,
+          "precision_prev1": 0.1052,
+          "precision_prev10": 0.564,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0159,
+            "Infiltration": 0.9444,
+            "Infiltration - Portscan": 0.9892,
+            "Portscan": 0.9995,
+            "Web Attack - Brute Force": 0.0137,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.6111,
+            "Web attack": 0.1154,
+            "Probe": 0.9943
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9002,
+          "recall": 0.6517,
+          "f1": 0.756,
+          "fpr": 0.0558,
+          "accuracy": 0.8168,
+          "tp": 20121,
+          "tn": 37770,
+          "fp": 2230,
+          "fn": 10755,
+          "threshold": 0.023961,
+          "val_f1": 0.0879,
+          "val_fpr": 0.0497,
+          "f1_gap": 0.6681,
+          "fpr_gap": 0.0061,
+          "alerts_per_10k_normal": 557.5,
+          "precision_prev1": 0.1056,
+          "precision_prev10": 0.565,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.015,
+            "Infiltration": 0.9444,
+            "Infiltration - Portscan": 0.9892,
+            "Portscan": 0.9995,
+            "Web Attack - Brute Force": 0.0137,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.2778,
+            "Web attack": 0.0577,
+            "Probe": 0.9943
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9522,
+          "recall": 0.6425,
+          "f1": 0.7673,
+          "fpr": 0.0249,
+          "accuracy": 0.8302,
+          "tp": 19838,
+          "tn": 39004,
+          "fp": 996,
+          "fn": 11038,
+          "threshold": 0.069319,
+          "val_f1": 0.0013,
+          "val_fpr": 0.0146,
+          "f1_gap": 0.766,
+          "fpr_gap": 0.0103,
+          "alerts_per_10k_normal": 249.0,
+          "precision_prev1": 0.2068,
+          "precision_prev10": 0.7414,
+          "recall_by_group": {
+            "Botnet": 0.0476,
+            "DDoS": 0.0,
+            "Infiltration": 0.6111,
+            "Infiltration - Portscan": 0.9832,
+            "Portscan": 0.9949,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.989
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8349,
+          "recall": 0.9742,
+          "f1": 0.8992,
+          "fpr": 0.1487,
+          "accuracy": 0.9048,
+          "tp": 30080,
+          "tn": 34050,
+          "fp": 5950,
+          "fn": 796,
+          "threshold": -0.020812,
+          "val_f1": 0.7416,
+          "val_fpr": 0.1494,
+          "f1_gap": 0.1576,
+          "fpr_gap": -0.0007,
+          "alerts_per_10k_normal": 1487.5,
+          "precision_prev1": 0.0621,
+          "precision_prev10": 0.4212,
+          "recall_by_group": {
+            "Botnet": 0.0666,
+            "DDoS": 0.9961,
+            "Infiltration": 1.0,
+            "Infiltration - Portscan": 0.9944,
+            "Portscan": 1.0,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9972
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "params": {
+          "n_neighbors": 20
+        },
+        "val_pr_auc": 0.8639,
+        "roc_auc": 0.9883,
+        "pr_auc": 0.9778,
+        "default": {
+          "precision": 0.8697,
+          "recall": 0.9966,
+          "f1": 0.9288,
+          "fpr": 0.1153,
+          "accuracy": 0.9335,
+          "tp": 30772,
+          "tn": 35389,
+          "fp": 4611,
+          "fn": 104
+        },
+        "val_threshold": {
+          "precision": 0.8914,
+          "recall": 0.9872,
+          "f1": 0.9369,
+          "fpr": 0.0929,
+          "accuracy": 0.942,
+          "tp": 30482,
+          "tn": 36285,
+          "fp": 3715,
+          "fn": 394,
+          "threshold": 0.113861,
+          "val_f1": 0.9077,
+          "val_fpr": 0.0748,
+          "f1_gap": 0.0292,
+          "fpr_gap": 0.0181,
+          "alerts_per_10k_normal": 928.8,
+          "precision_prev1": 0.097,
+          "precision_prev10": 0.5415,
+          "recall_by_group": {
+            "Botnet": 0.5136,
+            "DDoS": 1.0,
+            "Infiltration": 0.8889,
+            "Infiltration - Portscan": 0.9982,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.999
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9649,
+          "recall": 0.7968,
+          "f1": 0.8729,
+          "fpr": 0.0223,
+          "accuracy": 0.8989,
+          "tp": 24603,
+          "tn": 39106,
+          "fp": 894,
+          "fn": 6273,
+          "threshold": 3.033537,
+          "val_f1": 0.0031,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.8698,
+          "fpr_gap": 0.0124,
+          "alerts_per_10k_normal": 223.5,
+          "precision_prev1": 0.2648,
+          "precision_prev10": 0.7984,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.468,
+            "Infiltration": 0.1389,
+            "Infiltration - Portscan": 0.9894,
+            "Portscan": 0.998,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9937
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.916,
+          "recall": 0.9761,
+          "f1": 0.9451,
+          "fpr": 0.0691,
+          "accuracy": 0.9506,
+          "tp": 30138,
+          "tn": 37236,
+          "fp": 2764,
+          "fn": 738,
+          "threshold": 0.337348,
+          "val_f1": 0.822,
+          "val_fpr": 0.0499,
+          "f1_gap": 0.1231,
+          "fpr_gap": 0.0192,
+          "alerts_per_10k_normal": 691.0,
+          "precision_prev1": 0.1249,
+          "precision_prev10": 0.6108,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.8333,
+            "Infiltration - Portscan": 0.9975,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9987
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9654,
+          "recall": 0.8206,
+          "f1": 0.8872,
+          "fpr": 0.0227,
+          "accuracy": 0.9091,
+          "tp": 25338,
+          "tn": 39093,
+          "fp": 907,
+          "fn": 5538,
+          "threshold": 2.863081,
+          "val_f1": 0.2279,
+          "val_fpr": 0.0103,
+          "f1_gap": 0.6593,
+          "fpr_gap": 0.0124,
+          "alerts_per_10k_normal": 226.8,
+          "precision_prev1": 0.2677,
+          "precision_prev10": 0.8008,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5405,
+            "Infiltration": 0.2222,
+            "Infiltration - Portscan": 0.99,
+            "Portscan": 0.9981,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.994
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9652,
+          "recall": 0.8091,
+          "f1": 0.8803,
+          "fpr": 0.0225,
+          "accuracy": 0.9041,
+          "tp": 24981,
+          "tn": 39099,
+          "fp": 901,
+          "fn": 5895,
+          "threshold": 2.936139,
+          "val_f1": 0.0192,
+          "val_fpr": 0.0101,
+          "f1_gap": 0.8611,
+          "fpr_gap": 0.0124,
+          "alerts_per_10k_normal": 225.2,
+          "precision_prev1": 0.2662,
+          "precision_prev10": 0.7996,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5051,
+            "Infiltration": 0.1944,
+            "Infiltration - Portscan": 0.9898,
+            "Portscan": 0.9981,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.994
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9565,
+          "recall": 0.9727,
+          "f1": 0.9645,
+          "fpr": 0.0341,
+          "accuracy": 0.9688,
+          "tp": 30034,
+          "tn": 38634,
+          "fp": 1366,
+          "fn": 842,
+          "threshold": 1.382507,
+          "val_f1": 0.5743,
+          "val_fpr": 0.0183,
+          "f1_gap": 0.3902,
+          "fpr_gap": 0.0158,
+          "alerts_per_10k_normal": 341.5,
+          "precision_prev1": 0.2234,
+          "precision_prev10": 0.7599,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9965,
+            "Infiltration": 0.2778,
+            "Infiltration - Portscan": 0.9947,
+            "Portscan": 0.9998,
+            "Web Attack - Brute Force": 0.9589,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.6731,
+            "Probe": 0.9972
+          }
+        }
+      },
+      "One-Class SVM": {
+        "params": {
+          "gamma_mult": 1.0,
+          "nu": null
+        },
+        "val_pr_auc": 0.6888,
+        "roc_auc": 0.9534,
+        "pr_auc": 0.9176,
+        "default": {
+          "precision": 0.8895,
+          "recall": 0.9748,
+          "f1": 0.9302,
+          "fpr": 0.0935,
+          "accuracy": 0.9363,
+          "tp": 30098,
+          "tn": 36262,
+          "fp": 3738,
+          "fn": 778
+        },
+        "val_threshold": {
+          "precision": 0.7906,
+          "recall": 0.9756,
+          "f1": 0.8734,
+          "fpr": 0.1994,
+          "accuracy": 0.8768,
+          "tp": 30122,
+          "tn": 32023,
+          "fp": 7977,
+          "fn": 754,
+          "threshold": -7.378256,
+          "val_f1": 0.7704,
+          "val_fpr": 0.1962,
+          "f1_gap": 0.103,
+          "fpr_gap": 0.0032,
+          "alerts_per_10k_normal": 1994.2,
+          "precision_prev1": 0.0471,
+          "precision_prev10": 0.3521,
+          "recall_by_group": {
+            "Botnet": 0.0693,
+            "DDoS": 0.9998,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9948,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9973
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9057,
+          "recall": 0.1484,
+          "f1": 0.2551,
+          "fpr": 0.0119,
+          "accuracy": 0.6223,
+          "tp": 4583,
+          "tn": 39523,
+          "fp": 477,
+          "fn": 26293,
+          "threshold": 94.295243,
+          "val_f1": 0.0016,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.2535,
+          "fpr_gap": 0.002,
+          "alerts_per_10k_normal": 119.2,
+          "precision_prev1": 0.1117,
+          "precision_prev10": 0.5804,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0,
+            "Infiltration": 0.5278,
+            "Infiltration - Portscan": 0.449,
+            "Portscan": 0.003,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.226
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9323,
+          "recall": 0.9735,
+          "f1": 0.9525,
+          "fpr": 0.0545,
+          "accuracy": 0.9577,
+          "tp": 30058,
+          "tn": 37819,
+          "fp": 2181,
+          "fn": 818,
+          "threshold": 14.718056,
+          "val_f1": 0.5445,
+          "val_fpr": 0.0499,
+          "f1_gap": 0.408,
+          "fpr_gap": 0.0046,
+          "alerts_per_10k_normal": 545.2,
+          "precision_prev1": 0.1528,
+          "precision_prev10": 0.6649,
+          "recall_by_group": {
+            "Botnet": 0.0611,
+            "DDoS": 0.9998,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.99,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9945
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9474,
+          "recall": 0.973,
+          "f1": 0.96,
+          "fpr": 0.0417,
+          "accuracy": 0.9647,
+          "tp": 30041,
+          "tn": 38332,
+          "fp": 1668,
+          "fn": 835,
+          "threshold": 27.543408,
+          "val_f1": 0.1325,
+          "val_fpr": 0.0371,
+          "f1_gap": 0.8275,
+          "fpr_gap": 0.0046,
+          "alerts_per_10k_normal": 417.0,
+          "precision_prev1": 0.1907,
+          "precision_prev10": 0.7216,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9989,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9893,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9941
+          }
+        },
+        "quantile_99": {
+          "precision": 0.883,
+          "recall": 0.1632,
+          "f1": 0.2755,
+          "fpr": 0.0167,
+          "accuracy": 0.626,
+          "tp": 5039,
+          "tn": 39332,
+          "fp": 668,
+          "fn": 25837,
+          "threshold": 83.603857,
+          "val_f1": 0.0016,
+          "val_fpr": 0.0145,
+          "f1_gap": 0.2739,
+          "fpr_gap": 0.0022,
+          "alerts_per_10k_normal": 167.0,
+          "precision_prev1": 0.0898,
+          "precision_prev10": 0.5206,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0,
+            "Infiltration": 0.7222,
+            "Infiltration - Portscan": 0.4866,
+            "Portscan": 0.0103,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.2485
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9487,
+          "recall": 0.9723,
+          "f1": 0.9604,
+          "fpr": 0.0406,
+          "accuracy": 0.965,
+          "tp": 30022,
+          "tn": 38376,
+          "fp": 1624,
+          "fn": 854,
+          "threshold": 28.61287,
+          "val_f1": 0.0655,
+          "val_fpr": 0.0337,
+          "f1_gap": 0.8949,
+          "fpr_gap": 0.0069,
+          "alerts_per_10k_normal": 406.0,
+          "precision_prev1": 0.1948,
+          "precision_prev10": 0.7269,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.997,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9893,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9941
+          }
+        }
+      },
+      "Random Forest": {
+        "params": {
+          "max_depth": null
+        },
+        "val_pr_auc": 1.0,
+        "roc_auc": 0.9918,
+        "pr_auc": 0.9877,
+        "default": {
+          "precision": 0.9998,
+          "recall": 0.1514,
+          "f1": 0.263,
+          "fpr": 0.0,
+          "accuracy": 0.6303,
+          "tp": 4676,
+          "tn": 39999,
+          "fp": 1,
+          "fn": 26200
+        },
+        "val_threshold": {
+          "precision": 0.9993,
+          "recall": 0.3241,
+          "f1": 0.4895,
+          "fpr": 0.0002,
+          "accuracy": 0.7055,
+          "tp": 10007,
+          "tn": 39993,
+          "fp": 7,
+          "fn": 20869,
+          "threshold": 0.25,
+          "val_f1": 0.9999,
+          "val_fpr": 0.0001,
+          "f1_gap": -0.5104,
+          "fpr_gap": 0.0001,
+          "alerts_per_10k_normal": 1.8,
+          "precision_prev1": 0.9493,
+          "precision_prev10": 0.9952,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.9993,
+            "Infiltration": 0.0278,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0009,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.3077,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0385,
+            "Probe": 0.0004
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9812,
+          "recall": 0.9737,
+          "f1": 0.9774,
+          "fpr": 0.0144,
+          "accuracy": 0.9804,
+          "tp": 30063,
+          "tn": 39424,
+          "fp": 576,
+          "fn": 813,
+          "threshold": 0.015,
+          "val_f1": 0.9899,
+          "val_fpr": 0.0099,
+          "f1_gap": -0.0125,
+          "fpr_gap": 0.0045,
+          "alerts_per_10k_normal": 144.0,
+          "precision_prev1": 0.4058,
+          "precision_prev10": 0.8825,
+          "recall_by_group": {
+            "Botnet": 0.0543,
+            "DDoS": 1.0,
+            "Infiltration": 0.8611,
+            "Infiltration - Portscan": 0.9894,
+            "Portscan": 0.9994,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9944
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9299,
+          "recall": 0.9935,
+          "f1": 0.9606,
+          "fpr": 0.0578,
+          "accuracy": 0.9645,
+          "tp": 30674,
+          "tn": 37689,
+          "fp": 2311,
+          "fn": 202,
+          "threshold": 0.0,
+          "val_f1": 0.9562,
+          "val_fpr": 0.0447,
+          "f1_gap": 0.0044,
+          "fpr_gap": 0.0131,
+          "alerts_per_10k_normal": 577.8,
+          "precision_prev1": 0.148,
+          "precision_prev10": 0.6564,
+          "recall_by_group": {
+            "Botnet": 0.8071,
+            "DDoS": 1.0,
+            "Infiltration": 0.9167,
+            "Infiltration - Portscan": 0.9943,
+            "Portscan": 1.0,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9971
+          }
+        },
+        "quantile_95": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.9758,
+          "val_fpr": 0.0,
+          "f1_gap": -0.9758,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.9758,
+          "val_fpr": 0.0,
+          "f1_gap": -0.9758,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9812,
+          "recall": 0.9737,
+          "f1": 0.9774,
+          "fpr": 0.0144,
+          "accuracy": 0.9804,
+          "tp": 30063,
+          "tn": 39424,
+          "fp": 576,
+          "fn": 813,
+          "threshold": 0.02,
+          "val_f1": 0.9899,
+          "val_fpr": 0.0099,
+          "f1_gap": -0.0125,
+          "fpr_gap": 0.0045,
+          "alerts_per_10k_normal": 144.0,
+          "precision_prev1": 0.4058,
+          "precision_prev10": 0.8825,
+          "recall_by_group": {
+            "Botnet": 0.0543,
+            "DDoS": 1.0,
+            "Infiltration": 0.8611,
+            "Infiltration - Portscan": 0.9894,
+            "Portscan": 0.9994,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9944
+          }
+        }
+      }
+    },
+    "3": {
+      "Isolation Forest": {
+        "params": {
+          "n_estimators": 200,
+          "max_samples": 256
+        },
+        "val_pr_auc": 0.6621,
+        "roc_auc": 0.9553,
+        "pr_auc": 0.931,
+        "default": {
+          "precision": 0.8548,
+          "recall": 0.7279,
+          "f1": 0.7863,
+          "fpr": 0.0954,
+          "accuracy": 0.8276,
+          "tp": 22474,
+          "tn": 36183,
+          "fp": 3817,
+          "fn": 8402
+        },
+        "val_threshold": {
+          "precision": 0.7739,
+          "recall": 0.9771,
+          "f1": 0.8637,
+          "fpr": 0.2204,
+          "accuracy": 0.8657,
+          "tp": 30170,
+          "tn": 31184,
+          "fp": 8816,
+          "fn": 706,
+          "threshold": -0.052338,
+          "val_f1": 0.7097,
+          "val_fpr": 0.2431,
+          "f1_gap": 0.154,
+          "fpr_gap": -0.0227,
+          "alerts_per_10k_normal": 2204.0,
+          "precision_prev1": 0.0429,
+          "precision_prev10": 0.33,
+          "recall_by_group": {
+            "Botnet": 0.0924,
+            "DDoS": 1.0,
+            "Infiltration": 1.0,
+            "Infiltration - Portscan": 0.9976,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9988
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9683,
+          "recall": 0.6425,
+          "f1": 0.7724,
+          "fpr": 0.0162,
+          "accuracy": 0.8351,
+          "tp": 19837,
+          "tn": 39351,
+          "fp": 649,
+          "fn": 11039,
+          "threshold": 0.091846,
+          "val_f1": 0.308,
+          "val_fpr": 0.01,
+          "f1_gap": 0.4644,
+          "fpr_gap": 0.0062,
+          "alerts_per_10k_normal": 162.2,
+          "precision_prev1": 0.2857,
+          "precision_prev10": 0.8148,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.1944,
+            "Infiltration - Portscan": 0.9847,
+            "Portscan": 0.9983,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9915
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9124,
+          "recall": 0.647,
+          "f1": 0.7571,
+          "fpr": 0.0479,
+          "accuracy": 0.8192,
+          "tp": 19977,
+          "tn": 38082,
+          "fp": 1918,
+          "fn": 10899,
+          "threshold": 0.030326,
+          "val_f1": 0.493,
+          "val_fpr": 0.05,
+          "f1_gap": 0.2641,
+          "fpr_gap": -0.0021,
+          "alerts_per_10k_normal": 479.5,
+          "precision_prev1": 0.1199,
+          "precision_prev10": 0.5999,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0013,
+            "Infiltration": 0.9444,
+            "Infiltration - Portscan": 0.9894,
+            "Portscan": 0.9989,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.1667,
+            "Web attack": 0.0288,
+            "Probe": 0.9941
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9709,
+          "recall": 0.6423,
+          "f1": 0.7731,
+          "fpr": 0.0149,
+          "accuracy": 0.8358,
+          "tp": 19832,
+          "tn": 39406,
+          "fp": 594,
+          "fn": 11044,
+          "threshold": 0.093224,
+          "val_f1": 0.3074,
+          "val_fpr": 0.0085,
+          "f1_gap": 0.4657,
+          "fpr_gap": 0.0064,
+          "alerts_per_10k_normal": 148.5,
+          "precision_prev1": 0.3041,
+          "precision_prev10": 0.8278,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.1944,
+            "Infiltration - Portscan": 0.9844,
+            "Portscan": 0.9981,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9912
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9752,
+          "recall": 0.4886,
+          "f1": 0.651,
+          "fpr": 0.0096,
+          "accuracy": 0.7718,
+          "tp": 15086,
+          "tn": 39617,
+          "fp": 383,
+          "fn": 15790,
+          "threshold": 0.099821,
+          "val_f1": 0.0906,
+          "val_fpr": 0.0023,
+          "f1_gap": 0.5604,
+          "fpr_gap": 0.0073,
+          "alerts_per_10k_normal": 95.8,
+          "precision_prev1": 0.3401,
+          "precision_prev10": 0.8501,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.1944,
+            "Infiltration - Portscan": 0.5154,
+            "Portscan": 0.9925,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.754
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.8364,
+          "recall": 0.9715,
+          "f1": 0.8989,
+          "fpr": 0.1467,
+          "accuracy": 0.9048,
+          "tp": 29997,
+          "tn": 34131,
+          "fp": 5869,
+          "fn": 879,
+          "threshold": -0.019453,
+          "val_f1": 0.6113,
+          "val_fpr": 0.1661,
+          "f1_gap": 0.2876,
+          "fpr_gap": -0.0194,
+          "alerts_per_10k_normal": 1467.2,
+          "precision_prev1": 0.0627,
+          "precision_prev10": 0.4239,
+          "recall_by_group": {
+            "Botnet": 0.0611,
+            "DDoS": 0.9873,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9955,
+            "Portscan": 0.9998,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9977
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "params": {
+          "n_neighbors": 20
+        },
+        "val_pr_auc": 0.8744,
+        "roc_auc": 0.9873,
+        "pr_auc": 0.9774,
+        "default": {
+          "precision": 0.8685,
+          "recall": 0.9901,
+          "f1": 0.9253,
+          "fpr": 0.1158,
+          "accuracy": 0.9303,
+          "tp": 30569,
+          "tn": 35370,
+          "fp": 4630,
+          "fn": 307
+        },
+        "val_threshold": {
+          "precision": 0.9168,
+          "recall": 0.9729,
+          "f1": 0.944,
+          "fpr": 0.0682,
+          "accuracy": 0.9497,
+          "tp": 30040,
+          "tn": 37273,
+          "fp": 2727,
+          "fn": 836,
+          "threshold": 0.368763,
+          "val_f1": 0.92,
+          "val_fpr": 0.0516,
+          "f1_gap": 0.024,
+          "fpr_gap": 0.0166,
+          "alerts_per_10k_normal": 681.8,
+          "precision_prev1": 0.126,
+          "precision_prev10": 0.6133,
+          "recall_by_group": {
+            "Botnet": 0.0611,
+            "DDoS": 1.0,
+            "Infiltration": 0.6667,
+            "Infiltration - Portscan": 0.9974,
+            "Portscan": 0.9997,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9986
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.971,
+          "recall": 0.8305,
+          "f1": 0.8953,
+          "fpr": 0.0191,
+          "accuracy": 0.9154,
+          "tp": 25643,
+          "tn": 39235,
+          "fp": 765,
+          "fn": 5233,
+          "threshold": 2.785223,
+          "val_f1": 0.2865,
+          "val_fpr": 0.01,
+          "f1_gap": 0.6088,
+          "fpr_gap": 0.0091,
+          "alerts_per_10k_normal": 191.2,
+          "precision_prev1": 0.3049,
+          "precision_prev10": 0.8283,
+          "recall_by_group": {
+            "Botnet": 0.0367,
+            "DDoS": 0.5719,
+            "Infiltration": 0.1667,
+            "Infiltration - Portscan": 0.9918,
+            "Portscan": 0.9973,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9946
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9199,
+          "recall": 0.9728,
+          "f1": 0.9456,
+          "fpr": 0.0654,
+          "accuracy": 0.9512,
+          "tp": 30035,
+          "tn": 37385,
+          "fp": 2615,
+          "fn": 841,
+          "threshold": 0.400444,
+          "val_f1": 0.8575,
+          "val_fpr": 0.05,
+          "f1_gap": 0.0881,
+          "fpr_gap": 0.0154,
+          "alerts_per_10k_normal": 653.8,
+          "precision_prev1": 0.1307,
+          "precision_prev10": 0.6231,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.5556,
+            "Infiltration - Portscan": 0.9974,
+            "Portscan": 0.9997,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9986
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9701,
+          "recall": 0.8313,
+          "f1": 0.8953,
+          "fpr": 0.0198,
+          "accuracy": 0.9153,
+          "tp": 25666,
+          "tn": 39209,
+          "fp": 791,
+          "fn": 5210,
+          "threshold": 2.700945,
+          "val_f1": 0.2961,
+          "val_fpr": 0.0105,
+          "f1_gap": 0.5992,
+          "fpr_gap": 0.0093,
+          "alerts_per_10k_normal": 197.8,
+          "precision_prev1": 0.2981,
+          "precision_prev10": 0.8237,
+          "recall_by_group": {
+            "Botnet": 0.0421,
+            "DDoS": 0.5728,
+            "Infiltration": 0.2222,
+            "Infiltration - Portscan": 0.9918,
+            "Portscan": 0.9981,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.995
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9805,
+          "recall": 0.1468,
+          "f1": 0.2554,
+          "fpr": 0.0022,
+          "accuracy": 0.6271,
+          "tp": 4534,
+          "tn": 39910,
+          "fp": 90,
+          "fn": 26342,
+          "threshold": 12.999599,
+          "val_f1": 0.0717,
+          "val_fpr": 0.0017,
+          "f1_gap": 0.1837,
+          "fpr_gap": 0.0005,
+          "alerts_per_10k_normal": 22.5,
+          "precision_prev1": 0.3973,
+          "precision_prev10": 0.8788,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0278,
+            "Infiltration - Portscan": 0.4409,
+            "Portscan": 0.0124,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.2266
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9389,
+          "recall": 0.97,
+          "f1": 0.9542,
+          "fpr": 0.0487,
+          "accuracy": 0.9594,
+          "tp": 29949,
+          "tn": 38051,
+          "fp": 1949,
+          "fn": 927,
+          "threshold": 0.721551,
+          "val_f1": 0.8299,
+          "val_fpr": 0.0331,
+          "f1_gap": 0.1243,
+          "fpr_gap": 0.0156,
+          "alerts_per_10k_normal": 487.2,
+          "precision_prev1": 0.1674,
+          "precision_prev10": 0.6887,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9935,
+            "Infiltration": 0.3611,
+            "Infiltration - Portscan": 0.996,
+            "Portscan": 0.9997,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9979
+          }
+        }
+      },
+      "One-Class SVM": {
+        "params": {
+          "gamma_mult": 1.0,
+          "nu": null
+        },
+        "val_pr_auc": 0.6183,
+        "roc_auc": 0.9552,
+        "pr_auc": 0.9246,
+        "default": {
+          "precision": 0.8873,
+          "recall": 0.9751,
+          "f1": 0.9291,
+          "fpr": 0.0956,
+          "accuracy": 0.9352,
+          "tp": 30108,
+          "tn": 36176,
+          "fp": 3824,
+          "fn": 768
+        },
+        "val_threshold": {
+          "precision": 0.9417,
+          "recall": 0.9737,
+          "f1": 0.9574,
+          "fpr": 0.0466,
+          "accuracy": 0.9623,
+          "tp": 30064,
+          "tn": 38138,
+          "fp": 1862,
+          "fn": 812,
+          "threshold": 22.311865,
+          "val_f1": 0.7388,
+          "val_fpr": 0.0488,
+          "f1_gap": 0.2186,
+          "fpr_gap": -0.0022,
+          "alerts_per_10k_normal": 465.5,
+          "precision_prev1": 0.1744,
+          "precision_prev10": 0.6992,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9996,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9908,
+            "Portscan": 0.9991,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.995
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9132,
+          "recall": 0.1476,
+          "f1": 0.2541,
+          "fpr": 0.0108,
+          "accuracy": 0.6225,
+          "tp": 4556,
+          "tn": 39567,
+          "fp": 433,
+          "fn": 26320,
+          "threshold": 92.056071,
+          "val_f1": 0.308,
+          "val_fpr": 0.01,
+          "f1_gap": -0.0539,
+          "fpr_gap": 0.0008,
+          "alerts_per_10k_normal": 108.2,
+          "precision_prev1": 0.121,
+          "precision_prev10": 0.6023,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0,
+            "Infiltration": 0.5278,
+            "Infiltration - Portscan": 0.4449,
+            "Portscan": 0.0044,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.2246
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9407,
+          "recall": 0.9737,
+          "f1": 0.957,
+          "fpr": 0.0474,
+          "accuracy": 0.9618,
+          "tp": 30065,
+          "tn": 38106,
+          "fp": 1894,
+          "fn": 811,
+          "threshold": 21.127148,
+          "val_f1": 0.7372,
+          "val_fpr": 0.05,
+          "f1_gap": 0.2198,
+          "fpr_gap": -0.0026,
+          "alerts_per_10k_normal": 473.5,
+          "precision_prev1": 0.172,
+          "precision_prev10": 0.6956,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9996,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9909,
+            "Portscan": 0.9991,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.995
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9229,
+          "recall": 0.1465,
+          "f1": 0.2529,
+          "fpr": 0.0095,
+          "accuracy": 0.6229,
+          "tp": 4524,
+          "tn": 39622,
+          "fp": 378,
+          "fn": 26352,
+          "threshold": 93.930798,
+          "val_f1": 0.3096,
+          "val_fpr": 0.008,
+          "f1_gap": -0.0567,
+          "fpr_gap": 0.0015,
+          "alerts_per_10k_normal": 94.5,
+          "precision_prev1": 0.1354,
+          "precision_prev10": 0.6327,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0,
+            "Infiltration": 0.5278,
+            "Infiltration - Portscan": 0.4423,
+            "Portscan": 0.0038,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.223
+          }
+        },
+        "quantile_99": {
+          "precision": 0.914,
+          "recall": 0.0678,
+          "f1": 0.1262,
+          "fpr": 0.0049,
+          "accuracy": 0.5911,
+          "tp": 2093,
+          "tn": 39803,
+          "fp": 197,
+          "fn": 28783,
+          "threshold": 107.304992,
+          "val_f1": 0.0648,
+          "val_fpr": 0.0028,
+          "f1_gap": 0.0614,
+          "fpr_gap": 0.0021,
+          "alerts_per_10k_normal": 49.2,
+          "precision_prev1": 0.1221,
+          "precision_prev10": 0.6046,
+          "recall_by_group": {
+            "Botnet": 0.0557,
+            "DDoS": 0.0,
+            "Infiltration": 0.4167,
+            "Infiltration - Portscan": 0.2036,
+            "Portscan": 0.0001,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.1018
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9492,
+          "recall": 0.9725,
+          "f1": 0.9607,
+          "fpr": 0.0402,
+          "accuracy": 0.9653,
+          "tp": 30028,
+          "tn": 38392,
+          "fp": 1608,
+          "fn": 848,
+          "threshold": 31.054765,
+          "val_f1": 0.3609,
+          "val_fpr": 0.0423,
+          "f1_gap": 0.5998,
+          "fpr_gap": -0.0021,
+          "alerts_per_10k_normal": 402.0,
+          "precision_prev1": 0.1964,
+          "precision_prev10": 0.7289,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.996,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9908,
+            "Portscan": 0.9991,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.995
+          }
+        }
+      },
+      "Random Forest": {
+        "params": {
+          "max_depth": null
+        },
+        "val_pr_auc": 0.9998,
+        "roc_auc": 0.9891,
+        "pr_auc": 0.9801,
+        "default": {
+          "precision": 1.0,
+          "recall": 0.2273,
+          "f1": 0.3704,
+          "fpr": 0.0,
+          "accuracy": 0.6634,
+          "tp": 7018,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 23858
+        },
+        "val_threshold": {
+          "precision": 1.0,
+          "recall": 0.3116,
+          "f1": 0.4751,
+          "fpr": 0.0,
+          "accuracy": 0.7001,
+          "tp": 9621,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 21255,
+          "threshold": 0.45,
+          "val_f1": 0.9973,
+          "val_fpr": 0.0,
+          "f1_gap": -0.5222,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 1.0,
+          "precision_prev10": 1.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.9612,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0007,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.1538,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0192,
+            "Probe": 0.0003
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9715,
+          "recall": 0.4999,
+          "f1": 0.6602,
+          "fpr": 0.0113,
+          "accuracy": 0.7758,
+          "tp": 15436,
+          "tn": 39547,
+          "fp": 453,
+          "fn": 15440,
+          "threshold": 0.02,
+          "val_f1": 0.9846,
+          "val_fpr": 0.0086,
+          "f1_gap": -0.3244,
+          "fpr_gap": 0.0027,
+          "alerts_per_10k_normal": 113.2,
+          "precision_prev1": 0.3084,
+          "precision_prev10": 0.8307,
+          "recall_by_group": {
+            "Botnet": 0.0394,
+            "DDoS": 1.0,
+            "Infiltration": 0.9167,
+            "Infiltration - Portscan": 0.0164,
+            "Portscan": 0.5106,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.2635
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.935,
+          "recall": 0.9983,
+          "f1": 0.9656,
+          "fpr": 0.0535,
+          "accuracy": 0.969,
+          "tp": 30822,
+          "tn": 37859,
+          "fp": 2141,
+          "fn": 54,
+          "threshold": 0.0,
+          "val_f1": 0.9382,
+          "val_fpr": 0.0401,
+          "f1_gap": 0.0274,
+          "fpr_gap": 0.0134,
+          "alerts_per_10k_normal": 535.2,
+          "precision_prev1": 0.1585,
+          "precision_prev10": 0.6745,
+          "recall_by_group": {
+            "Botnet": 0.966,
+            "DDoS": 1.0,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9973,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9986
+          }
+        },
+        "quantile_95": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.8912,
+          "val_fpr": 0.0,
+          "f1_gap": -0.8912,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.8912,
+          "val_fpr": 0.0,
+          "f1_gap": -0.8912,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9618,
+          "recall": 0.9976,
+          "f1": 0.9794,
+          "fpr": 0.0306,
+          "accuracy": 0.9817,
+          "tp": 30802,
+          "tn": 38776,
+          "fp": 1224,
+          "fn": 74,
+          "threshold": 0.01,
+          "val_f1": 0.968,
+          "val_fpr": 0.02,
+          "f1_gap": 0.0114,
+          "fpr_gap": 0.0106,
+          "alerts_per_10k_normal": 306.0,
+          "precision_prev1": 0.2477,
+          "precision_prev10": 0.7837,
+          "recall_by_group": {
+            "Botnet": 0.9647,
+            "DDoS": 1.0,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9955,
+            "Portscan": 0.9998,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9977
+          }
+        }
+      }
+    },
+    "4": {
+      "Isolation Forest": {
+        "params": {
+          "n_estimators": 200,
+          "max_samples": 256
+        },
+        "val_pr_auc": 0.4915,
+        "roc_auc": 0.939,
+        "pr_auc": 0.8826,
+        "default": {
+          "precision": 0.8349,
+          "recall": 0.6738,
+          "f1": 0.7457,
+          "fpr": 0.1028,
+          "accuracy": 0.7998,
+          "tp": 20803,
+          "tn": 35887,
+          "fp": 4113,
+          "fn": 10073
+        },
+        "val_threshold": {
+          "precision": 0.7704,
+          "recall": 0.9991,
+          "f1": 0.87,
+          "fpr": 0.2298,
+          "accuracy": 0.8699,
+          "tp": 30848,
+          "tn": 30807,
+          "fp": 9193,
+          "fn": 28,
+          "threshold": -0.057109,
+          "val_f1": 0.7085,
+          "val_fpr": 0.2442,
+          "f1_gap": 0.1615,
+          "fpr_gap": -0.0144,
+          "alerts_per_10k_normal": 2298.2,
+          "precision_prev1": 0.0421,
+          "precision_prev10": 0.3257,
+          "recall_by_group": {
+            "Botnet": 0.9973,
+            "DDoS": 1.0,
+            "Infiltration": 1.0,
+            "Infiltration - Portscan": 0.9988,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.9993
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.037,
+          "recall": 0.0003,
+          "f1": 0.0005,
+          "fpr": 0.0052,
+          "accuracy": 0.5615,
+          "tp": 8,
+          "tn": 39792,
+          "fp": 208,
+          "fn": 30868,
+          "threshold": 0.109714,
+          "val_f1": 0.0,
+          "val_fpr": 0.0098,
+          "f1_gap": 0.0005,
+          "fpr_gap": -0.0046,
+          "alerts_per_10k_normal": 52.0,
+          "precision_prev1": 0.0005,
+          "precision_prev10": 0.0055,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.1667,
+            "Infiltration - Portscan": 0.0002,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9095,
+          "recall": 0.6467,
+          "f1": 0.7559,
+          "fpr": 0.0497,
+          "accuracy": 0.8181,
+          "tp": 19969,
+          "tn": 38012,
+          "fp": 1988,
+          "fn": 10907,
+          "threshold": 0.028927,
+          "val_f1": 0.082,
+          "val_fpr": 0.05,
+          "f1_gap": 0.6739,
+          "fpr_gap": -0.0003,
+          "alerts_per_10k_normal": 497.0,
+          "precision_prev1": 0.1162,
+          "precision_prev10": 0.5912,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0002,
+            "Infiltration": 0.9444,
+            "Infiltration - Portscan": 0.9902,
+            "Portscan": 0.9986,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0556,
+            "Web attack": 0.0096,
+            "Probe": 0.9944
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9094,
+          "recall": 0.6467,
+          "f1": 0.7559,
+          "fpr": 0.0497,
+          "accuracy": 0.818,
+          "tp": 19969,
+          "tn": 38011,
+          "fp": 1989,
+          "fn": 10907,
+          "threshold": 0.028914,
+          "val_f1": 0.082,
+          "val_fpr": 0.0501,
+          "f1_gap": 0.6739,
+          "fpr_gap": -0.0004,
+          "alerts_per_10k_normal": 497.2,
+          "precision_prev1": 0.1161,
+          "precision_prev10": 0.591,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0002,
+            "Infiltration": 0.9444,
+            "Infiltration - Portscan": 0.9902,
+            "Portscan": 0.9986,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0556,
+            "Web attack": 0.0096,
+            "Probe": 0.9944
+          }
+        },
+        "quantile_99": {
+          "precision": 0.836,
+          "recall": 0.0664,
+          "f1": 0.123,
+          "fpr": 0.01,
+          "accuracy": 0.5876,
+          "tp": 2049,
+          "tn": 39598,
+          "fp": 402,
+          "fn": 28827,
+          "threshold": 0.096446,
+          "val_f1": 0.0026,
+          "val_fpr": 0.0129,
+          "f1_gap": 0.1204,
+          "fpr_gap": -0.0029,
+          "alerts_per_10k_normal": 100.5,
+          "precision_prev1": 0.0625,
+          "precision_prev10": 0.4232,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.3333,
+            "Infiltration - Portscan": 0.2037,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.1018
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.82,
+          "recall": 0.9732,
+          "f1": 0.89,
+          "fpr": 0.165,
+          "accuracy": 0.8952,
+          "tp": 30049,
+          "tn": 33402,
+          "fp": 6598,
+          "fn": 827,
+          "threshold": -0.036333,
+          "val_f1": 0.6872,
+          "val_fpr": 0.1816,
+          "f1_gap": 0.2028,
+          "fpr_gap": -0.0166,
+          "alerts_per_10k_normal": 1649.5,
+          "precision_prev1": 0.0562,
+          "precision_prev10": 0.396,
+          "recall_by_group": {
+            "Botnet": 0.0815,
+            "DDoS": 0.9901,
+            "Infiltration": 1.0,
+            "Infiltration - Portscan": 0.9963,
+            "Portscan": 0.9998,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.875,
+            "Probe": 0.998
+          }
+        }
+      },
+      "Local Outlier Factor": {
+        "params": {
+          "n_neighbors": 20
+        },
+        "val_pr_auc": 0.7814,
+        "roc_auc": 0.9882,
+        "pr_auc": 0.9779,
+        "default": {
+          "precision": 0.8672,
+          "recall": 0.9932,
+          "f1": 0.9259,
+          "fpr": 0.1174,
+          "accuracy": 0.9308,
+          "tp": 30666,
+          "tn": 35303,
+          "fp": 4697,
+          "fn": 210
+        },
+        "val_threshold": {
+          "precision": 0.9086,
+          "recall": 0.9743,
+          "f1": 0.9403,
+          "fpr": 0.0756,
+          "accuracy": 0.9461,
+          "tp": 30084,
+          "tn": 36974,
+          "fp": 3026,
+          "fn": 792,
+          "threshold": 0.273659,
+          "val_f1": 0.8602,
+          "val_fpr": 0.0689,
+          "f1_gap": 0.0801,
+          "fpr_gap": 0.0067,
+          "alerts_per_10k_normal": 756.5,
+          "precision_prev1": 0.1151,
+          "precision_prev10": 0.5887,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.8611,
+            "Infiltration - Portscan": 0.9927,
+            "Portscan": 0.9992,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.996
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9699,
+          "recall": 0.8304,
+          "f1": 0.8947,
+          "fpr": 0.0199,
+          "accuracy": 0.9149,
+          "tp": 25638,
+          "tn": 39203,
+          "fp": 797,
+          "fn": 5238,
+          "threshold": 2.88734,
+          "val_f1": 0.237,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.6577,
+          "fpr_gap": 0.01,
+          "alerts_per_10k_normal": 199.2,
+          "precision_prev1": 0.2962,
+          "precision_prev10": 0.8224,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5758,
+            "Infiltration": 0.1389,
+            "Infiltration - Portscan": 0.9879,
+            "Portscan": 0.9952,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9916
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9286,
+          "recall": 0.9735,
+          "f1": 0.9505,
+          "fpr": 0.0578,
+          "accuracy": 0.9558,
+          "tp": 30058,
+          "tn": 37688,
+          "fp": 2312,
+          "fn": 818,
+          "threshold": 0.513497,
+          "val_f1": 0.7199,
+          "val_fpr": 0.05,
+          "f1_gap": 0.2306,
+          "fpr_gap": 0.0078,
+          "alerts_per_10k_normal": 578.0,
+          "precision_prev1": 0.1454,
+          "precision_prev10": 0.6517,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.5833,
+            "Infiltration - Portscan": 0.9915,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.9726,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.9444,
+            "Web attack": 0.8462,
+            "Probe": 0.9952
+          }
+        },
+        "quantile_95": {
+          "precision": 0.969,
+          "recall": 0.8308,
+          "f1": 0.8946,
+          "fpr": 0.0205,
+          "accuracy": 0.9147,
+          "tp": 25652,
+          "tn": 39180,
+          "fp": 820,
+          "fn": 5224,
+          "threshold": 2.772968,
+          "val_f1": 0.2973,
+          "val_fpr": 0.0106,
+          "f1_gap": 0.5973,
+          "fpr_gap": 0.0099,
+          "alerts_per_10k_normal": 205.0,
+          "precision_prev1": 0.2905,
+          "precision_prev10": 0.8183,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5762,
+            "Infiltration": 0.1944,
+            "Infiltration - Portscan": 0.988,
+            "Portscan": 0.9959,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.9919
+          }
+        },
+        "quantile_99": {
+          "precision": 0.9723,
+          "recall": 0.83,
+          "f1": 0.8955,
+          "fpr": 0.0183,
+          "accuracy": 0.9156,
+          "tp": 25626,
+          "tn": 39269,
+          "fp": 731,
+          "fn": 5250,
+          "threshold": 3.149531,
+          "val_f1": 0.0271,
+          "val_fpr": 0.0088,
+          "f1_gap": 0.8684,
+          "fpr_gap": 0.0095,
+          "alerts_per_10k_normal": 182.8,
+          "precision_prev1": 0.3145,
+          "precision_prev10": 0.8346,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.5757,
+            "Infiltration": 0.1111,
+            "Infiltration - Portscan": 0.9877,
+            "Portscan": 0.9944,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.991
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.957,
+          "recall": 0.9701,
+          "f1": 0.9635,
+          "fpr": 0.0336,
+          "accuracy": 0.968,
+          "tp": 29954,
+          "tn": 38655,
+          "fp": 1345,
+          "fn": 922,
+          "threshold": 1.40314,
+          "val_f1": 0.5253,
+          "val_fpr": 0.0219,
+          "f1_gap": 0.4382,
+          "fpr_gap": 0.0117,
+          "alerts_per_10k_normal": 336.2,
+          "precision_prev1": 0.2257,
+          "precision_prev10": 0.7622,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9956,
+            "Infiltration": 0.2778,
+            "Infiltration - Portscan": 0.9899,
+            "Portscan": 0.9987,
+            "Web Attack - Brute Force": 0.7945,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.5577,
+            "Probe": 0.9943
+          }
+        }
+      },
+      "One-Class SVM": {
+        "params": {
+          "gamma_mult": 1.0,
+          "nu": null
+        },
+        "val_pr_auc": 0.586,
+        "roc_auc": 0.9534,
+        "pr_auc": 0.9153,
+        "default": {
+          "precision": 0.8847,
+          "recall": 0.975,
+          "f1": 0.9276,
+          "fpr": 0.0981,
+          "accuracy": 0.9337,
+          "tp": 30103,
+          "tn": 36077,
+          "fp": 3923,
+          "fn": 773
+        },
+        "val_threshold": {
+          "precision": 0.8473,
+          "recall": 0.9753,
+          "f1": 0.9068,
+          "fpr": 0.1357,
+          "accuracy": 0.9126,
+          "tp": 30113,
+          "tn": 34571,
+          "fp": 5429,
+          "fn": 763,
+          "threshold": -3.721121,
+          "val_f1": 0.6982,
+          "val_fpr": 0.1495,
+          "f1_gap": 0.2086,
+          "fpr_gap": -0.0138,
+          "alerts_per_10k_normal": 1357.3,
+          "precision_prev1": 0.0677,
+          "precision_prev10": 0.444,
+          "recall_by_group": {
+            "Botnet": 0.0625,
+            "DDoS": 0.9998,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.995,
+            "Portscan": 0.9994,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9972
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.897,
+          "recall": 0.1509,
+          "f1": 0.2583,
+          "fpr": 0.0134,
+          "accuracy": 0.6225,
+          "tp": 4658,
+          "tn": 39465,
+          "fp": 535,
+          "fn": 26218,
+          "threshold": 98.686686,
+          "val_f1": 0.078,
+          "val_fpr": 0.0099,
+          "f1_gap": 0.1803,
+          "fpr_gap": 0.0035,
+          "alerts_per_10k_normal": 133.8,
+          "precision_prev1": 0.1023,
+          "precision_prev10": 0.5562,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.0,
+            "Infiltration": 0.5,
+            "Infiltration - Portscan": 0.4557,
+            "Portscan": 0.0039,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.2298
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9369,
+          "recall": 0.9735,
+          "f1": 0.9549,
+          "fpr": 0.0506,
+          "accuracy": 0.9599,
+          "tp": 30059,
+          "tn": 37975,
+          "fp": 2025,
+          "fn": 817,
+          "threshold": 19.471465,
+          "val_f1": 0.4952,
+          "val_fpr": 0.05,
+          "f1_gap": 0.4597,
+          "fpr_gap": 0.0006,
+          "alerts_per_10k_normal": 506.3,
+          "precision_prev1": 0.1627,
+          "precision_prev10": 0.6812,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9998,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9902,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.9863,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8654,
+            "Probe": 0.9946
+          }
+        },
+        "quantile_95": {
+          "precision": 0.9517,
+          "recall": 0.9506,
+          "f1": 0.9511,
+          "fpr": 0.0372,
+          "accuracy": 0.9575,
+          "tp": 29351,
+          "tn": 38510,
+          "fp": 1490,
+          "fn": 1525,
+          "threshold": 38.565078,
+          "val_f1": 0.1684,
+          "val_fpr": 0.0342,
+          "f1_gap": 0.7827,
+          "fpr_gap": 0.003,
+          "alerts_per_10k_normal": 372.5,
+          "precision_prev1": 0.2049,
+          "precision_prev10": 0.7393,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9299,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9894,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.9726,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8558,
+            "Probe": 0.9942
+          }
+        },
+        "quantile_99": {
+          "precision": 0.8801,
+          "recall": 0.0699,
+          "f1": 0.1296,
+          "fpr": 0.0073,
+          "accuracy": 0.5907,
+          "tp": 2159,
+          "tn": 39706,
+          "fp": 294,
+          "fn": 28717,
+          "threshold": 113.372609,
+          "val_f1": 0.0521,
+          "val_fpr": 0.0049,
+          "f1_gap": 0.0775,
+          "fpr_gap": 0.0024,
+          "alerts_per_10k_normal": 73.5,
+          "precision_prev1": 0.0877,
+          "precision_prev10": 0.5139,
+          "recall_by_group": {
+            "Botnet": 0.0571,
+            "DDoS": 0.0,
+            "Infiltration": 0.3889,
+            "Infiltration - Portscan": 0.2101,
+            "Portscan": 0.0002,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.1051
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9507,
+          "recall": 0.9722,
+          "f1": 0.9613,
+          "fpr": 0.0389,
+          "accuracy": 0.9659,
+          "tp": 30018,
+          "tn": 38443,
+          "fp": 1557,
+          "fn": 858,
+          "threshold": 34.540687,
+          "val_f1": 0.1942,
+          "val_fpr": 0.0362,
+          "f1_gap": 0.7671,
+          "fpr_gap": 0.0027,
+          "alerts_per_10k_normal": 389.2,
+          "precision_prev1": 0.2015,
+          "precision_prev10": 0.7351,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 0.9962,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9898,
+            "Portscan": 0.999,
+            "Web Attack - Brute Force": 0.9726,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 0.8558,
+            "Probe": 0.9944
+          }
+        }
+      },
+      "Random Forest": {
+        "params": {
+          "max_depth": null
+        },
+        "val_pr_auc": 1.0,
+        "roc_auc": 0.9896,
+        "pr_auc": 0.984,
+        "default": {
+          "precision": 0.9999,
+          "recall": 0.3112,
+          "f1": 0.4746,
+          "fpr": 0.0,
+          "accuracy": 0.6999,
+          "tp": 9608,
+          "tn": 39999,
+          "fp": 1,
+          "fn": 21268
+        },
+        "val_threshold": {
+          "precision": 0.9997,
+          "recall": 0.3231,
+          "f1": 0.4884,
+          "fpr": 0.0001,
+          "accuracy": 0.7051,
+          "tp": 9976,
+          "tn": 39997,
+          "fp": 3,
+          "fn": 20900,
+          "threshold": 0.395,
+          "val_f1": 0.9986,
+          "val_fpr": 0.0,
+          "f1_gap": -0.5102,
+          "fpr_gap": 0.0001,
+          "alerts_per_10k_normal": 0.7,
+          "precision_prev1": 0.9775,
+          "precision_prev10": 0.9979,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.9969,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0005,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.1538,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0192,
+            "Probe": 0.0003
+          }
+        },
+        "fpr_1pct": {
+          "precision": 0.9858,
+          "recall": 0.7274,
+          "f1": 0.8371,
+          "fpr": 0.0081,
+          "accuracy": 0.8767,
+          "tp": 22460,
+          "tn": 39677,
+          "fp": 323,
+          "fn": 8416,
+          "threshold": 0.025,
+          "val_f1": 0.986,
+          "val_fpr": 0.0085,
+          "f1_gap": -0.1489,
+          "fpr_gap": -0.0004,
+          "alerts_per_10k_normal": 80.8,
+          "precision_prev1": 0.4764,
+          "precision_prev10": 0.9092,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.8333,
+            "Infiltration - Portscan": 0.2306,
+            "Portscan": 0.9976,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.6141
+          }
+        },
+        "fpr_5pct": {
+          "precision": 0.9558,
+          "recall": 0.9757,
+          "f1": 0.9657,
+          "fpr": 0.0348,
+          "accuracy": 0.9698,
+          "tp": 30126,
+          "tn": 38608,
+          "fp": 1392,
+          "fn": 750,
+          "threshold": 0.005,
+          "val_f1": 0.9574,
+          "val_fpr": 0.0269,
+          "f1_gap": 0.0083,
+          "fpr_gap": 0.0079,
+          "alerts_per_10k_normal": 348.0,
+          "precision_prev1": 0.2207,
+          "precision_prev10": 0.757,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.9722,
+            "Infiltration - Portscan": 0.9944,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9971
+          }
+        },
+        "quantile_95": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.9134,
+          "val_fpr": 0.0,
+          "f1_gap": -0.9134,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "quantile_99": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "accuracy": 0.5644,
+          "tp": 0,
+          "tn": 40000,
+          "fp": 0,
+          "fn": 30876,
+          "threshold": 1.0,
+          "val_f1": 0.9134,
+          "val_fpr": 0.0,
+          "f1_gap": -0.9134,
+          "fpr_gap": 0.0,
+          "alerts_per_10k_normal": 0.0,
+          "precision_prev1": 0.0,
+          "precision_prev10": 0.0,
+          "recall_by_group": {
+            "Botnet": 0.0,
+            "DDoS": 0.0,
+            "Infiltration": 0.0,
+            "Infiltration - Portscan": 0.0,
+            "Portscan": 0.0,
+            "Web Attack - Brute Force": 0.0,
+            "Web Attack - SQL Injection": 0.0,
+            "Web Attack - XSS": 0.0,
+            "Web attack": 0.0,
+            "Probe": 0.0
+          }
+        },
+        "oracle_test_max_f1": {
+          "precision": 0.9648,
+          "recall": 0.9752,
+          "f1": 0.9699,
+          "fpr": 0.0275,
+          "accuracy": 0.9737,
+          "tp": 30109,
+          "tn": 38900,
+          "fp": 1100,
+          "fn": 767,
+          "threshold": 0.015,
+          "val_f1": 0.972,
+          "val_fpr": 0.0174,
+          "f1_gap": -0.0021,
+          "fpr_gap": 0.0101,
+          "alerts_per_10k_normal": 275.0,
+          "precision_prev1": 0.2637,
+          "precision_prev10": 0.7976,
+          "recall_by_group": {
+            "Botnet": 0.0598,
+            "DDoS": 1.0,
+            "Infiltration": 0.9444,
+            "Infiltration - Portscan": 0.9928,
+            "Portscan": 0.9999,
+            "Web Attack - Brute Force": 1.0,
+            "Web Attack - SQL Injection": 1.0,
+            "Web Attack - XSS": 1.0,
+            "Web attack": 1.0,
+            "Probe": 0.9963
+          }
+        }
+      }
+    }
+  }
+}

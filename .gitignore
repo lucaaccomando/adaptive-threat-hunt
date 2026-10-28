@@ -20,3 +20,4 @@ data/*.csv
 data/tcpdump.pid
 models/*.pkl
 models/*.meta.json
+data/cicids2017/

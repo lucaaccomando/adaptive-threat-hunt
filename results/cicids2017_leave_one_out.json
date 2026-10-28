@@ -1,0 +1,7914 @@
+{
+  "dataset": "CIC-IDS2017 improved, Monday-Wednesday only",
+  "protocol": {
+    "sample": "per seed, the same capped sample of Monday-Wednesday as the benchmark",
+    "split": "10-minute blocks: 20% of blocks are test blocks (their normal flows are the test normals), the rest goes 80% / 20% to train / validation",
+    "held_out": "all rows of the held-out type or category go to the test set and are removed from train and validation; scaler and thresholds never see them",
+    "thresholds": "max F1, and 1% / 5% false alarms on validation normals, as in evaluate.py",
+    "transform": "none"
+  },
+  "min_rows": 20,
+  "skipped_types": {
+    "Heartbleed": 11
+  },
+  "holdouts": {
+    "DoS GoldenEye": {
+      "types": [
+        "DoS GoldenEye"
+      ],
+      "rows": 7567
+    },
+    "DoS Hulk": {
+      "types": [
+        "DoS Hulk"
+      ],
+      "rows": 8000
+    },
+    "DoS Slowhttptest": {
+      "types": [
+        "DoS Slowhttptest"
+      ],
+      "rows": 1740
+    },
+    "DoS Slowloris": {
+      "types": [
+        "DoS Slowloris"
+      ],
+      "rows": 3859
+    },
+    "FTP-Patator": {
+      "types": [
+        "FTP-Patator"
+      ],
+      "rows": 3972
+    },
+    "SSH-Patator": {
+      "types": [
+        "SSH-Patator"
+      ],
+      "rows": 2961
+    },
+    "Brute force": {
+      "types": [
+        "FTP-Patator",
+        "SSH-Patator"
+      ],
+      "rows": 6933
+    },
+    "DoS": {
+      "types": [
+        "DoS GoldenEye",
+        "DoS Hulk",
+        "DoS Slowhttptest",
+        "DoS Slowloris",
+        "Heartbleed"
+      ],
+      "rows": 21177
+    }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "summary": {
+    "DoS GoldenEye": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.9061,
+          "std": 0.0123
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9573,
+            "std": 0.0524
+          },
+          "fpr": {
+            "mean": 0.2492,
+            "std": 0.0328
+          },
+          "val_fpr": {
+            "mean": 0.2445,
+            "std": 0.0267
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.053,
+            "std": 0.0262
+          },
+          "fpr": {
+            "mean": 0.0095,
+            "std": 0.0005
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.3211,
+            "std": 0.0757
+          },
+          "fpr": {
+            "mean": 0.0538,
+            "std": 0.0075
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9262,
+          "std": 0.009
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9684,
+            "std": 0.0104
+          },
+          "fpr": {
+            "mean": 0.1994,
+            "std": 0.0211
+          },
+          "val_fpr": {
+            "mean": 0.1922,
+            "std": 0.0149
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.1063,
+            "std": 0.0461
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.3745,
+            "std": 0.0775
+          },
+          "fpr": {
+            "mean": 0.054,
+            "std": 0.0068
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.876,
+          "std": 0.0514
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9972,
+            "std": 0.0063
+          },
+          "fpr": {
+            "mean": 0.8918,
+            "std": 0.1449
+          },
+          "val_fpr": {
+            "mean": 0.8902,
+            "std": 0.1466
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0336,
+            "std": 0.0163
+          },
+          "fpr": {
+            "mean": 0.0105,
+            "std": 0.0017
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.2293,
+            "std": 0.1104
+          },
+          "fpr": {
+            "mean": 0.0508,
+            "std": 0.001
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8892,
+          "std": 0.01
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.5812,
+            "std": 0.3544
+          },
+          "fpr": {
+            "mean": 0.1135,
+            "std": 0.0399
+          },
+          "val_fpr": {
+            "mean": 0.1161,
+            "std": 0.044
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0005,
+            "std": 0.0006
+          },
+          "fpr": {
+            "mean": 0.0104,
+            "std": 0.0021
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0335,
+            "std": 0.0422
+          },
+          "fpr": {
+            "mean": 0.0506,
+            "std": 0.0015
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.7222,
+          "std": 0.1244
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.582,
+            "std": 0.1391
+          },
+          "fpr": {
+            "mean": 0.1017,
+            "std": 0.0331
+          },
+          "val_fpr": {
+            "mean": 0.0973,
+            "std": 0.0387
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0932,
+            "std": 0.074
+          },
+          "fpr": {
+            "mean": 0.0096,
+            "std": 0.0012
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.4321,
+            "std": 0.1743
+          },
+          "fpr": {
+            "mean": 0.0548,
+            "std": 0.0056
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8302,
+          "std": 0.0504
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.7755,
+            "std": 0.0167
+          },
+          "fpr": {
+            "mean": 0.0776,
+            "std": 0.0231
+          },
+          "val_fpr": {
+            "mean": 0.07,
+            "std": 0.0217
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.1639,
+            "std": 0.0883
+          },
+          "fpr": {
+            "mean": 0.0099,
+            "std": 0.0013
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.6612,
+            "std": 0.0997
+          },
+          "fpr": {
+            "mean": 0.0534,
+            "std": 0.0073
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.9994,
+          "std": 0.0005
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.4531,
+            "std": 0.3378
+          },
+          "fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          },
+          "val_fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.9928,
+            "std": 0.0071
+          },
+          "fpr": {
+            "mean": 0.0096,
+            "std": 0.0031
+          },
+          "val_fpr": {
+            "mean": 0.0087,
+            "std": 0.0011
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.9995,
+            "std": 0.0005
+          },
+          "fpr": {
+            "mean": 0.0442,
+            "std": 0.0068
+          },
+          "val_fpr": {
+            "mean": 0.0453,
+            "std": 0.0018
+          }
+        }
+      }
+    },
+    "DoS Hulk": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.8998,
+          "std": 0.0222
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9989,
+            "std": 0.0019
+          },
+          "fpr": {
+            "mean": 0.2447,
+            "std": 0.0617
+          },
+          "val_fpr": {
+            "mean": 0.2381,
+            "std": 0.0544
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0001,
+            "std": 0.0002
+          },
+          "fpr": {
+            "mean": 0.0102,
+            "std": 0.0005
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0665,
+            "std": 0.1204
+          },
+          "fpr": {
+            "mean": 0.0534,
+            "std": 0.0076
+          },
+          "val_fpr": {
+            "mean": 0.0499,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9326,
+          "std": 0.0169
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.2,
+            "std": 0.0229
+          },
+          "val_fpr": {
+            "mean": 0.193,
+            "std": 0.0169
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0003,
+            "std": 0.0001
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.2567,
+            "std": 0.3282
+          },
+          "fpr": {
+            "mean": 0.0539,
+            "std": 0.0067
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.9109,
+          "std": 0.0113
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8,
+            "std": 0.4472
+          },
+          "fpr": {
+            "mean": 0.6894,
+            "std": 0.4013
+          },
+          "val_fpr": {
+            "mean": 0.6865,
+            "std": 0.4025
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0105,
+            "std": 0.0019
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.108,
+            "std": 0.0714
+          },
+          "fpr": {
+            "mean": 0.0504,
+            "std": 0.0021
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9209,
+          "std": 0.0075
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.7954,
+            "std": 0.4447
+          },
+          "fpr": {
+            "mean": 0.126,
+            "std": 0.0716
+          },
+          "val_fpr": {
+            "mean": 0.1271,
+            "std": 0.071
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0103,
+            "std": 0.002
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0096,
+            "std": 0.005
+          },
+          "fpr": {
+            "mean": 0.0505,
+            "std": 0.0021
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.8821,
+          "std": 0.0598
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.7662,
+            "std": 0.2193
+          },
+          "fpr": {
+            "mean": 0.2414,
+            "std": 0.3341
+          },
+          "val_fpr": {
+            "mean": 0.2305,
+            "std": 0.3279
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0519,
+            "std": 0.116
+          },
+          "fpr": {
+            "mean": 0.01,
+            "std": 0.0008
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.4255,
+            "std": 0.3414
+          },
+          "fpr": {
+            "mean": 0.0535,
+            "std": 0.0059
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9622,
+          "std": 0.014
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9673,
+            "std": 0.0459
+          },
+          "fpr": {
+            "mean": 0.2355,
+            "std": 0.3524
+          },
+          "val_fpr": {
+            "mean": 0.2278,
+            "std": 0.352
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0565,
+            "std": 0.1206
+          },
+          "fpr": {
+            "mean": 0.0099,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.8328,
+            "std": 0.1046
+          },
+          "fpr": {
+            "mean": 0.0544,
+            "std": 0.0045
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.954,
+          "std": 0.0961
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.0146,
+            "std": 0.0195
+          },
+          "fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          },
+          "val_fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.818,
+            "std": 0.2637
+          },
+          "fpr": {
+            "mean": 0.0098,
+            "std": 0.0027
+          },
+          "val_fpr": {
+            "mean": 0.0089,
+            "std": 0.0009
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.9177,
+            "std": 0.1813
+          },
+          "fpr": {
+            "mean": 0.0352,
+            "std": 0.0144
+          },
+          "val_fpr": {
+            "mean": 0.0347,
+            "std": 0.0086
+          }
+        }
+      }
+    },
+    "DoS Slowhttptest": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.9507,
+          "std": 0.0059
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9971,
+            "std": 0.0004
+          },
+          "fpr": {
+            "mean": 0.2368,
+            "std": 0.0361
+          },
+          "val_fpr": {
+            "mean": 0.2304,
+            "std": 0.0317
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.021,
+            "std": 0.0203
+          },
+          "fpr": {
+            "mean": 0.0098,
+            "std": 0.0007
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.7817,
+            "std": 0.0228
+          },
+          "fpr": {
+            "mean": 0.0533,
+            "std": 0.0083
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9586,
+          "std": 0.0038
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9976,
+            "std": 0.0003
+          },
+          "fpr": {
+            "mean": 0.1987,
+            "std": 0.0212
+          },
+          "val_fpr": {
+            "mean": 0.1917,
+            "std": 0.0151
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.1257,
+            "std": 0.0344
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.7985,
+            "std": 0.0018
+          },
+          "fpr": {
+            "mean": 0.054,
+            "std": 0.0068
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.7985,
+          "std": 0.0309
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.8875,
+            "std": 0.1505
+          },
+          "val_fpr": {
+            "mean": 0.8854,
+            "std": 0.1525
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.1968,
+            "std": 0.0139
+          },
+          "fpr": {
+            "mean": 0.0104,
+            "std": 0.002
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.2236,
+            "std": 0.0174
+          },
+          "fpr": {
+            "mean": 0.0508,
+            "std": 0.0019
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8321,
+          "std": 0.0371
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.4407,
+            "std": 0.2691
+          },
+          "fpr": {
+            "mean": 0.1272,
+            "std": 0.0432
+          },
+          "val_fpr": {
+            "mean": 0.1285,
+            "std": 0.0418
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0109,
+            "std": 0.0101
+          },
+          "fpr": {
+            "mean": 0.0105,
+            "std": 0.0021
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0341,
+            "std": 0.0013
+          },
+          "fpr": {
+            "mean": 0.0509,
+            "std": 0.0018
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.8299,
+          "std": 0.0044
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8338,
+            "std": 0.0008
+          },
+          "fpr": {
+            "mean": 0.1309,
+            "std": 0.0571
+          },
+          "val_fpr": {
+            "mean": 0.127,
+            "std": 0.0674
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0231,
+            "std": 0.0152
+          },
+          "fpr": {
+            "mean": 0.0097,
+            "std": 0.0006
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.8017,
+            "std": 0.0424
+          },
+          "fpr": {
+            "mean": 0.0554,
+            "std": 0.0057
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8425,
+          "std": 0.0039
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8341,
+            "std": 0.0009
+          },
+          "fpr": {
+            "mean": 0.0872,
+            "std": 0.0222
+          },
+          "val_fpr": {
+            "mean": 0.0801,
+            "std": 0.0205
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0468,
+            "std": 0.0199
+          },
+          "fpr": {
+            "mean": 0.0098,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.8331,
+            "std": 0.0005
+          },
+          "fpr": {
+            "mean": 0.0552,
+            "std": 0.0053
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.9998,
+          "std": 0.0003
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.7059,
+            "std": 0.3298
+          },
+          "fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          },
+          "val_fpr": {
+            "mean": 0.0,
+            "std": 0.0001
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.9994,
+            "std": 0.0006
+          },
+          "fpr": {
+            "mean": 0.0086,
+            "std": 0.0023
+          },
+          "val_fpr": {
+            "mean": 0.0083,
+            "std": 0.0005
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0401,
+            "std": 0.0135
+          },
+          "val_fpr": {
+            "mean": 0.0389,
+            "std": 0.0097
+          }
+        }
+      }
+    },
+    "DoS Slowloris": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.9477,
+          "std": 0.004
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9533,
+            "std": 0.0248
+          },
+          "fpr": {
+            "mean": 0.2388,
+            "std": 0.038
+          },
+          "val_fpr": {
+            "mean": 0.2341,
+            "std": 0.0307
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.2596,
+            "std": 0.2295
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.7796,
+            "std": 0.0167
+          },
+          "fpr": {
+            "mean": 0.0532,
+            "std": 0.0083
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9442,
+          "std": 0.0038
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8535,
+            "std": 0.0023
+          },
+          "fpr": {
+            "mean": 0.1996,
+            "std": 0.0207
+          },
+          "val_fpr": {
+            "mean": 0.1927,
+            "std": 0.0146
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.421,
+            "std": 0.2172
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.7998,
+            "std": 0.0092
+          },
+          "fpr": {
+            "mean": 0.054,
+            "std": 0.0066
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.885,
+          "std": 0.0458
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.88,
+            "std": 0.1547
+          },
+          "val_fpr": {
+            "mean": 0.8776,
+            "std": 0.1563
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0371,
+            "std": 0.0187
+          },
+          "fpr": {
+            "mean": 0.0106,
+            "std": 0.0016
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.3922,
+            "std": 0.0162
+          },
+          "fpr": {
+            "mean": 0.0513,
+            "std": 0.0013
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9187,
+          "std": 0.0192
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.5721,
+            "std": 0.4034
+          },
+          "fpr": {
+            "mean": 0.1005,
+            "std": 0.0593
+          },
+          "val_fpr": {
+            "mean": 0.102,
+            "std": 0.0616
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0127,
+            "std": 0.0086
+          },
+          "fpr": {
+            "mean": 0.0108,
+            "std": 0.002
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.3616,
+            "std": 0.0113
+          },
+          "fpr": {
+            "mean": 0.0514,
+            "std": 0.0018
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.9264,
+          "std": 0.0062
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8859,
+            "std": 0.0476
+          },
+          "fpr": {
+            "mean": 0.1187,
+            "std": 0.0347
+          },
+          "val_fpr": {
+            "mean": 0.1131,
+            "std": 0.0375
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.006,
+            "std": 0.0047
+          },
+          "fpr": {
+            "mean": 0.0096,
+            "std": 0.0007
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.7638,
+            "std": 0.062
+          },
+          "fpr": {
+            "mean": 0.0557,
+            "std": 0.0057
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.936,
+          "std": 0.003
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8628,
+            "std": 0.017
+          },
+          "fpr": {
+            "mean": 0.0865,
+            "std": 0.0232
+          },
+          "val_fpr": {
+            "mean": 0.0786,
+            "std": 0.0219
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0586,
+            "std": 0.0758
+          },
+          "fpr": {
+            "mean": 0.0098,
+            "std": 0.0012
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.7829,
+            "std": 0.1115
+          },
+          "fpr": {
+            "mean": 0.0549,
+            "std": 0.0054
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.998,
+          "std": 0.0008
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.4927,
+            "std": 0.0426
+          },
+          "fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          },
+          "val_fpr": {
+            "mean": 0.0001,
+            "std": 0.0002
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.9623,
+            "std": 0.0758
+          },
+          "fpr": {
+            "mean": 0.0096,
+            "std": 0.0029
+          },
+          "val_fpr": {
+            "mean": 0.0091,
+            "std": 0.0006
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0343,
+            "std": 0.0102
+          },
+          "val_fpr": {
+            "mean": 0.0337,
+            "std": 0.0111
+          }
+        }
+      }
+    },
+    "FTP-Patator": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.8179,
+          "std": 0.0157
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.995,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.2138,
+            "std": 0.0198
+          },
+          "val_fpr": {
+            "mean": 0.2083,
+            "std": 0.0117
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0098,
+            "std": 0.0008
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0533,
+            "std": 0.0086
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8052,
+          "std": 0.0238
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.1996,
+            "std": 0.4446
+          },
+          "fpr": {
+            "mean": 0.1672,
+            "std": 0.0393
+          },
+          "val_fpr": {
+            "mean": 0.1623,
+            "std": 0.0392
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.054,
+            "std": 0.0068
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.7837,
+          "std": 0.0976
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.801,
+            "std": 0.445
+          },
+          "fpr": {
+            "mean": 0.6666,
+            "std": 0.4616
+          },
+          "val_fpr": {
+            "mean": 0.6643,
+            "std": 0.4623
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0036,
+            "std": 0.0014
+          },
+          "fpr": {
+            "mean": 0.0106,
+            "std": 0.0021
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.005,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0509,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.7849,
+          "std": 0.0978
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.0043,
+            "std": 0.0025
+          },
+          "fpr": {
+            "mean": 0.0581,
+            "std": 0.058
+          },
+          "val_fpr": {
+            "mean": 0.06,
+            "std": 0.0609
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0037,
+            "std": 0.0013
+          },
+          "fpr": {
+            "mean": 0.0107,
+            "std": 0.0022
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.005,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0511,
+            "std": 0.0012
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.9457,
+          "std": 0.0073
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.998,
+            "std": 0.0027
+          },
+          "fpr": {
+            "mean": 0.5786,
+            "std": 0.3578
+          },
+          "val_fpr": {
+            "mean": 0.5857,
+            "std": 0.3608
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0099,
+            "std": 0.0012
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.5976,
+            "std": 0.5442
+          },
+          "fpr": {
+            "mean": 0.0545,
+            "std": 0.0046
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9352,
+          "std": 0.0052
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.998,
+            "std": 0.0027
+          },
+          "fpr": {
+            "mean": 0.5615,
+            "std": 0.4291
+          },
+          "val_fpr": {
+            "mean": 0.5644,
+            "std": 0.4353
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0099,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.1868,
+            "std": 0.4144
+          },
+          "fpr": {
+            "mean": 0.0553,
+            "std": 0.0054
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.9972,
+          "std": 0.0026
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.0002,
+            "std": 0.0004
+          },
+          "fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          },
+          "val_fpr": {
+            "mean": 0.0001,
+            "std": 0.0001
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.8212,
+            "std": 0.3984
+          },
+          "fpr": {
+            "mean": 0.0093,
+            "std": 0.0031
+          },
+          "val_fpr": {
+            "mean": 0.0089,
+            "std": 0.0005
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.9995,
+            "std": 0.0004
+          },
+          "fpr": {
+            "mean": 0.0314,
+            "std": 0.0112
+          },
+          "val_fpr": {
+            "mean": 0.0313,
+            "std": 0.0083
+          }
+        }
+      }
+    },
+    "SSH-Patator": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.8462,
+          "std": 0.0074
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.7962,
+            "std": 0.4381
+          },
+          "fpr": {
+            "mean": 0.2067,
+            "std": 0.0473
+          },
+          "val_fpr": {
+            "mean": 0.1979,
+            "std": 0.0442
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0102,
+            "std": 0.0006
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0007,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0537,
+            "std": 0.0091
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8197,
+          "std": 0.0076
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.5991,
+            "std": 0.5355
+          },
+          "fpr": {
+            "mean": 0.1838,
+            "std": 0.0443
+          },
+          "val_fpr": {
+            "mean": 0.1738,
+            "std": 0.0425
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0007,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0539,
+            "std": 0.0067
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.9431,
+          "std": 0.0335
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.8207,
+            "std": 0.1603
+          },
+          "val_fpr": {
+            "mean": 0.8186,
+            "std": 0.1605
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.228,
+            "std": 0.4277
+          },
+          "fpr": {
+            "mean": 0.0105,
+            "std": 0.0019
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.2754,
+            "std": 0.4117
+          },
+          "fpr": {
+            "mean": 0.0511,
+            "std": 0.0013
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.944,
+          "std": 0.0332
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.984,
+            "std": 0.0315
+          },
+          "fpr": {
+            "mean": 0.1295,
+            "std": 0.0401
+          },
+          "val_fpr": {
+            "mean": 0.1311,
+            "std": 0.0393
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.228,
+            "std": 0.4278
+          },
+          "fpr": {
+            "mean": 0.0104,
+            "std": 0.0022
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.2771,
+            "std": 0.4107
+          },
+          "fpr": {
+            "mean": 0.0514,
+            "std": 0.0015
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.1977,
+          "std": 0.029
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.0025,
+            "std": 0.0005
+          },
+          "fpr": {
+            "mean": 0.1177,
+            "std": 0.0388
+          },
+          "val_fpr": {
+            "mean": 0.1135,
+            "std": 0.0466
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0099,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0018,
+            "std": 0.0001
+          },
+          "fpr": {
+            "mean": 0.0549,
+            "std": 0.0052
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.1576,
+          "std": 0.0065
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.0023,
+            "std": 0.0004
+          },
+          "fpr": {
+            "mean": 0.0856,
+            "std": 0.0198
+          },
+          "val_fpr": {
+            "mean": 0.0781,
+            "std": 0.0192
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0099,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0016,
+            "std": 0.0002
+          },
+          "fpr": {
+            "mean": 0.0556,
+            "std": 0.0061
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.7799,
+          "std": 0.1826
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0,
+            "std": 0.0001
+          },
+          "val_fpr": {
+            "mean": 0.0003,
+            "std": 0.0006
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0219,
+            "std": 0.0441
+          },
+          "fpr": {
+            "mean": 0.0092,
+            "std": 0.0021
+          },
+          "val_fpr": {
+            "mean": 0.0092,
+            "std": 0.0006
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.6015,
+            "std": 0.3653
+          },
+          "fpr": {
+            "mean": 0.04,
+            "std": 0.0047
+          },
+          "val_fpr": {
+            "mean": 0.0397,
+            "std": 0.0066
+          }
+        }
+      }
+    },
+    "Brute force": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.8408,
+          "std": 0.0081
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8835,
+            "std": 0.2571
+          },
+          "fpr": {
+            "mean": 0.6763,
+            "std": 0.4439
+          },
+          "val_fpr": {
+            "mean": 0.6737,
+            "std": 0.4475
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0097,
+            "std": 0.0007
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0003,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0536,
+            "std": 0.0081
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8117,
+          "std": 0.0158
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.6002,
+            "std": 0.5474
+          },
+          "fpr": {
+            "mean": 0.6432,
+            "std": 0.4886
+          },
+          "val_fpr": {
+            "mean": 0.6398,
+            "std": 0.4932
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0008
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0003,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0539,
+            "std": 0.0066
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.8724,
+          "std": 0.049
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.8586,
+            "std": 0.305
+          },
+          "val_fpr": {
+            "mean": 0.8561,
+            "std": 0.3092
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.3413,
+            "std": 0.182
+          },
+          "fpr": {
+            "mean": 0.0105,
+            "std": 0.0017
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.4248,
+            "std": 0.0019
+          },
+          "fpr": {
+            "mean": 0.051,
+            "std": 0.0014
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8731,
+          "std": 0.0491
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.7717,
+            "std": 0.3126
+          },
+          "fpr": {
+            "mean": 0.6478,
+            "std": 0.4822
+          },
+          "val_fpr": {
+            "mean": 0.6496,
+            "std": 0.4799
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.3413,
+            "std": 0.182
+          },
+          "fpr": {
+            "mean": 0.0103,
+            "std": 0.0019
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.4247,
+            "std": 0.0019
+          },
+          "fpr": {
+            "mean": 0.0513,
+            "std": 0.0016
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.6321,
+          "std": 0.0112
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8285,
+            "std": 0.2348
+          },
+          "fpr": {
+            "mean": 0.6626,
+            "std": 0.462
+          },
+          "val_fpr": {
+            "mean": 0.6633,
+            "std": 0.461
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0098,
+            "std": 0.0007
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.4569,
+            "std": 0.2546
+          },
+          "fpr": {
+            "mean": 0.0548,
+            "std": 0.0052
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.6039,
+          "std": 0.0047
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.8284,
+            "std": 0.2349
+          },
+          "fpr": {
+            "mean": 0.6376,
+            "std": 0.4962
+          },
+          "val_fpr": {
+            "mean": 0.6355,
+            "std": 0.4992
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0099,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.115,
+            "std": 0.2537
+          },
+          "fpr": {
+            "mean": 0.0553,
+            "std": 0.0057
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.614,
+          "std": 0.1934
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.6,
+            "std": 0.5477
+          },
+          "fpr": {
+            "mean": 0.6,
+            "std": 0.5477
+          },
+          "val_fpr": {
+            "mean": 0.6003,
+            "std": 0.5474
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.011,
+            "std": 0.0223
+          },
+          "fpr": {
+            "mean": 0.0092,
+            "std": 0.0018
+          },
+          "val_fpr": {
+            "mean": 0.009,
+            "std": 0.0007
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.2684,
+            "std": 0.3927
+          },
+          "fpr": {
+            "mean": 0.0364,
+            "std": 0.0046
+          },
+          "val_fpr": {
+            "mean": 0.0364,
+            "std": 0.0068
+          }
+        }
+      }
+    },
+    "DoS": {
+      "Isolation Forest (mixed)": {
+        "roc_auc": {
+          "mean": 0.9319,
+          "std": 0.0094
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9891,
+            "std": 0.0088
+          },
+          "fpr": {
+            "mean": 0.2879,
+            "std": 0.0488
+          },
+          "val_fpr": {
+            "mean": 0.2814,
+            "std": 0.0374
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.1074,
+            "std": 0.0422
+          },
+          "fpr": {
+            "mean": 0.0103,
+            "std": 0.0011
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.3884,
+            "std": 0.0826
+          },
+          "fpr": {
+            "mean": 0.0535,
+            "std": 0.0075
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Isolation Forest (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9348,
+          "std": 0.0093
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9614,
+            "std": 0.0036
+          },
+          "fpr": {
+            "mean": 0.1985,
+            "std": 0.0204
+          },
+          "val_fpr": {
+            "mean": 0.1914,
+            "std": 0.0144
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.1273,
+            "std": 0.0465
+          },
+          "fpr": {
+            "mean": 0.0101,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.4428,
+            "std": 0.1477
+          },
+          "fpr": {
+            "mean": 0.0537,
+            "std": 0.0066
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (mixed)": {
+        "roc_auc": {
+          "mean": 0.8892,
+          "std": 0.0095
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 1.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.7871,
+            "std": 0.1174
+          },
+          "val_fpr": {
+            "mean": 0.7834,
+            "std": 0.1196
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0033,
+            "std": 0.0026
+          },
+          "fpr": {
+            "mean": 0.0104,
+            "std": 0.002
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0961,
+            "std": 0.0254
+          },
+          "fpr": {
+            "mean": 0.0502,
+            "std": 0.0031
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Local Outlier Factor (normal-only)": {
+        "roc_auc": {
+          "mean": 0.8892,
+          "std": 0.0094
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.5104,
+            "std": 0.393
+          },
+          "fpr": {
+            "mean": 0.105,
+            "std": 0.0625
+          },
+          "val_fpr": {
+            "mean": 0.1055,
+            "std": 0.0643
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0033,
+            "std": 0.0027
+          },
+          "fpr": {
+            "mean": 0.0104,
+            "std": 0.0019
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.0964,
+            "std": 0.0252
+          },
+          "fpr": {
+            "mean": 0.0501,
+            "std": 0.0031
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (mixed)": {
+        "roc_auc": {
+          "mean": 0.9491,
+          "std": 0.0029
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9515,
+            "std": 0.0179
+          },
+          "fpr": {
+            "mean": 0.2657,
+            "std": 0.3378
+          },
+          "val_fpr": {
+            "mean": 0.259,
+            "std": 0.3379
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.2999,
+            "std": 0.0307
+          },
+          "fpr": {
+            "mean": 0.0094,
+            "std": 0.0009
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.8728,
+            "std": 0.0238
+          },
+          "fpr": {
+            "mean": 0.0539,
+            "std": 0.0065
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "One-Class SVM (normal-only)": {
+        "roc_auc": {
+          "mean": 0.9457,
+          "std": 0.0037
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.9185,
+            "std": 0.0417
+          },
+          "fpr": {
+            "mean": 0.2399,
+            "std": 0.3506
+          },
+          "val_fpr": {
+            "mean": 0.2327,
+            "std": 0.3488
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.2986,
+            "std": 0.0389
+          },
+          "fpr": {
+            "mean": 0.0097,
+            "std": 0.0008
+          },
+          "val_fpr": {
+            "mean": 0.0099,
+            "std": 0.0001
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.8693,
+            "std": 0.0237
+          },
+          "fpr": {
+            "mean": 0.054,
+            "std": 0.0069
+          },
+          "val_fpr": {
+            "mean": 0.05,
+            "std": 0.0001
+          }
+        }
+      },
+      "Random Forest": {
+        "roc_auc": {
+          "mean": 0.5664,
+          "std": 0.0298
+        },
+        "val_threshold": {
+          "recall": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "fpr": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "val_fpr": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "fpr_1pct": {
+          "recall": {
+            "mean": 0.0916,
+            "std": 0.0577
+          },
+          "fpr": {
+            "mean": 0.0051,
+            "std": 0.0016
+          },
+          "val_fpr": {
+            "mean": 0.0049,
+            "std": 0.0015
+          }
+        },
+        "fpr_5pct": {
+          "recall": {
+            "mean": 0.1452,
+            "std": 0.0596
+          },
+          "fpr": {
+            "mean": 0.0128,
+            "std": 0.0041
+          },
+          "val_fpr": {
+            "mean": 0.0126,
+            "std": 0.0016
+          }
+        }
+      }
+    }
+  },
+  "per_seed": {
+    "0": {
+      "DoS GoldenEye": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9171,
+          "val_threshold": {
+            "recall": 0.9785,
+            "fpr": 0.2707,
+            "val_fpr": 0.2553
+          },
+          "fpr_1pct": {
+            "recall": 0.0678,
+            "fpr": 0.0102,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4356,
+            "fpr": 0.0498,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9329,
+          "val_threshold": {
+            "recall": 0.9783,
+            "fpr": 0.226,
+            "val_fpr": 0.2132
+          },
+          "fpr_1pct": {
+            "recall": 0.1487,
+            "fpr": 0.0114,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.3809,
+            "fpr": 0.051,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8892,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9975,
+            "val_fpr": 0.9969
+          },
+          "fpr_1pct": {
+            "recall": 0.0299,
+            "fpr": 0.0115,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.1862,
+            "fpr": 0.052,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8883,
+          "val_threshold": {
+            "recall": 0.0658,
+            "fpr": 0.0685,
+            "val_fpr": 0.0646
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0117,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0033,
+            "fpr": 0.0523,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.7395,
+          "val_threshold": {
+            "recall": 0.5743,
+            "fpr": 0.0921,
+            "val_fpr": 0.0774
+          },
+          "fpr_1pct": {
+            "recall": 0.0737,
+            "fpr": 0.0089,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.406,
+            "fpr": 0.0613,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.8058,
+          "val_threshold": {
+            "recall": 0.75,
+            "fpr": 0.0716,
+            "val_fpr": 0.0585
+          },
+          "fpr_1pct": {
+            "recall": 0.1304,
+            "fpr": 0.0086,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7028,
+            "fpr": 0.059,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9999,
+          "val_threshold": {
+            "recall": 0.0017,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 1.0,
+            "fpr": 0.0124,
+            "val_fpr": 0.0074
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0472,
+            "val_fpr": 0.0453
+          }
+        }
+      },
+      "DoS Hulk": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9083,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.267,
+            "val_fpr": 0.2491
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0097,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.028,
+            "fpr": 0.0489,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.948,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.2308,
+            "val_fpr": 0.2187
+          },
+          "fpr_1pct": {
+            "recall": 0.0003,
+            "fpr": 0.0113,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4815,
+            "fpr": 0.0509,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8959,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9976,
+            "val_fpr": 0.9969
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0115,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.092,
+            "fpr": 0.0519,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9079,
+          "val_threshold": {
+            "recall": 0.999,
+            "fpr": 0.1927,
+            "val_fpr": 0.1877
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0115,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0035,
+            "fpr": 0.0525,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8511,
+          "val_threshold": {
+            "recall": 0.5669,
+            "fpr": 0.0849,
+            "val_fpr": 0.0689
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0092,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.3265,
+            "fpr": 0.0589,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.95,
+          "val_threshold": {
+            "recall": 0.8935,
+            "fpr": 0.0733,
+            "val_fpr": 0.0613
+          },
+          "fpr_1pct": {
+            "recall": 0.0001,
+            "fpr": 0.0091,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7911,
+            "fpr": 0.058,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9973,
+          "val_threshold": {
+            "recall": 0.0001,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.9659,
+            "fpr": 0.0141,
+            "val_fpr": 0.0085
+          },
+          "fpr_5pct": {
+            "recall": 0.9999,
+            "fpr": 0.0573,
+            "val_fpr": 0.0492
+          }
+        }
+      },
+      "DoS Slowhttptest": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9557,
+          "val_threshold": {
+            "recall": 0.9971,
+            "fpr": 0.2292,
+            "val_fpr": 0.2147
+          },
+          "fpr_1pct": {
+            "recall": 0.0172,
+            "fpr": 0.0102,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7948,
+            "fpr": 0.0501,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9616,
+          "val_threshold": {
+            "recall": 0.9977,
+            "fpr": 0.2261,
+            "val_fpr": 0.2137
+          },
+          "fpr_1pct": {
+            "recall": 0.0943,
+            "fpr": 0.0113,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7977,
+            "fpr": 0.051,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.827,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9977,
+            "val_fpr": 0.9975
+          },
+          "fpr_1pct": {
+            "recall": 0.1874,
+            "fpr": 0.0121,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.2207,
+            "fpr": 0.0534,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.7867,
+          "val_threshold": {
+            "recall": 0.458,
+            "fpr": 0.18,
+            "val_fpr": 0.1735
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0122,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0333,
+            "fpr": 0.0533,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8341,
+          "val_threshold": {
+            "recall": 0.8333,
+            "fpr": 0.0932,
+            "val_fpr": 0.0781
+          },
+          "fpr_1pct": {
+            "recall": 0.023,
+            "fpr": 0.0091,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8201,
+            "fpr": 0.0611,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.8427,
+          "val_threshold": {
+            "recall": 0.8333,
+            "fpr": 0.0726,
+            "val_fpr": 0.0622
+          },
+          "fpr_1pct": {
+            "recall": 0.0374,
+            "fpr": 0.0088,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8328,
+            "fpr": 0.0593,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9998,
+          "val_threshold": {
+            "recall": 0.1586,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 1.0,
+            "fpr": 0.011,
+            "val_fpr": 0.0075
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0546,
+            "val_fpr": 0.0469
+          }
+        }
+      },
+      "DoS Slowloris": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9419,
+          "val_threshold": {
+            "recall": 0.9487,
+            "fpr": 0.2455,
+            "val_fpr": 0.2335
+          },
+          "fpr_1pct": {
+            "recall": 0.0311,
+            "fpr": 0.0104,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7613,
+            "fpr": 0.05,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9415,
+          "val_threshold": {
+            "recall": 0.8572,
+            "fpr": 0.226,
+            "val_fpr": 0.2136
+          },
+          "fpr_1pct": {
+            "recall": 0.4351,
+            "fpr": 0.0113,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7974,
+            "fpr": 0.0511,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8302,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9973,
+            "val_fpr": 0.9971
+          },
+          "fpr_1pct": {
+            "recall": 0.0314,
+            "fpr": 0.0114,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.3859,
+            "fpr": 0.053,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9144,
+          "val_threshold": {
+            "recall": 0.0124,
+            "fpr": 0.0155,
+            "val_fpr": 0.0129
+          },
+          "fpr_1pct": {
+            "recall": 0.007,
+            "fpr": 0.0124,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.3491,
+            "fpr": 0.0539,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.924,
+          "val_threshold": {
+            "recall": 0.8424,
+            "fpr": 0.0923,
+            "val_fpr": 0.0786
+          },
+          "fpr_1pct": {
+            "recall": 0.0031,
+            "fpr": 0.0089,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7914,
+            "fpr": 0.0618,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9344,
+          "val_threshold": {
+            "recall": 0.8448,
+            "fpr": 0.0708,
+            "val_fpr": 0.0592
+          },
+          "fpr_1pct": {
+            "recall": 0.0031,
+            "fpr": 0.0086,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8373,
+            "fpr": 0.0595,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9977,
+          "val_threshold": {
+            "recall": 0.4512,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.9889,
+            "fpr": 0.0121,
+            "val_fpr": 0.0081
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0301,
+            "val_fpr": 0.0237
+          }
+        }
+      },
+      "FTP-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8044,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.2345,
+            "val_fpr": 0.2243
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0095,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0485,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.7769,
+          "val_threshold": {
+            "recall": 0.0015,
+            "fpr": 0.1973,
+            "val_fpr": 0.1854
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0113,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.051,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.6444,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9973,
+            "val_fpr": 0.997
+          },
+          "fpr_1pct": {
+            "recall": 0.005,
+            "fpr": 0.0115,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.0525,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.6453,
+          "val_threshold": {
+            "recall": 0.005,
+            "fpr": 0.0149,
+            "val_fpr": 0.0131
+          },
+          "fpr_1pct": {
+            "recall": 0.005,
+            "fpr": 0.0123,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.053,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9529,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.8277,
+            "val_fpr": 0.8511
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0096,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.995,
+            "fpr": 0.055,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9326,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.8688,
+            "val_fpr": 0.883
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0089,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0015,
+            "fpr": 0.0582,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9982,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.999,
+            "fpr": 0.0118,
+            "val_fpr": 0.0085
+          },
+          "fpr_5pct": {
+            "recall": 0.9992,
+            "fpr": 0.0311,
+            "val_fpr": 0.0245
+          }
+        }
+      },
+      "SSH-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.849,
+          "val_threshold": {
+            "recall": 0.9909,
+            "fpr": 0.2136,
+            "val_fpr": 0.1995
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0101,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0488,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8115,
+          "val_threshold": {
+            "recall": 0.9905,
+            "fpr": 0.2261,
+            "val_fpr": 0.2137
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0113,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.051,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9479,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7476,
+            "val_fpr": 0.7465
+          },
+          "fpr_1pct": {
+            "recall": 0.101,
+            "fpr": 0.0122,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.104,
+            "fpr": 0.053,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9485,
+          "val_threshold": {
+            "recall": 0.9983,
+            "fpr": 0.1729,
+            "val_fpr": 0.1657
+          },
+          "fpr_1pct": {
+            "recall": 0.101,
+            "fpr": 0.012,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.1128,
+            "fpr": 0.0537,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.2174,
+          "val_threshold": {
+            "recall": 0.0024,
+            "fpr": 0.0866,
+            "val_fpr": 0.0724
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0089,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.002,
+            "fpr": 0.0593,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.1546,
+          "val_threshold": {
+            "recall": 0.002,
+            "fpr": 0.0721,
+            "val_fpr": 0.0611
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0089,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0017,
+            "fpr": 0.0617,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5728,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.001,
+            "fpr": 0.0094,
+            "val_fpr": 0.0083
+          },
+          "fpr_5pct": {
+            "recall": 0.1895,
+            "fpr": 0.0409,
+            "val_fpr": 0.0363
+          }
+        }
+      },
+      "Brute force": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8319,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9999,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0101,
+            "val_fpr": 0.0097
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0498,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.7917,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0113,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.051,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8007,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.4215,
+            "fpr": 0.0116,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4216,
+            "fpr": 0.0528,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8012,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.4215,
+            "fpr": 0.012,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4216,
+            "fpr": 0.0537,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.6403,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.009,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.5709,
+            "fpr": 0.0582,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.6011,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0089,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0016,
+            "fpr": 0.0582,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.4829,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0004,
+            "fpr": 0.0108,
+            "val_fpr": 0.0079
+          },
+          "fpr_5pct": {
+            "recall": 0.0039,
+            "fpr": 0.0381,
+            "val_fpr": 0.035
+          }
+        }
+      },
+      "DoS": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9414,
+          "val_threshold": {
+            "recall": 0.9961,
+            "fpr": 0.3405,
+            "val_fpr": 0.3159
+          },
+          "fpr_1pct": {
+            "recall": 0.0498,
+            "fpr": 0.0104,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4814,
+            "fpr": 0.0495,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9426,
+          "val_threshold": {
+            "recall": 0.9647,
+            "fpr": 0.2247,
+            "val_fpr": 0.2117
+          },
+          "fpr_1pct": {
+            "recall": 0.1405,
+            "fpr": 0.0113,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.5338,
+            "fpr": 0.0509,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8751,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7294,
+            "val_fpr": 0.7287
+          },
+          "fpr_1pct": {
+            "recall": 0.0008,
+            "fpr": 0.0118,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0759,
+            "fpr": 0.0511,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8752,
+          "val_threshold": {
+            "recall": 0.1749,
+            "fpr": 0.0818,
+            "val_fpr": 0.0762
+          },
+          "fpr_1pct": {
+            "recall": 0.0008,
+            "fpr": 0.0118,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0769,
+            "fpr": 0.051,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9492,
+          "val_threshold": {
+            "recall": 0.9428,
+            "fpr": 0.1155,
+            "val_fpr": 0.1012
+          },
+          "fpr_1pct": {
+            "recall": 0.3321,
+            "fpr": 0.0092,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8843,
+            "fpr": 0.059,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.942,
+          "val_threshold": {
+            "recall": 0.8868,
+            "fpr": 0.0669,
+            "val_fpr": 0.0589
+          },
+          "fpr_1pct": {
+            "recall": 0.2648,
+            "fpr": 0.0086,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8813,
+            "fpr": 0.0602,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5666,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0905,
+            "fpr": 0.006,
+            "val_fpr": 0.005
+          },
+          "fpr_5pct": {
+            "recall": 0.148,
+            "fpr": 0.0154,
+            "val_fpr": 0.0121
+          }
+        }
+      }
+    },
+    "1": {
+      "DoS GoldenEye": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8954,
+          "val_threshold": {
+            "recall": 0.9991,
+            "fpr": 0.2939,
+            "val_fpr": 0.2834
+          },
+          "fpr_1pct": {
+            "recall": 0.0303,
+            "fpr": 0.0088,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.2607,
+            "fpr": 0.0616,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9193,
+          "val_threshold": {
+            "recall": 0.9659,
+            "fpr": 0.2014,
+            "val_fpr": 0.1873
+          },
+          "fpr_1pct": {
+            "recall": 0.0749,
+            "fpr": 0.009,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3444,
+            "fpr": 0.0611,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9187,
+          "val_threshold": {
+            "recall": 0.9999,
+            "fpr": 0.7446,
+            "val_fpr": 0.7327
+          },
+          "fpr_1pct": {
+            "recall": 0.0513,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.391,
+            "fpr": 0.05,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9004,
+          "val_threshold": {
+            "recall": 0.376,
+            "fpr": 0.0743,
+            "val_fpr": 0.0752
+          },
+          "fpr_1pct": {
+            "recall": 0.0012,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0887,
+            "fpr": 0.0494,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.5654,
+          "val_threshold": {
+            "recall": 0.4303,
+            "fpr": 0.1126,
+            "val_fpr": 0.1036
+          },
+          "fpr_1pct": {
+            "recall": 0.0501,
+            "fpr": 0.0107,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3177,
+            "fpr": 0.0591,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.7958,
+          "val_threshold": {
+            "recall": 0.793,
+            "fpr": 0.115,
+            "val_fpr": 0.1031
+          },
+          "fpr_1pct": {
+            "recall": 0.0815,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.5676,
+            "fpr": 0.0583,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9993,
+          "val_threshold": {
+            "recall": 0.7196,
+            "fpr": 0.0002,
+            "val_fpr": 0.0002
+          },
+          "fpr_1pct": {
+            "recall": 0.9923,
+            "fpr": 0.0097,
+            "val_fpr": 0.0077
+          },
+          "fpr_5pct": {
+            "recall": 0.9995,
+            "fpr": 0.0539,
+            "val_fpr": 0.0474
+          }
+        }
+      },
+      "DoS Hulk": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.935,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.3418,
+            "val_fpr": 0.3286
+          },
+          "fpr_1pct": {
+            "recall": 0.0004,
+            "fpr": 0.0099,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.2811,
+            "fpr": 0.0599,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9164,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.2015,
+            "val_fpr": 0.1873
+          },
+          "fpr_1pct": {
+            "recall": 0.0001,
+            "fpr": 0.0089,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0214,
+            "fpr": 0.061,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9239,
+          "val_threshold": {
+            "recall": 0.9999,
+            "fpr": 0.7192,
+            "val_fpr": 0.7098
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0126,
+            "fpr": 0.0473,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9247,
+          "val_threshold": {
+            "recall": 0.9974,
+            "fpr": 0.144,
+            "val_fpr": 0.1432
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0135,
+            "fpr": 0.0474,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9844,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.1114,
+            "val_fpr": 0.1018
+          },
+          "fpr_1pct": {
+            "recall": 0.2595,
+            "fpr": 0.0107,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0562,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9848,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.0984,
+            "val_fpr": 0.0896
+          },
+          "fpr_1pct": {
+            "recall": 0.2721,
+            "fpr": 0.011,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0562,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.7821,
+          "val_threshold": {
+            "recall": 0.048,
+            "fpr": 0.0003,
+            "val_fpr": 0.0002
+          },
+          "fpr_1pct": {
+            "recall": 0.3589,
+            "fpr": 0.01,
+            "val_fpr": 0.0077
+          },
+          "fpr_5pct": {
+            "recall": 0.5934,
+            "fpr": 0.0413,
+            "val_fpr": 0.0337
+          }
+        }
+      },
+      "DoS Slowhttptest": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.957,
+          "val_threshold": {
+            "recall": 0.9977,
+            "fpr": 0.3004,
+            "val_fpr": 0.2855
+          },
+          "fpr_1pct": {
+            "recall": 0.0523,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8,
+            "fpr": 0.0605,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9637,
+          "val_threshold": {
+            "recall": 0.9977,
+            "fpr": 0.1994,
+            "val_fpr": 0.186
+          },
+          "fpr_1pct": {
+            "recall": 0.1845,
+            "fpr": 0.0089,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7983,
+            "fpr": 0.0608,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8287,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7206,
+            "val_fpr": 0.7078
+          },
+          "fpr_1pct": {
+            "recall": 0.2207,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.254,
+            "fpr": 0.0489,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8075,
+          "val_threshold": {
+            "recall": 0.0362,
+            "fpr": 0.0739,
+            "val_fpr": 0.0752
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0333,
+            "fpr": 0.049,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8345,
+          "val_threshold": {
+            "recall": 0.8339,
+            "fpr": 0.1098,
+            "val_fpr": 0.0994
+          },
+          "fpr_1pct": {
+            "recall": 0.0448,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8201,
+            "fpr": 0.0595,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.848,
+          "val_threshold": {
+            "recall": 0.8356,
+            "fpr": 0.1213,
+            "val_fpr": 0.1085
+          },
+          "fpr_1pct": {
+            "recall": 0.0552,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8339,
+            "fpr": 0.0587,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9993,
+          "val_threshold": {
+            "recall": 0.7414,
+            "fpr": 0.0002,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.9994,
+            "fpr": 0.0102,
+            "val_fpr": 0.0087
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.047,
+            "val_fpr": 0.0394
+          }
+        }
+      },
+      "DoS Slowloris": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9507,
+          "val_threshold": {
+            "recall": 0.9889,
+            "fpr": 0.3,
+            "val_fpr": 0.2853
+          },
+          "fpr_1pct": {
+            "recall": 0.6087,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8012,
+            "fpr": 0.0605,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9389,
+          "val_threshold": {
+            "recall": 0.8533,
+            "fpr": 0.201,
+            "val_fpr": 0.1871
+          },
+          "fpr_1pct": {
+            "recall": 0.05,
+            "fpr": 0.0089,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.815,
+            "fpr": 0.0607,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9234,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7163,
+            "val_fpr": 0.7026
+          },
+          "fpr_1pct": {
+            "recall": 0.0205,
+            "fpr": 0.0091,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3786,
+            "fpr": 0.0496,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8929,
+          "val_threshold": {
+            "recall": 0.4278,
+            "fpr": 0.0721,
+            "val_fpr": 0.0724
+          },
+          "fpr_1pct": {
+            "recall": 0.001,
+            "fpr": 0.0088,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3522,
+            "fpr": 0.0496,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9331,
+          "val_threshold": {
+            "recall": 0.887,
+            "fpr": 0.122,
+            "val_fpr": 0.1105
+          },
+          "fpr_1pct": {
+            "recall": 0.0143,
+            "fpr": 0.0103,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7867,
+            "fpr": 0.058,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9366,
+          "val_threshold": {
+            "recall": 0.8777,
+            "fpr": 0.1235,
+            "val_fpr": 0.1101
+          },
+          "fpr_1pct": {
+            "recall": 0.142,
+            "fpr": 0.0103,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8287,
+            "fpr": 0.0558,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9984,
+          "val_threshold": {
+            "recall": 0.5359,
+            "fpr": 0.0001,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 1.0,
+            "fpr": 0.0123,
+            "val_fpr": 0.0095
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0491,
+            "val_fpr": 0.0412
+          }
+        }
+      },
+      "FTP-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.81,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.2249,
+            "val_fpr": 0.2129
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0089,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0619,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8041,
+          "val_threshold": {
+            "recall": 0.0015,
+            "fpr": 0.1789,
+            "val_fpr": 0.1671
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0091,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0612,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8767,
+          "val_threshold": {
+            "recall": 0.005,
+            "fpr": 0.0323,
+            "val_fpr": 0.0341
+          },
+          "fpr_1pct": {
+            "recall": 0.0025,
+            "fpr": 0.009,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.051,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8777,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0039,
+            "val_fpr": 0.0047
+          },
+          "fpr_1pct": {
+            "recall": 0.0025,
+            "fpr": 0.009,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.0509,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9359,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.8636,
+            "val_fpr": 0.8571
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0112,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0015,
+            "fpr": 0.0596,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9317,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.8826,
+            "val_fpr": 0.8776
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0107,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0015,
+            "fpr": 0.0593,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9971,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0003,
+            "val_fpr": 0.0002
+          },
+          "fpr_1pct": {
+            "recall": 1.0,
+            "fpr": 0.0127,
+            "val_fpr": 0.0096
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0502,
+            "val_fpr": 0.0454
+          }
+        }
+      },
+      "SSH-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8381,
+          "val_threshold": {
+            "recall": 0.9949,
+            "fpr": 0.2694,
+            "val_fpr": 0.2573
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0096,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0621,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8214,
+          "val_threshold": {
+            "recall": 0.9905,
+            "fpr": 0.2033,
+            "val_fpr": 0.1888
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.009,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0609,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9277,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7239,
+            "val_fpr": 0.7117
+          },
+          "fpr_1pct": {
+            "recall": 0.0027,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0078,
+            "fpr": 0.0507,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9286,
+          "val_threshold": {
+            "recall": 0.9277,
+            "fpr": 0.0735,
+            "val_fpr": 0.0741
+          },
+          "fpr_1pct": {
+            "recall": 0.0024,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0078,
+            "fpr": 0.0504,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.1697,
+          "val_threshold": {
+            "recall": 0.0027,
+            "fpr": 0.1097,
+            "val_fpr": 0.099
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0017,
+            "fpr": 0.0589,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.1488,
+          "val_threshold": {
+            "recall": 0.0027,
+            "fpr": 0.1133,
+            "val_fpr": 0.1014
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0105,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0017,
+            "fpr": 0.0587,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.6497,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0078,
+            "fpr": 0.0119,
+            "val_fpr": 0.0093
+          },
+          "fpr_5pct": {
+            "recall": 0.3404,
+            "fpr": 0.0361,
+            "val_fpr": 0.0314
+          }
+        }
+      },
+      "Brute force": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8325,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9999,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0004,
+            "fpr": 0.0618,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8131,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0092,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0608,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9266,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.4218,
+            "fpr": 0.0089,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.4255,
+            "fpr": 0.0519,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9272,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.4216,
+            "fpr": 0.0089,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.4252,
+            "fpr": 0.052,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.6163,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0105,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.5707,
+            "fpr": 0.06,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.5978,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9999,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0105,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0016,
+            "fpr": 0.0598,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5132,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0509,
+            "fpr": 0.0103,
+            "val_fpr": 0.0088
+          },
+          "fpr_5pct": {
+            "recall": 0.0558,
+            "fpr": 0.0299,
+            "val_fpr": 0.0253
+          }
+        }
+      },
+      "DoS": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9227,
+          "val_threshold": {
+            "recall": 0.9977,
+            "fpr": 0.3378,
+            "val_fpr": 0.3245
+          },
+          "fpr_1pct": {
+            "recall": 0.1281,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3293,
+            "fpr": 0.0614,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.925,
+          "val_threshold": {
+            "recall": 0.9602,
+            "fpr": 0.1979,
+            "val_fpr": 0.1845
+          },
+          "fpr_1pct": {
+            "recall": 0.0511,
+            "fpr": 0.0089,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3429,
+            "fpr": 0.0608,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9017,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7212,
+            "val_fpr": 0.7102
+          },
+          "fpr_1pct": {
+            "recall": 0.0002,
+            "fpr": 0.0084,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0938,
+            "fpr": 0.0468,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9017,
+          "val_threshold": {
+            "recall": 0.8083,
+            "fpr": 0.1527,
+            "val_fpr": 0.1549
+          },
+          "fpr_1pct": {
+            "recall": 0.0002,
+            "fpr": 0.0086,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0945,
+            "fpr": 0.0469,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9494,
+          "val_threshold": {
+            "recall": 0.9414,
+            "fpr": 0.1221,
+            "val_fpr": 0.1107
+          },
+          "fpr_1pct": {
+            "recall": 0.2733,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8833,
+            "fpr": 0.0568,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9476,
+          "val_threshold": {
+            "recall": 0.9389,
+            "fpr": 0.1194,
+            "val_fpr": 0.108
+          },
+          "fpr_1pct": {
+            "recall": 0.2919,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8832,
+            "fpr": 0.0565,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5994,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.1001,
+            "fpr": 0.0067,
+            "val_fpr": 0.0041
+          },
+          "fpr_5pct": {
+            "recall": 0.2155,
+            "fpr": 0.017,
+            "val_fpr": 0.0133
+          }
+        }
+      }
+    },
+    "2": {
+      "DoS GoldenEye": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8977,
+          "val_threshold": {
+            "recall": 0.868,
+            "fpr": 0.2124,
+            "val_fpr": 0.2139
+          },
+          "fpr_1pct": {
+            "recall": 0.0501,
+            "fpr": 0.0095,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.3199,
+            "fpr": 0.0551,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9359,
+          "val_threshold": {
+            "recall": 0.9608,
+            "fpr": 0.1885,
+            "val_fpr": 0.1906
+          },
+          "fpr_1pct": {
+            "recall": 0.0967,
+            "fpr": 0.0096,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.5056,
+            "fpr": 0.0542,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8861,
+          "val_threshold": {
+            "recall": 0.9859,
+            "fpr": 0.7222,
+            "val_fpr": 0.7266
+          },
+          "fpr_1pct": {
+            "recall": 0.0262,
+            "fpr": 0.0103,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.1711,
+            "fpr": 0.0498,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8983,
+          "val_threshold": {
+            "recall": 0.9366,
+            "fpr": 0.1587,
+            "val_fpr": 0.1662
+          },
+          "fpr_1pct": {
+            "recall": 0.0001,
+            "fpr": 0.0098,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0015,
+            "fpr": 0.049,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.7119,
+          "val_threshold": {
+            "recall": 0.4917,
+            "fpr": 0.0782,
+            "val_fpr": 0.0735
+          },
+          "fpr_1pct": {
+            "recall": 0.0663,
+            "fpr": 0.0105,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.406,
+            "fpr": 0.0523,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.8245,
+          "val_threshold": {
+            "recall": 0.7752,
+            "fpr": 0.0619,
+            "val_fpr": 0.0575
+          },
+          "fpr_1pct": {
+            "recall": 0.2474,
+            "fpr": 0.0109,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7204,
+            "fpr": 0.0516,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9999,
+          "val_threshold": {
+            "recall": 0.1822,
+            "fpr": 0.0001,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 1.0,
+            "fpr": 0.0088,
+            "val_fpr": 0.0097
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0409,
+            "val_fpr": 0.0426
+          }
+        }
+      },
+      "DoS Hulk": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8836,
+          "val_threshold": {
+            "recall": 0.9955,
+            "fpr": 0.203,
+            "val_fpr": 0.2036
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0101,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.017,
+            "fpr": 0.0539,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9495,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.1864,
+            "val_fpr": 0.1888
+          },
+          "fpr_1pct": {
+            "recall": 0.0003,
+            "fpr": 0.0095,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7255,
+            "fpr": 0.0539,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9192,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7189,
+            "val_fpr": 0.7206
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0109,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.2099,
+            "fpr": 0.0492,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.927,
+          "val_threshold": {
+            "recall": 0.9956,
+            "fpr": 0.157,
+            "val_fpr": 0.1639
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.011,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.01,
+            "fpr": 0.0492,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8311,
+          "val_threshold": {
+            "recall": 0.5716,
+            "fpr": 0.0743,
+            "val_fpr": 0.0685
+          },
+          "fpr_1pct": {
+            "recall": 0.0001,
+            "fpr": 0.0106,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4386,
+            "fpr": 0.0541,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9627,
+          "val_threshold": {
+            "recall": 0.9514,
+            "fpr": 0.0624,
+            "val_fpr": 0.0569
+          },
+          "fpr_1pct": {
+            "recall": 0.0094,
+            "fpr": 0.0103,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8628,
+            "fpr": 0.0528,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9979,
+          "val_threshold": {
+            "recall": 0.0016,
+            "fpr": 0.0001,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.9971,
+            "fpr": 0.0098,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0248,
+            "val_fpr": 0.0263
+          }
+        }
+      },
+      "DoS Slowhttptest": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9433,
+          "val_threshold": {
+            "recall": 0.9966,
+            "fpr": 0.2112,
+            "val_fpr": 0.2125
+          },
+          "fpr_1pct": {
+            "recall": 0.0034,
+            "fpr": 0.0097,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7586,
+            "fpr": 0.0533,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9547,
+          "val_threshold": {
+            "recall": 0.9977,
+            "fpr": 0.1868,
+            "val_fpr": 0.189
+          },
+          "fpr_1pct": {
+            "recall": 0.1161,
+            "fpr": 0.0095,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8006,
+            "fpr": 0.0541,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.7947,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7246,
+            "val_fpr": 0.7294
+          },
+          "fpr_1pct": {
+            "recall": 0.1874,
+            "fpr": 0.0099,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.2109,
+            "fpr": 0.049,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8365,
+          "val_threshold": {
+            "recall": 0.7943,
+            "fpr": 0.1625,
+            "val_fpr": 0.1688
+          },
+          "fpr_1pct": {
+            "recall": 0.0167,
+            "fpr": 0.0109,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0362,
+            "fpr": 0.0494,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8295,
+          "val_threshold": {
+            "recall": 0.8333,
+            "fpr": 0.0755,
+            "val_fpr": 0.0712
+          },
+          "fpr_1pct": {
+            "recall": 0.0017,
+            "fpr": 0.0095,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8224,
+            "fpr": 0.0541,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.8442,
+          "val_threshold": {
+            "recall": 0.8339,
+            "fpr": 0.0646,
+            "val_fpr": 0.0602
+          },
+          "fpr_1pct": {
+            "recall": 0.0759,
+            "fpr": 0.0105,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8333,
+            "fpr": 0.0533,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 1.0,
+          "val_threshold": {
+            "recall": 0.6994,
+            "fpr": 0.0001,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.9989,
+            "fpr": 0.0077,
+            "val_fpr": 0.0087
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0466,
+            "val_fpr": 0.0499
+          }
+        }
+      },
+      "DoS Slowloris": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9452,
+          "val_threshold": {
+            "recall": 0.9194,
+            "fpr": 0.2025,
+            "val_fpr": 0.2033
+          },
+          "fpr_1pct": {
+            "recall": 0.078,
+            "fpr": 0.0093,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.7642,
+            "fpr": 0.0525,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9479,
+          "val_threshold": {
+            "recall": 0.851,
+            "fpr": 0.1896,
+            "val_fpr": 0.1923
+          },
+          "fpr_1pct": {
+            "recall": 0.6074,
+            "fpr": 0.0094,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8007,
+            "fpr": 0.0547,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8424,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7052,
+            "val_fpr": 0.7107
+          },
+          "fpr_1pct": {
+            "recall": 0.0684,
+            "fpr": 0.0107,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.418,
+            "fpr": 0.0507,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9457,
+          "val_threshold": {
+            "recall": 0.9614,
+            "fpr": 0.1486,
+            "val_fpr": 0.1556
+          },
+          "fpr_1pct": {
+            "recall": 0.0223,
+            "fpr": 0.011,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.3698,
+            "fpr": 0.0503,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9172,
+          "val_threshold": {
+            "recall": 0.8339,
+            "fpr": 0.079,
+            "val_fpr": 0.0758
+          },
+          "fpr_1pct": {
+            "recall": 0.0047,
+            "fpr": 0.0099,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.786,
+            "fpr": 0.0547,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9408,
+          "val_threshold": {
+            "recall": 0.844,
+            "fpr": 0.0637,
+            "val_fpr": 0.0575
+          },
+          "fpr_1pct": {
+            "recall": 0.1412,
+            "fpr": 0.0105,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8261,
+            "fpr": 0.0533,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9972,
+          "val_threshold": {
+            "recall": 0.4626,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.8269,
+            "fpr": 0.0092,
+            "val_fpr": 0.0095
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0239,
+            "val_fpr": 0.0244
+          }
+        }
+      },
+      "FTP-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.814,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.1976,
+            "val_fpr": 0.1982
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0095,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0548,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8402,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.1899,
+            "val_fpr": 0.1918
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0095,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0539,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8612,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9957,
+            "val_fpr": 0.9949
+          },
+          "fpr_1pct": {
+            "recall": 0.005,
+            "fpr": 0.0105,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.0494,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8628,
+          "val_threshold": {
+            "recall": 0.005,
+            "fpr": 0.0314,
+            "val_fpr": 0.0321
+          },
+          "fpr_1pct": {
+            "recall": 0.005,
+            "fpr": 0.0109,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.0497,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9532,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.8277,
+            "val_fpr": 0.8385
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0105,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.995,
+            "fpr": 0.0559,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9425,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.8732,
+            "val_fpr": 0.8862
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.9282,
+            "fpr": 0.054,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9986,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.999,
+            "fpr": 0.0078,
+            "val_fpr": 0.0086
+          },
+          "fpr_5pct": {
+            "recall": 0.9997,
+            "fpr": 0.0239,
+            "val_fpr": 0.0269
+          }
+        }
+      },
+      "SSH-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.856,
+          "val_threshold": {
+            "recall": 0.9905,
+            "fpr": 0.1883,
+            "val_fpr": 0.1889
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0097,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0557,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8207,
+          "val_threshold": {
+            "recall": 0.0233,
+            "fpr": 0.1625,
+            "val_fpr": 0.1641
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0094,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0538,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.943,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.649,
+            "val_fpr": 0.6539
+          },
+          "fpr_1pct": {
+            "recall": 0.0247,
+            "fpr": 0.0107,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.2519,
+            "fpr": 0.0494,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.944,
+          "val_threshold": {
+            "recall": 0.9993,
+            "fpr": 0.1609,
+            "val_fpr": 0.1675
+          },
+          "fpr_1pct": {
+            "recall": 0.0247,
+            "fpr": 0.0105,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.2519,
+            "fpr": 0.0498,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.2274,
+          "val_threshold": {
+            "recall": 0.0017,
+            "fpr": 0.0762,
+            "val_fpr": 0.0707
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0102,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0017,
+            "fpr": 0.0541,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.1631,
+          "val_threshold": {
+            "recall": 0.0017,
+            "fpr": 0.0626,
+            "val_fpr": 0.0573
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0106,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0014,
+            "fpr": 0.0537,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.7388,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0001,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0003,
+            "fpr": 0.0089,
+            "val_fpr": 0.0098
+          },
+          "fpr_5pct": {
+            "recall": 0.5154,
+            "fpr": 0.0379,
+            "val_fpr": 0.0383
+          }
+        }
+      },
+      "Brute force": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8486,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.01,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0549,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8319,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0094,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0538,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8949,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9999,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0157,
+            "fpr": 0.0107,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4267,
+            "fpr": 0.0491,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8961,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9999,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0157,
+            "fpr": 0.0104,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4267,
+            "fpr": 0.0494,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.6437,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0103,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.5707,
+            "fpr": 0.0544,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.6103,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0106,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.5689,
+            "fpr": 0.0537,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9549,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0019,
+            "fpr": 0.0082,
+            "val_fpr": 0.009
+          },
+          "fpr_5pct": {
+            "recall": 0.9599,
+            "fpr": 0.0351,
+            "val_fpr": 0.0382
+          }
+        }
+      },
+      "DoS": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9398,
+          "val_threshold": {
+            "recall": 0.9756,
+            "fpr": 0.2363,
+            "val_fpr": 0.237
+          },
+          "fpr_1pct": {
+            "recall": 0.0801,
+            "fpr": 0.0101,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.4751,
+            "fpr": 0.0531,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9447,
+          "val_threshold": {
+            "recall": 0.9586,
+            "fpr": 0.1886,
+            "val_fpr": 0.1911
+          },
+          "fpr_1pct": {
+            "recall": 0.1646,
+            "fpr": 0.0096,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.6602,
+            "fpr": 0.0537,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8889,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7396,
+            "val_fpr": 0.743
+          },
+          "fpr_1pct": {
+            "recall": 0.0051,
+            "fpr": 0.0105,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.0901,
+            "fpr": 0.0495,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8891,
+          "val_threshold": {
+            "recall": 0.7216,
+            "fpr": 0.1432,
+            "val_fpr": 0.1478
+          },
+          "fpr_1pct": {
+            "recall": 0.0052,
+            "fpr": 0.0104,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.09,
+            "fpr": 0.049,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9536,
+          "val_threshold": {
+            "recall": 0.9465,
+            "fpr": 0.1034,
+            "val_fpr": 0.1053
+          },
+          "fpr_1pct": {
+            "recall": 0.3318,
+            "fpr": 0.0093,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8859,
+            "fpr": 0.0532,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9504,
+          "val_threshold": {
+            "recall": 0.889,
+            "fpr": 0.063,
+            "val_fpr": 0.0603
+          },
+          "fpr_1pct": {
+            "recall": 0.3648,
+            "fpr": 0.0098,
+            "val_fpr": 0.01
+          },
+          "fpr_5pct": {
+            "recall": 0.8841,
+            "fpr": 0.0524,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5471,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0495,
+            "fpr": 0.0038,
+            "val_fpr": 0.0033
+          },
+          "fpr_5pct": {
+            "recall": 0.1034,
+            "fpr": 0.009,
+            "val_fpr": 0.0106
+          }
+        }
+      }
+    },
+    "3": {
+      "DoS GoldenEye": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8985,
+          "val_threshold": {
+            "recall": 0.9551,
+            "fpr": 0.2402,
+            "val_fpr": 0.2275
+          },
+          "fpr_1pct": {
+            "recall": 0.0896,
+            "fpr": 0.0098,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.2457,
+            "fpr": 0.0431,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9284,
+          "val_threshold": {
+            "recall": 0.9802,
+            "fpr": 0.2106,
+            "val_fpr": 0.1974
+          },
+          "fpr_1pct": {
+            "recall": 0.1586,
+            "fpr": 0.0103,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.328,
+            "fpr": 0.0443,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.899,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 0.9999
+          },
+          "fpr_1pct": {
+            "recall": 0.0485,
+            "fpr": 0.013,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.287,
+            "fpr": 0.0519,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.881,
+          "val_threshold": {
+            "recall": 0.7929,
+            "fpr": 0.1343,
+            "val_fpr": 0.1388
+          },
+          "fpr_1pct": {
+            "recall": 0.0012,
+            "fpr": 0.0133,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0046,
+            "fpr": 0.0519,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.6838,
+          "val_threshold": {
+            "recall": 0.6203,
+            "fpr": 0.1539,
+            "val_fpr": 0.1622
+          },
+          "fpr_1pct": {
+            "recall": 0.0517,
+            "fpr": 0.0078,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.2996,
+            "fpr": 0.0471,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.8064,
+          "val_threshold": {
+            "recall": 0.7876,
+            "fpr": 0.0827,
+            "val_fpr": 0.0806
+          },
+          "fpr_1pct": {
+            "recall": 0.0912,
+            "fpr": 0.0084,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.5442,
+            "fpr": 0.0414,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9992,
+          "val_threshold": {
+            "recall": 0.6345,
+            "fpr": 0.0,
+            "val_fpr": 0.0001
+          },
+          "fpr_1pct": {
+            "recall": 0.9863,
+            "fpr": 0.0048,
+            "val_fpr": 0.0088
+          },
+          "fpr_5pct": {
+            "recall": 0.9992,
+            "fpr": 0.0357,
+            "val_fpr": 0.0464
+          }
+        }
+      },
+      "DoS Hulk": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8894,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.2225,
+            "val_fpr": 0.2102
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0108,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0024,
+            "fpr": 0.043,
+            "val_fpr": 0.0497
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.935,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.2106,
+            "val_fpr": 0.1974
+          },
+          "fpr_1pct": {
+            "recall": 0.0005,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0325,
+            "fpr": 0.0443,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9043,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0158,
+            "val_fpr": 0.0115
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0129,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0958,
+            "fpr": 0.0523,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9219,
+          "val_threshold": {
+            "recall": 0.9848,
+            "fpr": 0.1316,
+            "val_fpr": 0.1351
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0125,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0057,
+            "fpr": 0.0515,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8655,
+          "val_threshold": {
+            "recall": 0.6925,
+            "fpr": 0.0977,
+            "val_fpr": 0.0968
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0091,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.1226,
+            "fpr": 0.0435,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9624,
+          "val_threshold": {
+            "recall": 0.9918,
+            "fpr": 0.0779,
+            "val_fpr": 0.074
+          },
+          "fpr_1pct": {
+            "recall": 0.0005,
+            "fpr": 0.0084,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7324,
+            "fpr": 0.0473,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9958,
+          "val_threshold": {
+            "recall": 0.0139,
+            "fpr": 0.0001,
+            "val_fpr": 0.0001
+          },
+          "fpr_1pct": {
+            "recall": 0.8355,
+            "fpr": 0.0072,
+            "val_fpr": 0.0091
+          },
+          "fpr_5pct": {
+            "recall": 0.9992,
+            "fpr": 0.0222,
+            "val_fpr": 0.0321
+          }
+        }
+      },
+      "DoS Slowhttptest": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9509,
+          "val_threshold": {
+            "recall": 0.9971,
+            "fpr": 0.2203,
+            "val_fpr": 0.2101
+          },
+          "fpr_1pct": {
+            "recall": 0.0282,
+            "fpr": 0.01,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7552,
+            "fpr": 0.0411,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9564,
+          "val_threshold": {
+            "recall": 0.9977,
+            "fpr": 0.2102,
+            "val_fpr": 0.197
+          },
+          "fpr_1pct": {
+            "recall": 0.1121,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.796,
+            "fpr": 0.0442,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.754,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.192,
+            "fpr": 0.0128,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.2161,
+            "fpr": 0.0511,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8462,
+          "val_threshold": {
+            "recall": 0.4644,
+            "fpr": 0.111,
+            "val_fpr": 0.1129
+          },
+          "fpr_1pct": {
+            "recall": 0.0172,
+            "fpr": 0.0129,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0333,
+            "fpr": 0.0511,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8265,
+          "val_threshold": {
+            "recall": 0.8351,
+            "fpr": 0.2161,
+            "val_fpr": 0.233
+          },
+          "fpr_1pct": {
+            "recall": 0.023,
+            "fpr": 0.0091,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7259,
+            "fpr": 0.0466,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.8388,
+          "val_threshold": {
+            "recall": 0.8339,
+            "fpr": 0.0948,
+            "val_fpr": 0.0925
+          },
+          "fpr_1pct": {
+            "recall": 0.0425,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8328,
+            "fpr": 0.0467,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 1.0,
+          "val_threshold": {
+            "recall": 0.9655,
+            "fpr": 0.0001,
+            "val_fpr": 0.0001
+          },
+          "fpr_1pct": {
+            "recall": 0.9989,
+            "fpr": 0.0051,
+            "val_fpr": 0.0081
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.022,
+            "val_fpr": 0.0284
+          }
+        }
+      },
+      "DoS Slowloris": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9508,
+          "val_threshold": {
+            "recall": 0.9521,
+            "fpr": 0.2321,
+            "val_fpr": 0.2228
+          },
+          "fpr_1pct": {
+            "recall": 0.3193,
+            "fpr": 0.0107,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7854,
+            "fpr": 0.0414,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9456,
+          "val_threshold": {
+            "recall": 0.8523,
+            "fpr": 0.2101,
+            "val_fpr": 0.1969
+          },
+          "fpr_1pct": {
+            "recall": 0.5349,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7911,
+            "fpr": 0.0443,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9018,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0381,
+            "fpr": 0.0129,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.398,
+            "fpr": 0.0521,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9257,
+          "val_threshold": {
+            "recall": 0.9702,
+            "fpr": 0.1612,
+            "val_fpr": 0.1606
+          },
+          "fpr_1pct": {
+            "recall": 0.0176,
+            "fpr": 0.0129,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3757,
+            "fpr": 0.0525,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9304,
+          "val_threshold": {
+            "recall": 0.9342,
+            "fpr": 0.1329,
+            "val_fpr": 0.1382
+          },
+          "fpr_1pct": {
+            "recall": 0.0031,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.6535,
+            "fpr": 0.0467,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.935,
+          "val_threshold": {
+            "recall": 0.8717,
+            "fpr": 0.0903,
+            "val_fpr": 0.0889
+          },
+          "fpr_1pct": {
+            "recall": 0.0031,
+            "fpr": 0.0084,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.5838,
+            "fpr": 0.0463,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9992,
+          "val_threshold": {
+            "recall": 0.4724,
+            "fpr": 0.0001,
+            "val_fpr": 0.0005
+          },
+          "fpr_1pct": {
+            "recall": 0.9966,
+            "fpr": 0.0051,
+            "val_fpr": 0.0093
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0402,
+            "val_fpr": 0.0492
+          }
+        }
+      },
+      "FTP-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8448,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.2238,
+            "val_fpr": 0.2106
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0411,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.7919,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0993,
+            "val_fpr": 0.0944
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0102,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0443,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8105,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.3132,
+            "val_fpr": 0.3034
+          },
+          "fpr_1pct": {
+            "recall": 0.0033,
+            "fpr": 0.0136,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.051,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8119,
+          "val_threshold": {
+            "recall": 0.0065,
+            "fpr": 0.1313,
+            "val_fpr": 0.1377
+          },
+          "fpr_1pct": {
+            "recall": 0.0033,
+            "fpr": 0.0133,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.0511,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9429,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.1965,
+            "val_fpr": 0.212
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0081,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0015,
+            "fpr": 0.0469,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9388,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.099,
+            "val_fpr": 0.0975
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0086,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0015,
+            "fpr": 0.0463,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9927,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0001,
+            "val_fpr": 0.0001
+          },
+          "fpr_1pct": {
+            "recall": 0.1085,
+            "fpr": 0.0049,
+            "val_fpr": 0.0092
+          },
+          "fpr_5pct": {
+            "recall": 0.999,
+            "fpr": 0.0222,
+            "val_fpr": 0.0281
+          }
+        }
+      },
+      "SSH-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8484,
+          "val_threshold": {
+            "recall": 0.9922,
+            "fpr": 0.2219,
+            "val_fpr": 0.2096
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0406,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8141,
+          "val_threshold": {
+            "recall": 0.9895,
+            "fpr": 0.2106,
+            "val_fpr": 0.1974
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0103,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0442,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9029,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 1.0,
+            "val_fpr": 1.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0216,
+            "fpr": 0.0126,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.022,
+            "fpr": 0.0513,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9044,
+          "val_threshold": {
+            "recall": 0.9976,
+            "fpr": 0.1317,
+            "val_fpr": 0.1367
+          },
+          "fpr_1pct": {
+            "recall": 0.0216,
+            "fpr": 0.0131,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.022,
+            "fpr": 0.0513,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.1638,
+          "val_threshold": {
+            "recall": 0.003,
+            "fpr": 0.1565,
+            "val_fpr": 0.1695
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0091,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0017,
+            "fpr": 0.0465,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.1566,
+          "val_threshold": {
+            "recall": 0.0027,
+            "fpr": 0.0954,
+            "val_fpr": 0.0925
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0014,
+            "fpr": 0.0459,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9805,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0001,
+            "val_fpr": 0.0013
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.006,
+            "val_fpr": 0.0094
+          },
+          "fpr_5pct": {
+            "recall": 0.9939,
+            "fpr": 0.0372,
+            "val_fpr": 0.0456
+          }
+        }
+      },
+      "Brute force": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8432,
+          "val_threshold": {
+            "recall": 0.9938,
+            "fpr": 0.2293,
+            "val_fpr": 0.2173
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.01,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0417,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8014,
+          "val_threshold": {
+            "recall": 0.0003,
+            "fpr": 0.0994,
+            "val_fpr": 0.0943
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0103,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0444,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8921,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.3132,
+            "val_fpr": 0.3032
+          },
+          "fpr_1pct": {
+            "recall": 0.4242,
+            "fpr": 0.0126,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.4249,
+            "fpr": 0.0508,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8929,
+          "val_threshold": {
+            "recall": 0.4298,
+            "fpr": 0.1304,
+            "val_fpr": 0.1364
+          },
+          "fpr_1pct": {
+            "recall": 0.4242,
+            "fpr": 0.0123,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.4249,
+            "fpr": 0.0506,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.6257,
+          "val_threshold": {
+            "recall": 0.5712,
+            "fpr": 0.1507,
+            "val_fpr": 0.163
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0092,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0014,
+            "fpr": 0.0465,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.6057,
+          "val_threshold": {
+            "recall": 0.5712,
+            "fpr": 0.0996,
+            "val_fpr": 0.0977
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0014,
+            "fpr": 0.046,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5687,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0001,
+            "val_fpr": 0.0013
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0065,
+            "val_fpr": 0.0096
+          },
+          "fpr_5pct": {
+            "recall": 0.1758,
+            "fpr": 0.0366,
+            "val_fpr": 0.0428
+          }
+        }
+      },
+      "DoS": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9345,
+          "val_threshold": {
+            "recall": 0.9892,
+            "fpr": 0.2746,
+            "val_fpr": 0.2673
+          },
+          "fpr_1pct": {
+            "recall": 0.1562,
+            "fpr": 0.0105,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3411,
+            "fpr": 0.0434,
+            "val_fpr": 0.05
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9363,
+          "val_threshold": {
+            "recall": 0.9657,
+            "fpr": 0.2101,
+            "val_fpr": 0.1969
+          },
+          "fpr_1pct": {
+            "recall": 0.1618,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3402,
+            "fpr": 0.0443,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8909,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.7491,
+            "val_fpr": 0.739
+          },
+          "fpr_1pct": {
+            "recall": 0.0061,
+            "fpr": 0.013,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.081,
+            "fpr": 0.0551,
+            "val_fpr": 0.05
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8909,
+          "val_threshold": {
+            "recall": 0.8459,
+            "fpr": 0.142,
+            "val_fpr": 0.1433
+          },
+          "fpr_1pct": {
+            "recall": 0.0061,
+            "fpr": 0.0129,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.081,
+            "fpr": 0.0549,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9461,
+          "val_threshold": {
+            "recall": 0.9437,
+            "fpr": 0.1176,
+            "val_fpr": 0.1145
+          },
+          "fpr_1pct": {
+            "recall": 0.2934,
+            "fpr": 0.0081,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8305,
+            "fpr": 0.0429,
+            "val_fpr": 0.05
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9464,
+          "val_threshold": {
+            "recall": 0.8952,
+            "fpr": 0.0843,
+            "val_fpr": 0.0807
+          },
+          "fpr_1pct": {
+            "recall": 0.294,
+            "fpr": 0.0093,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8282,
+            "fpr": 0.0428,
+            "val_fpr": 0.05
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.591,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.1827,
+            "fpr": 0.0031,
+            "val_fpr": 0.0048
+          },
+          "fpr_5pct": {
+            "recall": 0.1889,
+            "fpr": 0.0078,
+            "val_fpr": 0.0122
+          }
+        }
+      }
+    },
+    "4": {
+      "DoS GoldenEye": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9217,
+          "val_threshold": {
+            "recall": 0.9859,
+            "fpr": 0.2289,
+            "val_fpr": 0.2424
+          },
+          "fpr_1pct": {
+            "recall": 0.0274,
+            "fpr": 0.0094,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3435,
+            "fpr": 0.0593,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9146,
+          "val_threshold": {
+            "recall": 0.9568,
+            "fpr": 0.1706,
+            "val_fpr": 0.1724
+          },
+          "fpr_1pct": {
+            "recall": 0.0526,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3135,
+            "fpr": 0.0595,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.787,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9949,
+            "val_fpr": 0.9951
+          },
+          "fpr_1pct": {
+            "recall": 0.0123,
+            "fpr": 0.0092,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.111,
+            "fpr": 0.0505,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.878,
+          "val_threshold": {
+            "recall": 0.7349,
+            "fpr": 0.1316,
+            "val_fpr": 0.1357
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0695,
+            "fpr": 0.0504,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9105,
+          "val_threshold": {
+            "recall": 0.7934,
+            "fpr": 0.0717,
+            "val_fpr": 0.0696
+          },
+          "fpr_1pct": {
+            "recall": 0.2244,
+            "fpr": 0.0102,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7313,
+            "fpr": 0.054,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9185,
+          "val_threshold": {
+            "recall": 0.7719,
+            "fpr": 0.057,
+            "val_fpr": 0.0504
+          },
+          "fpr_1pct": {
+            "recall": 0.2689,
+            "fpr": 0.011,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7711,
+            "fpr": 0.0565,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9988,
+          "val_threshold": {
+            "recall": 0.7276,
+            "fpr": 0.0002,
+            "val_fpr": 0.0001
+          },
+          "fpr_1pct": {
+            "recall": 0.9853,
+            "fpr": 0.0123,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.9988,
+            "fpr": 0.0432,
+            "val_fpr": 0.0448
+          }
+        }
+      },
+      "DoS Hulk": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8827,
+          "val_threshold": {
+            "recall": 0.9989,
+            "fpr": 0.1893,
+            "val_fpr": 0.1988
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0107,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0039,
+            "fpr": 0.0611,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9139,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.1708,
+            "val_fpr": 0.1726
+          },
+          "fpr_1pct": {
+            "recall": 0.0003,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0224,
+            "fpr": 0.0594,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9114,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9957,
+            "val_fpr": 0.9936
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.1298,
+            "fpr": 0.0513,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9231,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0047,
+            "val_fpr": 0.0054
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0079,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0154,
+            "fpr": 0.0517,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8785,
+          "val_threshold": {
+            "recall": 0.9999,
+            "fpr": 0.8385,
+            "val_fpr": 0.8165
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0105,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.2397,
+            "fpr": 0.055,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9509,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.8655,
+            "val_fpr": 0.8571
+          },
+          "fpr_1pct": {
+            "recall": 0.0003,
+            "fpr": 0.0108,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7775,
+            "fpr": 0.0578,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.997,
+          "val_threshold": {
+            "recall": 0.0094,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.9325,
+            "fpr": 0.0079,
+            "val_fpr": 0.0093
+          },
+          "fpr_5pct": {
+            "recall": 0.9959,
+            "fpr": 0.0304,
+            "val_fpr": 0.0321
+          }
+        }
+      },
+      "DoS Slowhttptest": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9465,
+          "val_threshold": {
+            "recall": 0.9971,
+            "fpr": 0.223,
+            "val_fpr": 0.2292
+          },
+          "fpr_1pct": {
+            "recall": 0.004,
+            "fpr": 0.0105,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8,
+            "fpr": 0.0613,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9567,
+          "val_threshold": {
+            "recall": 0.9971,
+            "fpr": 0.1708,
+            "val_fpr": 0.1726
+          },
+          "fpr_1pct": {
+            "recall": 0.1213,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8,
+            "fpr": 0.0599,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.7879,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9945,
+            "val_fpr": 0.9924
+          },
+          "fpr_1pct": {
+            "recall": 0.1966,
+            "fpr": 0.0083,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.2161,
+            "fpr": 0.0517,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8834,
+          "val_threshold": {
+            "recall": 0.4506,
+            "fpr": 0.1087,
+            "val_fpr": 0.1121
+          },
+          "fpr_1pct": {
+            "recall": 0.0207,
+            "fpr": 0.008,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0345,
+            "fpr": 0.0518,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.8247,
+          "val_threshold": {
+            "recall": 0.8333,
+            "fpr": 0.1597,
+            "val_fpr": 0.1532
+          },
+          "fpr_1pct": {
+            "recall": 0.023,
+            "fpr": 0.01,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8201,
+            "fpr": 0.0557,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.8387,
+          "val_threshold": {
+            "recall": 0.8339,
+            "fpr": 0.0829,
+            "val_fpr": 0.077
+          },
+          "fpr_1pct": {
+            "recall": 0.023,
+            "fpr": 0.0109,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8328,
+            "fpr": 0.058,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 1.0,
+          "val_threshold": {
+            "recall": 0.9644,
+            "fpr": 0.0001,
+            "val_fpr": 0.0001
+          },
+          "fpr_1pct": {
+            "recall": 1.0,
+            "fpr": 0.009,
+            "val_fpr": 0.0086
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0302,
+            "val_fpr": 0.0301
+          }
+        }
+      },
+      "DoS Slowloris": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9501,
+          "val_threshold": {
+            "recall": 0.9575,
+            "fpr": 0.2137,
+            "val_fpr": 0.2257
+          },
+          "fpr_1pct": {
+            "recall": 0.2607,
+            "fpr": 0.0114,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.7857,
+            "fpr": 0.0617,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9469,
+          "val_threshold": {
+            "recall": 0.8536,
+            "fpr": 0.1712,
+            "val_fpr": 0.1734
+          },
+          "fpr_1pct": {
+            "recall": 0.4778,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.795,
+            "fpr": 0.0591,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9274,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.981,
+            "val_fpr": 0.9777
+          },
+          "fpr_1pct": {
+            "recall": 0.0269,
+            "fpr": 0.0091,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3807,
+            "fpr": 0.0512,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9149,
+          "val_threshold": {
+            "recall": 0.4887,
+            "fpr": 0.1049,
+            "val_fpr": 0.1087
+          },
+          "fpr_1pct": {
+            "recall": 0.0158,
+            "fpr": 0.0087,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.361,
+            "fpr": 0.0507,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9273,
+          "val_threshold": {
+            "recall": 0.9321,
+            "fpr": 0.1671,
+            "val_fpr": 0.1623
+          },
+          "fpr_1pct": {
+            "recall": 0.0047,
+            "fpr": 0.0101,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8015,
+            "fpr": 0.0575,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.933,
+          "val_threshold": {
+            "recall": 0.8759,
+            "fpr": 0.0841,
+            "val_fpr": 0.0775
+          },
+          "fpr_1pct": {
+            "recall": 0.0034,
+            "fpr": 0.0111,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8388,
+            "fpr": 0.0594,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9977,
+          "val_threshold": {
+            "recall": 0.5413,
+            "fpr": 0.0001,
+            "val_fpr": 0.0002
+          },
+          "fpr_1pct": {
+            "recall": 0.999,
+            "fpr": 0.0092,
+            "val_fpr": 0.0089
+          },
+          "fpr_5pct": {
+            "recall": 1.0,
+            "fpr": 0.0283,
+            "val_fpr": 0.0301
+          }
+        }
+      },
+      "FTP-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8161,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.1882,
+            "val_fpr": 0.1957
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0106,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0601,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8127,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.1708,
+            "val_fpr": 0.1726
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0,
+            "fpr": 0.0594,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.7257,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9944,
+            "val_fpr": 0.9923
+          },
+          "fpr_1pct": {
+            "recall": 0.002,
+            "fpr": 0.0084,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.0506,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.7266,
+          "val_threshold": {
+            "recall": 0.005,
+            "fpr": 0.1091,
+            "val_fpr": 0.1124
+          },
+          "fpr_1pct": {
+            "recall": 0.0025,
+            "fpr": 0.0081,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.005,
+            "fpr": 0.051,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9438,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.1777,
+            "val_fpr": 0.1697
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.01,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.995,
+            "fpr": 0.0549,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.9306,
+          "val_threshold": {
+            "recall": 0.995,
+            "fpr": 0.084,
+            "val_fpr": 0.0779
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0109,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0015,
+            "fpr": 0.0587,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9993,
+          "val_threshold": {
+            "recall": 0.001,
+            "fpr": 0.0001,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.9997,
+            "fpr": 0.0094,
+            "val_fpr": 0.0088
+          },
+          "fpr_5pct": {
+            "recall": 0.9997,
+            "fpr": 0.0295,
+            "val_fpr": 0.0314
+          }
+        }
+      },
+      "SSH-Patator": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8394,
+          "val_threshold": {
+            "recall": 0.0125,
+            "fpr": 0.1403,
+            "val_fpr": 0.1342
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0111,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0614,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.831,
+          "val_threshold": {
+            "recall": 0.0017,
+            "fpr": 0.1167,
+            "val_fpr": 0.1049
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0007,
+            "fpr": 0.0594,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.9942,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9832,
+            "val_fpr": 0.981
+          },
+          "fpr_1pct": {
+            "recall": 0.9902,
+            "fpr": 0.0084,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.9912,
+            "fpr": 0.0512,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.9947,
+          "val_threshold": {
+            "recall": 0.997,
+            "fpr": 0.1086,
+            "val_fpr": 0.1117
+          },
+          "fpr_1pct": {
+            "recall": 0.9902,
+            "fpr": 0.0078,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.9909,
+            "fpr": 0.052,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.2101,
+          "val_threshold": {
+            "recall": 0.0027,
+            "fpr": 0.1597,
+            "val_fpr": 0.156
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0108,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0017,
+            "fpr": 0.0559,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.1648,
+          "val_threshold": {
+            "recall": 0.0024,
+            "fpr": 0.0845,
+            "val_fpr": 0.0782
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0108,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0017,
+            "fpr": 0.0582,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.9575,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.1006,
+            "fpr": 0.0098,
+            "val_fpr": 0.009
+          },
+          "fpr_5pct": {
+            "recall": 0.9683,
+            "fpr": 0.0477,
+            "val_fpr": 0.0471
+          }
+        }
+      },
+      "Brute force": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.8476,
+          "val_threshold": {
+            "recall": 0.4235,
+            "fpr": 0.1526,
+            "val_fpr": 0.151
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0099,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0598,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.8205,
+          "val_threshold": {
+            "recall": 0.0007,
+            "fpr": 0.1167,
+            "val_fpr": 0.1049
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0104,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0003,
+            "fpr": 0.0594,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8476,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9798,
+            "val_fpr": 0.9774
+          },
+          "fpr_1pct": {
+            "recall": 0.4232,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.4254,
+            "fpr": 0.0505,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8483,
+          "val_threshold": {
+            "recall": 0.4287,
+            "fpr": 0.1089,
+            "val_fpr": 0.1116
+          },
+          "fpr_1pct": {
+            "recall": 0.4236,
+            "fpr": 0.0079,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.4252,
+            "fpr": 0.0507,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.6345,
+          "val_threshold": {
+            "recall": 0.5713,
+            "fpr": 0.1623,
+            "val_fpr": 0.1536
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0102,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.5707,
+            "fpr": 0.0551,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.6044,
+          "val_threshold": {
+            "recall": 0.571,
+            "fpr": 0.0887,
+            "val_fpr": 0.0798
+          },
+          "fpr_1pct": {
+            "recall": 0.0,
+            "fpr": 0.0109,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.0016,
+            "fpr": 0.0587,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5504,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.002,
+            "fpr": 0.0102,
+            "val_fpr": 0.0095
+          },
+          "fpr_5pct": {
+            "recall": 0.1464,
+            "fpr": 0.0425,
+            "val_fpr": 0.0405
+          }
+        }
+      },
+      "DoS": {
+        "Isolation Forest (mixed)": {
+          "roc_auc": 0.9213,
+          "val_threshold": {
+            "recall": 0.9868,
+            "fpr": 0.2502,
+            "val_fpr": 0.2621
+          },
+          "fpr_1pct": {
+            "recall": 0.1228,
+            "fpr": 0.0118,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3149,
+            "fpr": 0.0603,
+            "val_fpr": 0.0499
+          }
+        },
+        "Isolation Forest (normal-only)": {
+          "roc_auc": 0.9252,
+          "val_threshold": {
+            "recall": 0.9576,
+            "fpr": 0.1711,
+            "val_fpr": 0.173
+          },
+          "fpr_1pct": {
+            "recall": 0.1186,
+            "fpr": 0.0102,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.3369,
+            "fpr": 0.059,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (mixed)": {
+          "roc_auc": 0.8892,
+          "val_threshold": {
+            "recall": 1.0,
+            "fpr": 0.9962,
+            "val_fpr": 0.9962
+          },
+          "fpr_1pct": {
+            "recall": 0.0042,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.1397,
+            "fpr": 0.0487,
+            "val_fpr": 0.0499
+          }
+        },
+        "Local Outlier Factor (normal-only)": {
+          "roc_auc": 0.8892,
+          "val_threshold": {
+            "recall": 0.0012,
+            "fpr": 0.0051,
+            "val_fpr": 0.0054
+          },
+          "fpr_1pct": {
+            "recall": 0.0042,
+            "fpr": 0.0085,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.1397,
+            "fpr": 0.0487,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (mixed)": {
+          "roc_auc": 0.9472,
+          "val_threshold": {
+            "recall": 0.9833,
+            "fpr": 0.8699,
+            "val_fpr": 0.8634
+          },
+          "fpr_1pct": {
+            "recall": 0.269,
+            "fpr": 0.0099,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8802,
+            "fpr": 0.0577,
+            "val_fpr": 0.0499
+          }
+        },
+        "One-Class SVM (normal-only)": {
+          "roc_auc": 0.942,
+          "val_threshold": {
+            "recall": 0.9826,
+            "fpr": 0.8657,
+            "val_fpr": 0.8556
+          },
+          "fpr_1pct": {
+            "recall": 0.2774,
+            "fpr": 0.0101,
+            "val_fpr": 0.0099
+          },
+          "fpr_5pct": {
+            "recall": 0.8696,
+            "fpr": 0.0583,
+            "val_fpr": 0.0499
+          }
+        },
+        "Random Forest": {
+          "roc_auc": 0.5279,
+          "val_threshold": {
+            "recall": 0.0,
+            "fpr": 0.0,
+            "val_fpr": 0.0
+          },
+          "fpr_1pct": {
+            "recall": 0.0351,
+            "fpr": 0.006,
+            "val_fpr": 0.0072
+          },
+          "fpr_5pct": {
+            "recall": 0.0703,
+            "fpr": 0.0146,
+            "val_fpr": 0.0148
+          }
+        }
+      }
+    }
+  }
+}

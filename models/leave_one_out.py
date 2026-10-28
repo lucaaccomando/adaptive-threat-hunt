@@ -35,11 +35,11 @@ SETTINGS = ["val_threshold", "fpr_1pct", "fpr_5pct"]
 SETTING_LABELS = {"val_threshold": "max F1", "fpr_1pct": "1% fpr", "fpr_5pct": "5% fpr"}
 
 
-def holdout_sets(labels) -> tuple[dict[str, list[str]], dict[str, int]]:
+def holdout_sets(labels, categories=ATTACK_CATEGORIES) -> tuple[dict[str, list[str]], dict[str, int]]:
     counts = pd.Series(np.asarray(labels)).value_counts()
     attacks = counts.drop("normal", errors="ignore")
     sets = {t: [t] for t, n in sorted(attacks.items()) if n >= MIN_ROWS}
-    for cat, names in ATTACK_CATEGORIES.items():
+    for cat, names in categories.items():
         present = sorted(set(names) & set(attacks.index))
         if sum(attacks[t] for t in present) >= MIN_ROWS:
             sets[cat] = present

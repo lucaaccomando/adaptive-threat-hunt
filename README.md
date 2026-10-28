@@ -199,7 +199,7 @@ git clone https://github.com/lucaaccomando/adaptive-threat-hunt.git
 cd adaptive-threat-hunt
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python -m pytest -q
 ```
 
@@ -210,7 +210,7 @@ git clone https://github.com/lucaaccomando/adaptive-threat-hunt.git
 cd adaptive-threat-hunt
 python -m venv .venv
 .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python -m pytest -q
 ```
 
@@ -227,6 +227,9 @@ python models/pitfalls.py                    # evaluation pitfalls, read from th
 These write `results/benchmark.json`, `results/benchmark_normal_only.json`, `results/detection_map.json`,
 `results/hybrid.json` and `results/pitfalls.json`, with figures for the benchmark and the map. The leave-one-attack-type-out study is
 `python models/leave_one_out.py`. It takes about 1.5 hours and writes `results/leave_one_out.json`.
+
+`bash scripts/run_all.sh` runs every step above in order, plus the other benchmark variants (one-hot, log1p, tuned);
+`--with-cic` adds the CIC-IDS2017 study.
 
 The commands above have not been tested from a fresh clone yet.
 

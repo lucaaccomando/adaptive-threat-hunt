@@ -31,7 +31,7 @@ from evaluate import (
     engineer_features,
     load_nslkdd,
 )
-from leave_one_out import holdout_sets
+from leave_one_out import ATTACK_CATEGORIES, holdout_sets
 
 # detector -> (name in leave_one_out.json, benchmark file, name in that benchmark file)
 DETECTORS = {
@@ -58,13 +58,13 @@ def knn_distance(query, ref, kmax):
     return nn.kneighbors(query, return_distance=True)[0]
 
 
-def positions(df_tr, df_te, X_tr, X_te, ks):
+def positions(df_tr, df_te, X_tr, X_te, ks, categories=ATTACK_CATEGORIES):
     labels_tr, labels_te = df_tr["label"].values, df_te["label"].values
     attack_tr = labels_tr != "normal"
     normal_ref = X_tr[~attack_tr]
 
     jobs = []
-    sets, _ = holdout_sets(labels_tr)
+    sets, _ = holdout_sets(labels_tr, categories)
     for t, names in sets.items():
         if names == [t]:
             jobs.append((t, "held_out", X_tr[labels_tr == t], X_tr[attack_tr & (labels_tr != t)]))
@@ -100,7 +100,7 @@ def exact_duplicates(df_tr, df_te):
     }
 
 
-def load_recall(results_dir: Path, loo: dict | None, groups: dict[str, str]) -> dict:
+def load_recall(results_dir: Path, loo: dict | None, groups: dict[str, str], prefix: str = "") -> dict:
     recall = {t: {} for t in groups}
     if loo is not None:
         for t, group in groups.items():
@@ -111,7 +111,7 @@ def load_recall(results_dir: Path, loo: dict | None, groups: dict[str, str]) -> 
                 if row:
                     recall[t][det] = row[OPERATING_POINT]["recall"]["mean"]
     for det, (_, fname, bname) in DETECTORS.items():
-        path = results_dir / fname
+        path = results_dir / (prefix + fname)
         if not path.exists():
             continue
         summary = json.loads(path.read_text())["summary"].get(bname)
@@ -198,7 +198,8 @@ def rank_stability(points: dict, primary: str) -> dict:
     return out
 
 
-def plot_map(points: dict, out_path: Path) -> None:
+def plot_map(points: dict, out_path: Path,
+             names=("KDDTrain+ type (held out)", "KDDTest+ unseen type")) -> None:
     panels = [
         ("rf", "Random Forest"),
         ("if_normal", "Isolation Forest (normal-only)"),
@@ -225,8 +226,8 @@ def plot_map(points: dict, out_path: Path) -> None:
         ax.set_xlabel("x: distance from normal flows (log)")
         ax.grid(True, alpha=0.3)
     axes[0].set_ylabel("y: distance from the other attack types")
-    axes[0].scatter([], [], marker="o", color="grey", label="KDDTrain+ type (held out)")
-    axes[0].scatter([], [], marker="^", color="grey", label="KDDTest+ unseen type")
+    axes[0].scatter([], [], marker="o", color="grey", label=names[0])
+    axes[0].scatter([], [], marker="^", color="grey", label=names[1])
     axes[0].legend(loc="upper left", fontsize=8)
     if sc is not None:
         fig.colorbar(sc, ax=axes, label="recall at 5% false alarms (hollow: no recall)")

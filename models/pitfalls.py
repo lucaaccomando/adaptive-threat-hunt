@@ -16,6 +16,7 @@ FILES = {
     "normal_only": "benchmark_normal_only.json",
     "onehot": "benchmark_onehot.json",
 }
+CIC_FILE = "cicids2017_benchmark.json"
 FPR_TARGET = 0.05
 
 
@@ -35,7 +36,7 @@ def flag_all_f1(prevalence: float) -> float:
     return 2 * prevalence / (1 + prevalence)
 
 
-def rows(runs: dict, prevalence: float) -> list[dict]:
+def rows(runs: dict, prevalence: float, cic: dict | None = None) -> list[dict]:
     d, n, o = runs["default"], runs["normal_only"], runs["onehot"]
     out = []
 
@@ -71,6 +72,13 @@ def rows(runs: dict, prevalence: float) -> list[dict]:
             mean(o, m, "val_threshold", "f1"), mean(d, m, "val_threshold", "f1"), FILES["onehot"])
     add("a flag-all detector reported as a result", "Local Outlier Factor", "F1 at max F1",
         mean(d, "Local Outlier Factor", "val_threshold", "f1"), flag_all_f1(prevalence), FILES["default"])
+    if cic:
+        for m in MODELS:
+            add("conclusion from NSL-KDD alone: recall on new attack types at the 5% target", m, "recall",
+                mean(d, m, "fpr_5pct", "recall_by_group", "unseen"), mean(cic, m, "fpr_5pct", "recall"), CIC_FILE)
+        for m in MODELS:
+            add("conclusion from NSL-KDD alone: test FPR at the 5% target", m, "test FPR",
+                mean(d, m, "fpr_5pct", "fpr"), mean(cic, m, "fpr_5pct", "fpr"), CIC_FILE)
     return out
 
 
@@ -83,13 +91,14 @@ def main(argv: list[str] | None = None) -> None:
     results = Path(args.results)
     runs = {k: load(results, f) for k, f in FILES.items()}
     prevalence = runs["default"]["attack_prevalence"]["test"]
-    table = rows(runs, prevalence)
+    cic = load(results, CIC_FILE) if (results / CIC_FILE).exists() else None
+    table = rows(runs, prevalence, cic)
 
     out = {
         "test_attack_prevalence": prevalence,
         "source_files": FILES,
         "rows": table,
-        "not_yet": ["one dataset vs two (P0-10, needs a second dataset)"],
+        "not_yet": [] if cic else [f"one dataset vs two: run models/cicids2017.py benchmark to get {CIC_FILE}"],
     }
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
