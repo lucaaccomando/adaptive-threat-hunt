@@ -1,7 +1,7 @@
 # Adaptive Threat Hunt
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
-![Dataset](https://img.shields.io/badge/Dataset-NSL--KDD-green)
+![Dataset](https://img.shields.io/badge/Datasets-NSL--KDD%20and%20CIC--IDS2017-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 A research project on network intrusion detection under novelty, supervised by Dr. Pamela Thompson.
@@ -33,8 +33,9 @@ Three hypotheses, to be tested rather than assumed:
 - Done: a forest-plus-anomaly-detector evaluation at a fixed false-alarm budget (`models/hybrid.py`).
   It measured no gain on the test set.
 - Done: a table of evaluation pitfalls (`models/pitfalls.py`).
-- Not done: a second dataset, and a label-free threshold that targets a false-alarm rate (needs a
-  benign-only capture).
+- Done: the same study on a second dataset, CIC-IDS2017 with corrected labels
+  (`models/cicids2017.py`), where every attack type in the test set is new.
+- Not done: a label-free threshold that targets a false-alarm rate (needs a benign-only capture).
 
 The full details, with every table and its source file, are in [`RESULTS.md`](RESULTS.md).
 
@@ -172,6 +173,41 @@ detector adds. Per type, normal-only Isolation Forest adds nothing above 0.01 re
 adds sendmail (+0.17) and loses recall on four other types. The hybrid is an evaluation of a combination,
 not a new detector, and it shows no gain on this test set.
 
+### Second dataset (CIC-IDS2017)
+
+The improved release of CIC-IDS2017 (Engelen, Rimmer and Joosen; labels corrected). Models train and validate
+on Monday to Wednesday and test on Thursday and Friday, where every attack type is new (Portscan, DDoS,
+Botnet, web attacks and infiltration; 30,876 attack flows per seed). Same models, thresholds and seeds as
+above; the unsupervised models below train on normal flows only. I run two feature spaces, the raw features
+and sign(x) * log1p(|x|), because validation and test disagree about which is better.
+
+Recall at the 5% false-alarm target over all test attacks, 5 seeds:
+
+| Detector | Features | Test false-alarm rate | Recall |
+|---|---|---|---|
+| Random Forest | either | 0.045 | 0.987 |
+| Isolation Forest | raw | 0.044 | 0.043 |
+| Isolation Forest | slog1p | 0.050 | 0.648 |
+| LOF | raw | 0.056 | 0.433 |
+| LOF | slog1p | 0.062 | 0.974 |
+| One-Class SVM | raw | 0.045 | 0.431 |
+| One-Class SVM | slog1p | 0.049 | 0.974 |
+
+- The forest holds its false-alarm target here (4.5%), unlike on KDDTest+ (12.6%). It catches every new type
+  except Botnet (0.54).
+- The anomaly detectors depend on the feature transform. Raw Isolation Forest catches 4% of the new attacks
+  and 65% with the log transform (slog1p). With it, LOF and One-Class SVM match the forest on the three large types.
+- Botnet and SQL injection, the two types closest to normal traffic on the map, are missed by every
+  unsupervised detector (SQL injection has 13 test flows, so this is thin).
+- Position on the map again goes with anomaly-detector recall (Spearman 0.89 for normal-only Isolation Forest
+  on the raw features) and does not predict the forest's recall from the distance to other attack types. The
+  ranking of the types on the map changes between the two feature spaces (Spearman 0.51).
+- Conclusions from NSL-KDD alone moved: Isolation Forest trained on all flows recalled 55% of the unseen
+  types at the 5% target there and 1% of the new types here. `results/pitfalls.json` has the rows.
+
+All tables, the leave-one-out study on Monday to Wednesday and the map statistics are in `RESULTS.md`
+(section 8).
+
 ## Limitations
 
 - NSL-KDD is derived from DARPA 1998 traffic simulation. It is dated, and its attacks are simulated. These
@@ -188,7 +224,8 @@ not a new detector, and it shows no gain on this test set.
   labelled traffic.
 - The map pools two operating points, so its pooled correlations mix a 5% matched false-alarm rate with
   drifted ones. With 13 to 30 types, the intervals are wide.
-- One dataset. A second dataset with genuinely new attacks is planned.
+- Two datasets, one lab capture each. CIC-IDS2017 is from 2017, the test days also differ from the training
+  days in time, and the web attack and infiltration types have 13 to 104 test flows.
 
 ## Setup
 
@@ -226,7 +263,10 @@ python models/pitfalls.py                    # evaluation pitfalls, read from th
 
 These write `results/benchmark.json`, `results/benchmark_normal_only.json`, `results/detection_map.json`,
 `results/hybrid.json` and `results/pitfalls.json`, with figures for the benchmark and the map. The leave-one-attack-type-out study is
-`python models/leave_one_out.py`. It takes about 1.5 hours and writes `results/leave_one_out.json`.
+`python models/leave_one_out.py`. It takes about 1.5 hours and writes `results/leave_one_out.json`. The
+CIC-IDS2017 study is `python models/cicids2017.py benchmark`, `... leave-one-out` and `... map`, each with an
+optional `--transform slog1p`. The first call downloads 344 MB into `data/cicids2017/` (sha256 checked, not
+tracked in git).
 
 `bash scripts/run_all.sh` runs every step above in order, plus the other benchmark variants (one-hot, log1p, tuned);
 `--with-cic` adds the CIC-IDS2017 study.

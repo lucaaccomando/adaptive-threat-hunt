@@ -1,8 +1,9 @@
 # Results
 
 These results come from the scripts in `models/`. Each number is read from a JSON file in `results/`, and
-each section names its source. Dataset: NSL-KDD. KDDTrain+ is used for training and validation, KDDTest+
-for testing. The README has the short version; this file has the details.
+each section names its source. Sections 1 to 7 use NSL-KDD: KDDTrain+ for training and validation, KDDTest+
+for testing. Section 8 repeats the study on CIC-IDS2017. The README has the short version; this file has the
+details.
 
 ## Protocol
 
@@ -16,7 +17,7 @@ for testing. The README has the short version; this file has the details.
   validation normal flows; and label-free thresholds at the 95th and 99th percentile of all validation
   scores.
 - KDDTest+ contains 17 attack types that never appear in KDDTrain+ (3,750 flows, 29% of test attacks).
-  Test rows are grouped by type only for the analysis in sections 4 and 5.
+  Test rows are grouped by type only for the analysis in sections 4, 5 and 8.
 
 ## 1. Ranking quality and fixed false-alarm operating points
 
@@ -205,9 +206,152 @@ comparison in which only one model was tuned on test labels. When both models ge
 forest wins on test-label F1 (0.936 against 0.838). The other rows show that the reported number depends on
 the threshold rule and the base rate, not only on the detector.
 
-The second-dataset row ("one dataset vs two") waits for P0-10.
+A second dataset moves some of these conclusions (section 8). The rows below take the NSL-KDD number and the
+CIC-IDS2017 number for the same detector, both with all training flows and no feature transform:
 
-## 8. Limitations
+| Mistake | Model | NSL-KDD | CIC-IDS2017 | Shift |
+|---|---|---|---|---|
+| NSL-KDD alone (recall on new types at the 5% target) | Isolation Forest | 0.552 | 0.011 | +0.541 |
+| NSL-KDD alone (recall on new types at the 5% target) | LOF | 0.398 | 0.608 | -0.210 |
+| NSL-KDD alone (recall on new types at the 5% target) | One-Class SVM | 0.234 | 0.299 | -0.065 |
+| NSL-KDD alone (recall on new types at the 5% target) | Random Forest | 0.913 | 0.987 | -0.074 |
+| NSL-KDD alone (test FPR at the 5% target) | Random Forest | 0.126 | 0.045 | +0.081 |
+| NSL-KDD alone (test FPR at the 5% target) | LOF | 0.112 | 0.055 | +0.057 |
+
+All eight rows are in `results/pitfalls.json`. Isolation Forest goes from catching about half of the new
+types to almost none. The ranking of the four detectors by recall changes as well, and the forest's
+false-alarm drift on KDDTest+ (12.6% against a 5% target) does not appear here (4.5%).
+
+## 8. Second dataset: CIC-IDS2017
+
+Source: `results/cicids2017_benchmark.json` and `results/cicids2017_benchmark_normal_only.json`, the same two
+with the prefix `cicids2017_slog1p_`, `results/cicids2017_leave_one_out.json`,
+`results/cicids2017_slog1p_leave_one_out.json`, `results/cicids2017_detection_map.json` and
+`results/cicids2017_slog1p_detection_map.json`.
+
+NSL-KDD has 17 unseen attack types, but they come from a different file and mix novelty with a shifted
+distribution. CIC-IDS2017 gives a cleaner version: Monday to Wednesday hold FTP-Patator, SSH-Patator and five
+DoS types, Thursday and Friday hold only attack types that never occur before them.
+
+- Data: the improved release by Engelen, Rimmer and Joosen (labels corrected, flows regenerated). The download
+  is checked against a pinned sha256 before use. Flows labelled "... - Attempted" are relabelled normal, as the
+  authors recommend. 82 numeric features; ports, identifiers and time stamps are dropped.
+- Split: training and validation come from Monday to Wednesday, the test set from Thursday and Friday. The
+  train and validation split cuts the days into 10-minute blocks and gives whole blocks to one side (80% and
+  20%, drawn again for each seed), so near-identical flows of one burst do not land on both sides.
+- Sampling: per seed, normal flows are capped at 80,000 for the Monday to Wednesday pool and 40,000 for the test
+  set, and each attack type at 8,000 and 10,000. The test set has 30,876 attack flows: three types (Portscan,
+  DDoS and "Infiltration - Portscan") with 10,000 each, Botnet 736, web attacks 104 (brute force 73, XSS 18,
+  SQL injection 13) and Infiltration 36. Recall over all attacks is therefore mostly recall on the three large types.
+- Models, scaler, seeds and fixed false-alarm targets are the same as in section 1. The tables use the
+  unsupervised models trained on normal flows only, unless the text says otherwise.
+- Two feature spaces: the raw features, and sign(x) * log1p(|x|) on every column ("slog1p"). The validation rule
+  from section 2 (mean validation PR-AUC of the three unsupervised models) picks the raw features when the
+  models train on all flows (0.511 against 0.456) and slog1p when they train on normal flows only (0.684
+  against 0.727). Test results favour slog1p for all three. I show both and do not choose by test.
+
+Recall at the 5% target, over all test attacks. Test FPR is the false-alarm rate of the same threshold on
+Thursday and Friday:
+
+| Detector | Features | ROC-AUC | Test FPR | Recall | Precision at 1% |
+|---|---|---|---|---|---|
+| Random Forest | either | 0.990 | 0.045 | 0.987 | 0.19 |
+| IF, normal only | raw | 0.843 | 0.044 | 0.043 | 0.01 |
+| IF, normal only | slog1p | 0.951 | 0.050 | 0.648 | 0.12 |
+| LOF, normal only | raw | 0.944 | 0.056 | 0.433 | 0.07 |
+| LOF, normal only | slog1p | 0.988 | 0.062 | 0.974 | 0.14 |
+| OC-SVM, normal only | raw | 0.928 | 0.045 | 0.431 | 0.09 |
+| OC-SVM, normal only | slog1p | 0.955 | 0.049 | 0.974 | 0.17 |
+
+The forest ranks flows best (ROC-AUC 0.990) and holds its target (test false-alarm rate 0.045, against 0.126 on
+KDDTest+). The unsupervised detectors depend heavily on the feature space. Raw Isolation Forest recalls 4% of
+the new attacks, and with slog1p it recalls 65%. LOF and One-Class SVM reach 0.974 with slog1p, which matches
+the forest on the three large types. I did not test why the transform matters so much; heavy-tailed columns are
+the obvious suspect. Under slog1p, training on all flows instead of normal flows moves Isolation Forest and LOF
+by less than 0.01 (recall 0.647 and 0.975) and One-Class SVM by 0.10 (0.876).
+
+Recall at the 5% target per attack type. The unsupervised columns are the normal-only models. The forest column
+is from the raw run; the slog1p run differs by at most 0.02 per type.
+
+| Type (test flows) | Forest | IF raw | IF slog1p | LOF raw | LOF slog1p | OC-SVM raw | OC-SVM slog1p |
+|---|---|---|---|---|---|---|---|
+| DDoS (10,000) | 1.00 | 0.12 | 0.00 | 0.00 | 1.00 | 0.53 | 1.00 |
+| Portscan (10,000) | 1.00 | 0.00 | 1.00 | 0.76 | 1.00 | 0.14 | 1.00 |
+| Infiltration - Portscan (10,000) | 1.00 | 0.00 | 0.99 | 0.57 | 1.00 | 0.64 | 0.99 |
+| Infiltration (36) | 0.97 | 0.92 | 0.93 | 0.38 | 0.63 | 0.82 | 0.97 |
+| Botnet (736) | 0.54 | 0.06 | 0.06 | 0.06 | 0.07 | 0.06 | 0.06 |
+| Web Attack - Brute Force (73) | 1.00 | 0.99 | 0.01 | 0.00 | 0.39 | 0.99 | 0.99 |
+| Web Attack - XSS (18) | 1.00 | 1.00 | 0.23 | 0.00 | 0.39 | 1.00 | 1.00 |
+| Web Attack - SQL Injection (13) | 0.95 | 0.00 | 0.00 | 0.48 | 0.00 | 0.00 | 0.00 |
+
+- Botnet is missed by every unsupervised detector in both feature spaces (0.06 to 0.07), and the forest
+  catches 0.54. SQL injection (13 flows) is missed by Isolation Forest and One-Class SVM in both spaces, and
+  the forest catches 0.95. Botnet and SQL injection have the two smallest distances from normal traffic on the
+  map (raw x = 0.65 and 0.97). Two types, one with 13 flows, are too few to support a conclusion.
+- Which anomaly detector catches which type changes with the feature space. LOF recalls DDoS 0.00 on the raw
+  features and 1.00 with slog1p, while Isolation Forest recalls web attack brute force 0.99 on the raw features
+  and 0.01 with slog1p.
+- The max-F1 threshold chosen on validation fails for the forest. Its validation PR-AUC is 1.000, so
+  validation cannot rank thresholds, and the chosen one gives recall 0.402 at a 0.002 false-alarm rate on the
+  test days (F1 0.557). The best threshold in hindsight gives F1 0.972. The fixed-false-alarm thresholds do not
+  have this problem.
+- 957 of the 326,853 attack flows on Thursday and Friday are exact copies of a Monday to Wednesday normal flow;
+  all 957 are Portscan.
+
+Leave-one-attack-type-out on Monday to Wednesday, recall at the 5% target, five seeds. The held-out type is
+removed from training and validation, and the test set pairs it with normal flows that no model saw. The test
+false-alarm rate is between 0.013 and 0.059 for every entry. Heartbleed (11 flows) is skipped. "Brute force"
+holds both Patator types, "DoS" holds all five DoS types.
+
+| Held out | Forest | IF raw | IF slog1p | LOF raw | LOF slog1p | OC-SVM raw | OC-SVM slog1p |
+|---|---|---|---|---|---|---|---|
+| DoS GoldenEye | 1.00 | 0.37 | 0.02 | 0.03 | 0.67 | 0.66 | 0.28 |
+| DoS Hulk | 0.92 | 0.26 | 0.02 | 0.01 | 0.52 | 0.83 | 0.27 |
+| DoS Slowhttptest | 1.00 | 0.80 | 0.38 | 0.03 | 0.84 | 0.83 | 0.91 |
+| DoS Slowloris | 1.00 | 0.80 | 0.87 | 0.36 | 0.76 | 0.78 | 0.94 |
+| FTP-Patator | 1.00 | 0.00 | 0.20 | 0.01 | 1.00 | 0.19 | 0.99 |
+| SSH-Patator | 0.60 | 0.00 | 0.00 | 0.28 | 1.00 | 0.00 | 0.00 |
+| Brute force | 0.27 | 0.00 | 0.11 | 0.42 | 1.00 | 0.12 | 0.57 |
+| DoS | 0.15 | 0.44 | 0.21 | 0.10 | 0.60 | 0.87 | 0.48 |
+
+In the raw run the forest recalls 0.92 to 1.00 of each single DoS type and FTP-Patator, where a related type
+remains in training. It falls to 0.60 for SSH-Patator, 0.27 when both Patator types are out and 0.15 when all
+DoS types are out (0.43, 0.13 and 0.14 in the slog1p run). The unsupervised detectors do not follow that
+pattern, and again depend on the feature space: LOF with slog1p recalls 1.00 of the Patator flows,
+Isolation Forest 0.00 to 0.20. The held-out types are not strict zero-day
+tests, for the reason given in section 4.
+
+Detection map: the same construction as section 5 on the 14 types (six held out from Monday to Wednesday, eight
+from Thursday and Friday), k = 5. Spearman correlation between position and recall, with 95% bootstrap
+intervals. "Best other" is the highest recall per type among mixed Isolation Forest and normal-only LOF and
+One-Class SVM, so it is chosen with labels. With six held-out types the bootstrap interval of a perfect rank
+correlation collapses to a point, so the held-out rows say little.
+
+| Features | Group (types) | x vs forest | x vs IF normal | x vs best other | y vs forest |
+|---|---|---|---|---|---|
+| raw | All (14) | 0.72 [0.27, 0.94] | 0.89 [0.60, 0.99] | 0.88 [0.59, 1.00] | 0.36 [-0.25, 0.79] |
+| raw | Held out (6) | 0.74 [-0.19, 1.00] | 1.00 [1.00, 1.00] | 0.71 [-0.23, 1.00] | 0.00 [-0.90, 1.00] |
+| raw | Unseen, Thu-Fri (8) | 0.81 [0.11, 1.00] | 0.85 [0.28, 1.00] | 0.93 [0.40, 1.00] | 0.63 [-0.28, 0.95] |
+| slog1p | All (14) | 0.46 [-0.19, 0.76] | 0.60 [0.07, 0.91] | 0.52 [-0.07, 0.91] | 0.06 [-0.45, 0.49] |
+| slog1p | Held out (6) | 0.54 [-0.60, 1.00] | 0.77 [-0.09, 1.00] | 0.54 [-0.64, 1.00] | -0.49 [-1.00, 0.60] |
+| slog1p | Unseen, Thu-Fri (8) | 0.32 [-0.81, 0.81] | 0.48 [-0.50, 0.97] | 0.52 [-0.59, 1.00] | 0.22 [-0.94, 0.76] |
+
+- Distance from normal traffic goes with recall again. On the raw features the correlation is high for the
+  anomaly detectors (0.89 for normal-only Isolation Forest, interval 0.60 to 0.99) and 0.72 for the forest. With
+  slog1p it is lower and the intervals include zero for the forest.
+- Distance from other attack types does not predict the forest's recall: y vs forest is 0.36 (raw) and 0.06
+  (slog1p) over the 14 types, and the intervals include zero. The first hypothesis predicts a negative
+  correlation. Only the six held-out types in the slog1p space show one (-0.49, interval -1.00 to 0.60).
+- Position predicts the anomaly detectors out of sample better than a constant does. Leave-one-type-out error
+  for normal-only Isolation Forest is 0.17 against 0.40 for the mean of the other types (raw) and 0.26
+  against 0.38 (slog1p). For the forest it is 0.106 against 0.111 (raw) and 0.135 against 0.130 (slog1p). On
+  NSL-KDD the error for Isolation Forest did not beat the mean. The four DoS types sit close together on the
+  map, so leaving one out leaves near copies of it, which flatters this test.
+- The map depends on the feature space. The x ranking of the 14 types in the raw and slog1p spaces has
+  Spearman correlation 0.51 at k = 5. Within a space the ranking holds across k = 1, 5 and 20 (0.97 to 0.99
+  raw, 0.89 to 0.99 slog1p).
+
+## 9. Limitations
 
 - NSL-KDD is derived from 1998 DARPA traffic simulations. It is dated, and its attacks are simulated. These
   results describe this dataset, not current traffic.
@@ -220,12 +364,16 @@ The second-dataset row ("one dataset vs two") waits for P0-10.
   chosen on validation. No gain was measured.
 - The 38 numeric columns are the main feature set. The three categorical columns are dropped in the main
   results. The capture pipeline uses a different 8-feature set, so these results say nothing about it.
-- One dataset.
+- CIC-IDS2017 is one lab capture from 2017. Its test days differ from the training days by new attack types and
+  by the day itself, and I cannot separate the two. Row caps make each seed a subsample, and the web attack and
+  infiltration types have 13 to 104 test flows, so their recall cells are coarse.
+- The CIC-IDS2017 features are CICFlowMeter columns, different again from the NSL-KDD columns and from the 8
+  pipeline features. The unsupervised results depend on the feature transform, and validation and test
+  disagree about it.
+- Two datasets, one lab capture each.
 
-## 9. Not done
+## 10. Not done
 
-- A second dataset with genuinely new attacks (CIC-IDS2017 with corrected labels is the proposal). It needs a
-  download decision.
 - A label-free threshold that targets a false-alarm rate. It needs a benign-only capture.
 - The capture pipeline is checked on a synthetic capture only. It is not evaluated against labelled traffic.
 
