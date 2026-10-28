@@ -219,9 +219,9 @@ All tables, the leave-one-out study on Monday to Wednesday and the map statistic
   are therefore not yet fair.
 - Results use 38 numeric features. The three categorical columns are dropped in the main results. The
   capture pipeline uses a different, 8-feature set, so these results say nothing about it.
-- The capture pipeline (`feature_extractor/extract.py`, then `train.py` and `score.py`) runs on a pcap and fails
-  on a missing or empty capture. It was checked on a synthetic capture only, and it is not evaluated against
-  labelled traffic.
+- The capture pipeline (`sensors/capture.sh` for tcpdump, then `feature_extractor/extract.py`, `train.py` and
+  `score.py`) runs on a pcap and fails on a missing or empty capture. The extractor was checked on a synthetic
+  capture only, `capture.sh` only with a stand-in for tcpdump, and nothing is evaluated against labelled traffic.
 - The map pools two operating points, so its pooled correlations mix a 5% matched false-alarm rate with
   drifted ones. With 13 to 30 types, the intervals are wide.
 - Two datasets, one lab capture each. CIC-IDS2017 is from 2017, the test days also differ from the training
