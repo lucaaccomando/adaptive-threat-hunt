@@ -284,7 +284,7 @@ feature_extractor/   pcap to flow features (experimental)
 tests/               pytest suite
 results/             JSON outputs and figures
 data/nslkdd/         NSL-KDD files
-notebooks/           analysis notebooks (not yet rewritten; their numbers are out of date)
+notebooks/           results walkthrough (reads results/*.json, trains nothing)
 ```
 
 ## Acknowledgements
