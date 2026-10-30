@@ -333,3 +333,25 @@ def test_summarize_averages_every_setting_over_seeds():
     assert out["roc_auc"]["mean"] == 0.3
     assert out["default"]["f1"]["mean"] == 0.3
     assert out["val_threshold"]["recall_by_group"]["seen"]["mean"] == 0.3
+
+
+def test_download_if_missing_checks_the_pinned_hash(tmp_path, monkeypatch):
+    import evaluate
+    src = tmp_path / "src.txt"
+    src.write_bytes(b"flows")
+    url = src.as_uri()
+    monkeypatch.setitem(evaluate.SHA256, url, evaluate.sha256_of(src))
+    dest = tmp_path / "out" / "a.txt"
+    evaluate.download_if_missing(url, dest)
+    assert dest.read_bytes() == b"flows"
+    evaluate.download_if_missing(url, dest)
+
+    dest.write_bytes(b"tampered")
+    with pytest.raises(SystemExit, match="sha256"):
+        evaluate.download_if_missing(url, dest)
+
+    monkeypatch.setitem(evaluate.SHA256, url, "0" * 64)
+    bad = tmp_path / "out" / "b.txt"
+    with pytest.raises(SystemExit, match="sha256"):
+        evaluate.download_if_missing(url, bad)
+    assert not bad.exists() and not bad.with_name("b.txt.part").exists()

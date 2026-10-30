@@ -12,6 +12,7 @@
 #   python models/evaluate.py --tune                 # small hyperparameter grid, chosen on validation
 
 import argparse
+import hashlib
 import json
 import urllib.request
 from pathlib import Path
@@ -89,6 +90,11 @@ GRIDS = {
 
 TRAIN_URL = "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt"
 TEST_URL  = "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt"
+# sha256 of the two files, computed from the copies used for every result in this repo
+SHA256 = {
+    TRAIN_URL: "1b86d2f957b33082081bba410fe129b475efebcc13c9014c3f447c8271aadf95",
+    TEST_URL: "fa46b0935342616aa83b7c2578db355b6a7aaabbc492248172c7a1e8b7ab8f84",
+}
 
 # maps each NSL-KDD attack name to its category (DoS, Probe, R2L, or U2R)
 # worm (2 test rows) is listed as DoS in the NSL-KDD tables I found; the dataset ships no mapping file
@@ -128,13 +134,29 @@ OP_METRICS = SUMMARY_METRICS + ("val_f1", "val_fpr", "f1_gap", "fpr_gap",
                                 "alerts_per_10k_normal") + tuple(PREVALENCES)
 
 
+def sha256_of(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def download_if_missing(url: str, dest: Path) -> None:
+    sha256 = SHA256[url]
     if dest.exists():
-        print(f"  {dest} already downloaded, skipping")
+        if sha256_of(dest) != sha256:
+            raise SystemExit(f"{dest} does not match the pinned sha256, delete it and run again")
+        print(f"  {dest} already downloaded and verified, skipping")
         return
     dest.parent.mkdir(parents=True, exist_ok=True)
+    part = dest.with_name(dest.name + ".part")
     print(f"  downloading {url}")
-    urllib.request.urlretrieve(url, dest)
+    urllib.request.urlretrieve(url, part)
+    if sha256_of(part) != sha256:
+        part.unlink()
+        raise SystemExit("download does not match the pinned sha256, not saved")
+    part.rename(dest)
     print(f"  saved to {dest} ({dest.stat().st_size / 1024:.1f} KB)")
 
 

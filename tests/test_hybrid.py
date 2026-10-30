@@ -6,6 +6,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "models"))
 sys.path.insert(0, str(Path(__file__).parent))
+import evaluate
 from hybrid import SPLIT_GRID, alerts, main, thresholds
 from test_leave_one_out import _write_multi_attack
 
@@ -36,12 +37,14 @@ def test_share_one_is_the_forest_alone():
     assert (alerts(s_rf, s_an, tau_rf, tau_an) == (s_rf >= tau_rf)).all()
 
 
-def test_main_runs_end_to_end(tmp_path):
+def test_main_runs_end_to_end(tmp_path, monkeypatch):
     train = tmp_path / "train.txt"
     _write_multi_attack(train, 1200, seed=5)
     test = tmp_path / "test.txt"
     test.write_text(train.read_text())
     out = tmp_path / "hybrid.json"
+    monkeypatch.setitem(evaluate.SHA256, evaluate.TRAIN_URL, evaluate.sha256_of(train))
+    monkeypatch.setitem(evaluate.SHA256, evaluate.TEST_URL, evaluate.sha256_of(test))
 
     main(["--train", str(train), "--test", str(test), "--seeds", "0", "--out", str(out)])
 

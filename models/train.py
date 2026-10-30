@@ -20,10 +20,10 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import OneClassSVM
 
-# these are the 8 features we extract from pcap files
+# these are the 9 features we extract from pcap files; proto is two indicator columns
 NUMERIC = [
     "pkt_count", "bytes", "duration_ms", "avg_pkt_size",
-    "iat_mean_ms", "iat_std_ms", "payload_entropy", "proto",
+    "iat_mean_ms", "iat_std_ms", "payload_entropy", "proto_tcp", "proto_udp",
 ]
 
 

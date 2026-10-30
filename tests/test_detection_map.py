@@ -18,6 +18,7 @@ from detection_map import (
     positions,
     spearman_ci,
 )
+import evaluate
 from evaluate import NSL_KDD_COLUMNS, NUMERIC_COLS, load_nslkdd
 from test_leave_one_out import _write_multi_attack
 
@@ -92,7 +93,7 @@ def test_load_recall_reads_loo_and_benchmark(tmp_path):
     assert recall["apache2"] == {"rf": 0.3}
 
 
-def test_main_runs_end_to_end_on_small_data(tmp_path):
+def test_main_runs_end_to_end_on_small_data(tmp_path, monkeypatch):
     train = tmp_path / "train.txt"
     _write_multi_attack(train, 1200, seed=4)
     raw = pd.read_csv(train, header=None, names=NSL_KDD_COLUMNS).iloc[:400]
@@ -101,6 +102,8 @@ def test_main_runs_end_to_end_on_small_data(tmp_path):
     raw.to_csv(test, header=False, index=False)
 
     out = tmp_path / "map.json"
+    monkeypatch.setitem(evaluate.SHA256, evaluate.TRAIN_URL, evaluate.sha256_of(train))
+    monkeypatch.setitem(evaluate.SHA256, evaluate.TEST_URL, evaluate.sha256_of(test))
     main(["--train", str(train), "--test", str(test), "--results", str(tmp_path),
           "--ks", "1", "5", "--primary-k", "5", "--out", str(out)])
 

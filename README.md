@@ -218,7 +218,7 @@ All tables, the leave-one-out study on Monday to Wednesday and the map statistic
   targets give 6.4% and 12.6% on KDDTest+. Fixed-false-alarm comparisons across detectors on the test set
   are therefore not yet fair.
 - Results use 38 numeric features. The three categorical columns are dropped in the main results. The
-  capture pipeline uses a different, 8-feature set, so these results say nothing about it.
+  capture pipeline uses a different, 9-feature set, so these results say nothing about it.
 - The capture pipeline (`sensors/capture.sh` for tcpdump, then `feature_extractor/extract.py`, `train.py` and
   `score.py`) runs on a pcap and fails on a missing or empty capture. The extractor was checked on a synthetic
   capture only, `capture.sh` only with a stand-in for tcpdump, and nothing is evaluated against labelled traffic.

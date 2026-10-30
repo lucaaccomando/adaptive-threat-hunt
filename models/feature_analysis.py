@@ -34,7 +34,6 @@ from evaluate import (
 
 
 def train_rf(X_train: np.ndarray, y_train: np.ndarray) -> RandomForestClassifier:
-    # same setup as supervised_baseline.py
     clf = RandomForestClassifier(
         n_estimators=200,
         random_state=42,

@@ -22,7 +22,8 @@ def _make_df(n=200):
         "dst": ["10.0.0.2"] * n,
         "sport": rng.integers(1024, 65535, n),
         "dport": rng.integers(1, 1024, n),
-        "proto": rng.choice([6, 17, 1], n),
+        "proto_tcp": rng.integers(0, 2, n),
+        "proto_udp": rng.integers(0, 2, n),
         "pkt_count": rng.integers(1, 50, n).astype(float),
         "bytes": rng.integers(64, 9000, n).astype(float),
         "duration_ms": rng.uniform(0, 500, n),
@@ -108,10 +109,10 @@ def test_train_ocsvm_is_scaled(tmp_path, monkeypatch):
 
 def test_train_missing_column_exits(tmp_path, monkeypatch):
     csv = tmp_path / "features.csv"
-    _make_df().drop(columns=["proto"]).to_csv(csv, index=False)
+    _make_df().drop(columns=["proto_tcp"]).to_csv(csv, index=False)
     monkeypatch.setattr(sys, "argv", ["train.py", "--csv", str(csv),
                                       "--model", str(tmp_path / "m.pkl")])
-    with pytest.raises(SystemExit, match="proto"):
+    with pytest.raises(SystemExit, match="proto_tcp"):
         train.main()
 
 

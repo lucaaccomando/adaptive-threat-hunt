@@ -42,7 +42,7 @@ def test_demo_features_shape():
 
 
 def test_demo_features_columns():
-    expected = {"src", "dst", "sport", "dport", "proto",
+    expected = {"src", "dst", "sport", "dport", "proto_tcp", "proto_udp",
                 "pkt_count", "bytes", "duration_ms",
                 "avg_pkt_size", "iat_mean_ms", "iat_std_ms", "payload_entropy"}
     assert expected.issubset(set(demo_features().columns))

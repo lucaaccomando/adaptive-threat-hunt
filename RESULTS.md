@@ -363,7 +363,7 @@ correlation collapses to a point, so the held-out rows say little.
 - The hybrid's test false-alarm rates differ from the forest's by about two points, and the budget split is
   chosen on validation. No gain was measured.
 - The 38 numeric columns are the main feature set. The three categorical columns are dropped in the main
-  results. The capture pipeline uses a different 8-feature set, so these results say nothing about it.
+  results. The capture pipeline uses a different 9-feature set, so these results say nothing about it.
 - CIC-IDS2017 is one lab capture from 2017. Its test days differ from the training days by new attack types and
   by the day itself, and I cannot separate the two. Row caps make each seed a subsample, and the web attack and
   infiltration types have 13 to 104 test flows, so their recall cells are coarse.

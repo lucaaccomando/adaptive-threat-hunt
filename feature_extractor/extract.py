@@ -34,11 +34,11 @@ def entropy_bytes(b: bytes) -> float:
 
 def demo_features():
     return pd.DataFrame([
-        {"src": "10.0.0.1", "dst": "10.0.0.2", "sport": 1234, "dport": 80, "proto": 6,
-         "pkt_count": 10, "bytes": 1500, "duration_ms": 120, "avg_pkt_size": 150,
+        {"src": "10.0.0.1", "dst": "10.0.0.2", "sport": 1234, "dport": 80,
+         "proto_tcp": 1, "proto_udp": 0, "pkt_count": 10, "bytes": 1500, "duration_ms": 120, "avg_pkt_size": 150,
          "iat_mean_ms": 13, "iat_std_ms": 3, "payload_entropy": 3.2},
-        {"src": "10.0.0.2", "dst": "10.0.0.1", "sport": 80, "dport": 1234, "proto": 6,
-         "pkt_count": 8, "bytes": 900, "duration_ms": 95, "avg_pkt_size": 112.5,
+        {"src": "10.0.0.2", "dst": "10.0.0.1", "sport": 80, "dport": 1234,
+         "proto_tcp": 1, "proto_udp": 0, "pkt_count": 8, "bytes": 900, "duration_ms": 95, "avg_pkt_size": 112.5,
          "iat_mean_ms": 12, "iat_std_ms": 2.5, "payload_entropy": 2.8},
     ])
 
@@ -57,8 +57,8 @@ def _flow_row(f: dict) -> dict:
     duration_ms = (times[-1] - times[0]) * 1000 if n > 1 else 0.0
     iats = np.diff(times) * 1000 if n > 1 else np.array([0.0])
     return {
-        "src": f["src"], "dst": f["dst"], "sport": f["sport"], "dport": f["dport"], "proto": f["proto"],
-        "pkt_count": n, "bytes": f["bytes"], "duration_ms": duration_ms,
+        "src": f["src"], "dst": f["dst"], "sport": f["sport"], "dport": f["dport"],
+        "proto_tcp": int(f["proto"] == 6), "proto_udp": int(f["proto"] == 17), "pkt_count": n, "bytes": f["bytes"], "duration_ms": duration_ms,
         "avg_pkt_size": f["bytes"] / n, "iat_mean_ms": float(iats.mean()),
         "iat_std_ms": float(iats.std()), "payload_entropy": entropy_bytes(b"".join(f["payloads"])),
     }
