@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-# analyzes which features matter most for detecting attacks in NSL-KDD
-# uses a random forest to get feature importances and plots a correlation heatmap
-#
-# outputs:
-#   results/feature_importance.png  - bar chart of top N features
-#   results/correlation_heatmap.png - pearson correlation matrix
+# permutation importance on KDDTest+ for the forest and the normal-only Isolation Forest: the drop in
+# ROC-AUC (normal vs attack) when one feature is shuffled, for attacks seen in training and for unseen ones
+# models train on 80% of KDDTrain+ and nothing here picks a threshold or a model from test labels
 #
 # usage:
 #   python models/feature_analysis.py
-#   python models/feature_analysis.py --top 20
+#   python models/feature_analysis.py --top 15 --seeds 0 1 2
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -19,7 +17,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -27,165 +26,156 @@ from evaluate import (
     TEST_URL,
     TRAIN_URL,
     NUMERIC_COLS,
+    VAL_FRACTION,
+    attack_groups,
     download_if_missing,
     engineer_features,
+    fit_model,
     load_nslkdd,
+    mean_std,
+    score_samples,
 )
 
-
-def train_rf(X_train: np.ndarray, y_train: np.ndarray) -> RandomForestClassifier:
-    clf = RandomForestClassifier(
-        n_estimators=200,
-        random_state=42,
-        n_jobs=-1,
-        class_weight="balanced",
-    )
-    clf.fit(X_train, y_train)
-    return clf
+DETECTORS = {"rf": ("rf", False), "iforest_normal_only": ("iforest", True)}
 
 
-def plot_feature_importance(
-    importances: np.ndarray,
-    feature_names: list[str],
-    out_path: Path,
-    top_n: int = 15,
-) -> list[tuple[str, float]]:
-    # sort by importance and grab the top N
-    indices = np.argsort(importances)[::-1]
-    top_idx = indices[:top_n]
-    top_names = [feature_names[i] for i in top_idx]
-    top_vals = importances[top_idx]
+def permutation_importance(key, clf, X, y, rng, repeats=3) -> np.ndarray:
+    base = roc_auc_score(y, score_samples(key, clf, X))
+    drops = np.zeros(X.shape[1])
+    for j in range(X.shape[1]):
+        for _ in range(repeats):
+            Xp = X.copy()
+            Xp[:, j] = rng.permutation(Xp[:, j])
+            drops[j] += base - roc_auc_score(y, score_samples(key, clf, Xp))
+    return drops / repeats
 
-    # reverse so the most important feature is at the top of the chart
-    top_names_r = top_names[::-1]
-    top_vals_r = top_vals[::-1]
 
-    fig, ax = plt.subplots(figsize=(8, 6))
-    bars = ax.barh(top_names_r, top_vals_r, color="steelblue", alpha=0.85)
-    ax.bar_label(bars, fmt="%.4f", padding=3, fontsize=8)
-    ax.set_xlabel("Feature Importance (mean decrease in impurity)", fontsize=11)
-    ax.set_title(f"Top {top_n} Feature Importances - Random Forest on NSL-KDD", fontsize=12)
-    ax.set_xlim(0, top_vals_r.max() * 1.18)
-    ax.grid(axis="x", alpha=0.3)
+def importances_for_seed(df_train, df_test, seed, contamination=0.1):
+    X_all, y_all = engineer_features(df_train)
+    X_test, _ = engineer_features(df_test)
+    idx_tr, _ = train_test_split(np.arange(len(y_all)), test_size=VAL_FRACTION,
+                                 stratify=y_all, random_state=seed)
+    scaler = StandardScaler().fit(X_all[idx_tr])
+    X_tr, y_tr = scaler.transform(X_all[idx_tr]), y_all[idx_tr]
+    X_test = scaler.transform(X_test)
+
+    groups = attack_groups(df_train["label"], df_test["label"])
+    normal = (df_test["label"] == "normal").to_numpy()
+    rng = np.random.default_rng(seed)
+    out = {}
+    for name, (key, normal_only) in DETECTORS.items():
+        clf = fit_model(key, X_tr, y_tr, seed, contamination, {}, normal_only)
+        out[name] = {}
+        for g in ("seen", "unseen"):
+            mask = normal | groups[g]
+            out[name][g] = permutation_importance(key, clf, X_test[mask], groups[g][mask].astype(int), rng)
+    return out
+
+
+def summarize(per_seed: list[dict], names: list[str]) -> dict:
+    res = {}
+    for det in per_seed[0]:
+        res[det] = {}
+        for g in per_seed[0][det]:
+            vals = np.array([s[det][g] for s in per_seed])
+            res[det][g] = {n: mean_std(list(vals[:, i])) for i, n in enumerate(names)}
+    return res
+
+
+def plot_importance(res: dict, out_path: Path, top_n: int) -> None:
+    titles = {"rf": "Random Forest", "iforest_normal_only": "Isolation Forest, normal-only training"}
+    fig, axes = plt.subplots(1, len(res), figsize=(13, 6), sharex=True)
+    for ax, (det, groups) in zip(axes, res.items()):
+        order = sorted(groups["unseen"], key=lambda n: groups["seen"][n]["mean"] + groups["unseen"][n]["mean"],
+                       reverse=True)[:top_n][::-1]
+        pos = np.arange(len(order))
+        for off, g, color in ((-0.2, "seen", "steelblue"), (0.2, "unseen", "darkorange")):
+            ax.barh(pos + off, [groups[g][n]["mean"] for n in order], height=0.4, color=color,
+                    xerr=[groups[g][n]["std"] for n in order], label=f"{g} attacks")
+        ax.set_yticks(pos)
+        ax.set_yticklabels(order, fontsize=8)
+        ax.set_title(titles[det], fontsize=11)
+        ax.set_xlabel("drop in ROC-AUC when the feature is shuffled")
+        ax.grid(axis="x", alpha=0.3)
+    axes[0].legend()
     fig.tight_layout()
-
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"feature importance plot saved to {out_path}")
 
-    return list(zip(top_names, top_vals))
 
-
-def plot_correlation_heatmap(
-    df_train: pd.DataFrame,
-    feature_names: list[str],
-    out_path: Path,
-) -> pd.DataFrame:
-    corr = df_train[feature_names].corr()
-
-    n = len(feature_names)
+def plot_correlation_heatmap(df_train: pd.DataFrame, names: list[str], out_path: Path) -> pd.DataFrame:
+    corr = df_train[names].corr()
     fig, ax = plt.subplots(figsize=(14, 12))
     im = ax.imshow(corr.values, cmap="RdBu_r", vmin=-1, vmax=1, aspect="auto")
     fig.colorbar(im, ax=ax, shrink=0.8, label="Pearson r")
-
-    ax.set_xticks(range(n))
-    ax.set_yticks(range(n))
-    ax.set_xticklabels(feature_names, rotation=90, fontsize=7)
-    ax.set_yticklabels(feature_names, fontsize=7)
-    ax.set_title("Feature Correlation Heatmap - NSL-KDD Numeric Features", fontsize=12)
-
+    ax.set_xticks(range(len(names)))
+    ax.set_yticks(range(len(names)))
+    ax.set_xticklabels(names, rotation=90, fontsize=7)
+    ax.set_yticklabels(names, fontsize=7)
+    ax.set_title("Feature correlation, KDDTrain+ numeric features with nonzero variance", fontsize=12)
     fig.tight_layout()
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"correlation heatmap saved to {out_path}")
-
     return corr
 
 
-def generate_report(
-    top_features: list[tuple[str, float]],
-    corr: pd.DataFrame,
-    top_n_corr: int = 5,
-) -> None:
-    # print a markdown summary of what we found
-    print("\n" + "=" * 60)
-    print("## Feature Analysis Report - NSL-KDD\n")
-
-    print("### Top Features by Importance\n")
-    for i, (name, val) in enumerate(top_features, 1):
-        print(f"{i:>2}. `{name}` - {val:.4f}")
-
-    top3 = [name for name, _ in top_features[:3]]
-    print(f"\nTop 3: {', '.join(top3)}")
-
-    # find the strongest correlations (ignoring the diagonal)
-    print("\n### Strongest Feature Correlations\n")
-    corr_vals = (
-        corr.where(np.triu(np.ones(corr.shape), k=1).astype(bool))
-        .stack()
-        .abs()
-        .sort_values(ascending=False)
-    )
-    print("| Feature A | Feature B | Pearson r |")
-    print("|---|---|---|")
-    for (fa, fb), val in corr_vals.head(top_n_corr).items():
-        raw = corr.loc[fa, fb]
-        print(f"| `{fa}` | `{fb}` | {raw:+.3f} |")
-
-    # flag anything with |r| > 0.9 as potentially redundant
-    high_corr = corr_vals[corr_vals > 0.9]
-    if not high_corr.empty:
-        print(f"\n{len(high_corr)} pairs with |r| > 0.90 - likely redundant, candidates for pruning.")
-
-    print("\n" + "=" * 60)
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser(description="feature importance and correlation analysis on NSL-KDD")
+def main(argv: list[str] | None = None) -> None:
+    ap = argparse.ArgumentParser(description="permutation importance and correlation on NSL-KDD")
     ap.add_argument("--train", default="", help="path to KDDTrain+.txt")
-    ap.add_argument("--top", type=int, default=15, help="how many top features to plot (default: 15)")
-    ap.add_argument("--out-dir", default="results", help="folder to save plots (default: results/)")
-    args = ap.parse_args()
+    ap.add_argument("--test", default="", help="path to KDDTest+.txt")
+    ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
+    ap.add_argument("--top", type=int, default=12, help="features per panel (default: 12)")
+    ap.add_argument("--out-dir", default="results", help="folder for the plots and JSON (default: results/)")
+    args = ap.parse_args(argv)
 
     data_dir = Path("data") / "nslkdd"
     train_path = Path(args.train) if args.train else data_dir / "KDDTrain+.txt"
-    test_path = data_dir / "KDDTest+.txt"
+    test_path = Path(args.test) if args.test else data_dir / "KDDTest+.txt"
     out_dir = Path(args.out_dir)
 
-    print("=== Feature Analysis ===\n")
-
-    print("step 1: getting the dataset")
     download_if_missing(TRAIN_URL, train_path)
     download_if_missing(TEST_URL, test_path)
+    df_train, df_test = load_nslkdd(train_path), load_nslkdd(test_path)
 
-    print("\nstep 2: loading features")
-    df_train = load_nslkdd(train_path)
-    X_train_raw, y_train = engineer_features(df_train)
+    constant = [c for c in NUMERIC_COLS if df_train[c].std() == 0]
+    names = [c for c in NUMERIC_COLS if c not in constant]
+    print(f"dropping constant columns: {constant}")
+    keep = [NUMERIC_COLS.index(c) for c in names]
 
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train_raw)
+    per_seed = []
+    for seed in args.seeds:
+        print(f"seed {seed}")
+        per_seed.append({det: {g: v[keep] for g, v in groups.items()}
+                         for det, groups in importances_for_seed(df_train, df_test, seed).items()})
+    res = summarize(per_seed, names)
 
-    print("step 3: training random forest to get feature importances")
-    clf = train_rf(X_train, y_train)
+    plot_importance(res, out_dir / "feature_importance.png", args.top)
+    corr = plot_correlation_heatmap(df_train, names, out_dir / "correlation_heatmap.png")
 
-    print("\nstep 4: plotting feature importance")
-    top_features = plot_feature_importance(
-        clf.feature_importances_,
-        NUMERIC_COLS,
-        out_dir / "feature_importance.png",
-        top_n=args.top,
-    )
+    pairs = corr.where(np.triu(np.ones(corr.shape), k=1).astype(bool)).stack()
+    strong = pairs[pairs.abs() > 0.9].sort_values(key=abs, ascending=False)
+    out = {
+        "dataset": "NSL-KDD (KDDTrain+ / KDDTest+)",
+        "seeds": args.seeds,
+        "dropped_constant_columns": constant,
+        "method": "mean drop in test ROC-AUC (normal vs seen or unseen attacks) over 3 shuffles per feature; "
+                  "models trained on 80% of KDDTrain+, raw features, scaler fit on the training split; "
+                  "analysis only, no threshold or model choice uses test labels",
+        "permutation_importance": res,
+        "correlated_pairs_over_0.9": [{"a": a, "b": b, "r": round(float(r), 3)} for (a, b), r in strong.items()],
+    }
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "feature_importance.json").write_text(json.dumps(out, indent=2))
+    print(f"results saved to {out_dir / 'feature_importance.json'}")
 
-    print("\nstep 5: plotting correlation heatmap")
-    corr = plot_correlation_heatmap(
-        df_train,
-        NUMERIC_COLS,
-        out_dir / "correlation_heatmap.png",
-    )
-
-    generate_report(top_features, corr)
+    for det, groups in res.items():
+        print(f"\n{det}: top features by drop in ROC-AUC (seen / unseen)")
+        for n in sorted(names, key=lambda n: groups["unseen"][n]["mean"], reverse=True)[:5]:
+            print(f"  {n:<28} {groups['seen'][n]['mean']:.4f} / {groups['unseen'][n]['mean']:.4f}")
 
 
 if __name__ == "__main__":

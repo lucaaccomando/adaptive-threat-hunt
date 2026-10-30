@@ -1,0 +1,685 @@
+{
+  "dataset": "NSL-KDD (KDDTrain+ / KDDTest+)",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "dropped_constant_columns": [
+    "num_outbound_cmds"
+  ],
+  "method": "mean drop in test ROC-AUC (normal vs seen or unseen attacks) over 3 shuffles per feature; models trained on 80% of KDDTrain+, raw features, scaler fit on the training split; analysis only, no threshold or model choice uses test labels",
+  "permutation_importance": {
+    "rf": {
+      "seen": {
+        "duration": {
+          "mean": 0.0039,
+          "std": 0.0025
+        },
+        "src_bytes": {
+          "mean": 0.0506,
+          "std": 0.0036
+        },
+        "dst_bytes": {
+          "mean": 0.0348,
+          "std": 0.0045
+        },
+        "land": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "wrong_fragment": {
+          "mean": -0.0001,
+          "std": 0.0001
+        },
+        "urgent": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "hot": {
+          "mean": 0.0026,
+          "std": 0.0003
+        },
+        "num_failed_logins": {
+          "mean": 0.005,
+          "std": 0.0027
+        },
+        "logged_in": {
+          "mean": 0.0164,
+          "std": 0.001
+        },
+        "num_compromised": {
+          "mean": 0.0006,
+          "std": 0.0
+        },
+        "root_shell": {
+          "mean": -0.0,
+          "std": 0.0
+        },
+        "su_attempted": {
+          "mean": -0.0,
+          "std": 0.0
+        },
+        "num_root": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "num_file_creations": {
+          "mean": 0.0001,
+          "std": 0.0
+        },
+        "num_shells": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "num_access_files": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "is_host_login": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "is_guest_login": {
+          "mean": 0.0064,
+          "std": 0.0007
+        },
+        "count": {
+          "mean": 0.0072,
+          "std": 0.0015
+        },
+        "srv_count": {
+          "mean": 0.0018,
+          "std": 0.0006
+        },
+        "serror_rate": {
+          "mean": 0.0035,
+          "std": 0.0005
+        },
+        "srv_serror_rate": {
+          "mean": 0.0035,
+          "std": 0.0006
+        },
+        "rerror_rate": {
+          "mean": 0.0113,
+          "std": 0.0046
+        },
+        "srv_rerror_rate": {
+          "mean": 0.0086,
+          "std": 0.0049
+        },
+        "same_srv_rate": {
+          "mean": 0.0077,
+          "std": 0.0035
+        },
+        "diff_srv_rate": {
+          "mean": 0.0086,
+          "std": 0.0023
+        },
+        "srv_diff_host_rate": {
+          "mean": 0.0006,
+          "std": 0.0002
+        },
+        "dst_host_count": {
+          "mean": 0.0024,
+          "std": 0.0004
+        },
+        "dst_host_srv_count": {
+          "mean": 0.0129,
+          "std": 0.0011
+        },
+        "dst_host_same_srv_rate": {
+          "mean": 0.0205,
+          "std": 0.0066
+        },
+        "dst_host_diff_srv_rate": {
+          "mean": 0.01,
+          "std": 0.002
+        },
+        "dst_host_same_src_port_rate": {
+          "mean": 0.0071,
+          "std": 0.002
+        },
+        "dst_host_srv_diff_host_rate": {
+          "mean": 0.0024,
+          "std": 0.0006
+        },
+        "dst_host_serror_rate": {
+          "mean": 0.005,
+          "std": 0.0007
+        },
+        "dst_host_srv_serror_rate": {
+          "mean": 0.0067,
+          "std": 0.0024
+        },
+        "dst_host_rerror_rate": {
+          "mean": 0.0183,
+          "std": 0.0054
+        },
+        "dst_host_srv_rerror_rate": {
+          "mean": 0.0061,
+          "std": 0.0024
+        }
+      },
+      "unseen": {
+        "duration": {
+          "mean": 0.0035,
+          "std": 0.0005
+        },
+        "src_bytes": {
+          "mean": 0.0594,
+          "std": 0.0087
+        },
+        "dst_bytes": {
+          "mean": 0.0418,
+          "std": 0.0072
+        },
+        "land": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "wrong_fragment": {
+          "mean": 0.0007,
+          "std": 0.0002
+        },
+        "urgent": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "hot": {
+          "mean": 0.0003,
+          "std": 0.0004
+        },
+        "num_failed_logins": {
+          "mean": -0.0,
+          "std": 0.0
+        },
+        "logged_in": {
+          "mean": 0.0022,
+          "std": 0.0033
+        },
+        "num_compromised": {
+          "mean": 0.0001,
+          "std": 0.0001
+        },
+        "root_shell": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "su_attempted": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "num_root": {
+          "mean": 0.0001,
+          "std": 0.0001
+        },
+        "num_file_creations": {
+          "mean": 0.0001,
+          "std": 0.0
+        },
+        "num_shells": {
+          "mean": 0.0001,
+          "std": 0.0001
+        },
+        "num_access_files": {
+          "mean": -0.0001,
+          "std": 0.0001
+        },
+        "is_host_login": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "is_guest_login": {
+          "mean": 0.0008,
+          "std": 0.0004
+        },
+        "count": {
+          "mean": 0.0036,
+          "std": 0.0038
+        },
+        "srv_count": {
+          "mean": 0.0037,
+          "std": 0.004
+        },
+        "serror_rate": {
+          "mean": -0.0,
+          "std": 0.0006
+        },
+        "srv_serror_rate": {
+          "mean": 0.0006,
+          "std": 0.0004
+        },
+        "rerror_rate": {
+          "mean": 0.0062,
+          "std": 0.0029
+        },
+        "srv_rerror_rate": {
+          "mean": 0.0045,
+          "std": 0.0022
+        },
+        "same_srv_rate": {
+          "mean": 0.002,
+          "std": 0.0012
+        },
+        "diff_srv_rate": {
+          "mean": 0.0039,
+          "std": 0.0021
+        },
+        "srv_diff_host_rate": {
+          "mean": 0.0028,
+          "std": 0.0013
+        },
+        "dst_host_count": {
+          "mean": 0.003,
+          "std": 0.0011
+        },
+        "dst_host_srv_count": {
+          "mean": 0.0125,
+          "std": 0.0014
+        },
+        "dst_host_same_srv_rate": {
+          "mean": 0.0157,
+          "std": 0.0028
+        },
+        "dst_host_diff_srv_rate": {
+          "mean": 0.0073,
+          "std": 0.0025
+        },
+        "dst_host_same_src_port_rate": {
+          "mean": 0.0053,
+          "std": 0.002
+        },
+        "dst_host_srv_diff_host_rate": {
+          "mean": 0.0022,
+          "std": 0.0025
+        },
+        "dst_host_serror_rate": {
+          "mean": 0.0002,
+          "std": 0.0007
+        },
+        "dst_host_srv_serror_rate": {
+          "mean": 0.0029,
+          "std": 0.002
+        },
+        "dst_host_rerror_rate": {
+          "mean": 0.0129,
+          "std": 0.0034
+        },
+        "dst_host_srv_rerror_rate": {
+          "mean": -0.0018,
+          "std": 0.0007
+        }
+      }
+    },
+    "iforest_normal_only": {
+      "seen": {
+        "duration": {
+          "mean": 0.0038,
+          "std": 0.0029
+        },
+        "src_bytes": {
+          "mean": 0.006,
+          "std": 0.001
+        },
+        "dst_bytes": {
+          "mean": -0.0022,
+          "std": 0.0006
+        },
+        "land": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "wrong_fragment": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "urgent": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "hot": {
+          "mean": 0.0026,
+          "std": 0.001
+        },
+        "num_failed_logins": {
+          "mean": 0.0016,
+          "std": 0.0007
+        },
+        "logged_in": {
+          "mean": 0.0108,
+          "std": 0.0031
+        },
+        "num_compromised": {
+          "mean": 0.001,
+          "std": 0.0004
+        },
+        "root_shell": {
+          "mean": -0.0,
+          "std": 0.0
+        },
+        "su_attempted": {
+          "mean": -0.0,
+          "std": 0.0
+        },
+        "num_root": {
+          "mean": -0.0,
+          "std": 0.0001
+        },
+        "num_file_creations": {
+          "mean": 0.0001,
+          "std": 0.0
+        },
+        "num_shells": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "num_access_files": {
+          "mean": -0.0003,
+          "std": 0.0001
+        },
+        "is_host_login": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "is_guest_login": {
+          "mean": 0.0077,
+          "std": 0.0008
+        },
+        "count": {
+          "mean": 0.0061,
+          "std": 0.0007
+        },
+        "srv_count": {
+          "mean": -0.0021,
+          "std": 0.0007
+        },
+        "serror_rate": {
+          "mean": 0.0055,
+          "std": 0.0011
+        },
+        "srv_serror_rate": {
+          "mean": 0.0061,
+          "std": 0.0011
+        },
+        "rerror_rate": {
+          "mean": 0.0079,
+          "std": 0.0002
+        },
+        "srv_rerror_rate": {
+          "mean": 0.0119,
+          "std": 0.0026
+        },
+        "same_srv_rate": {
+          "mean": 0.0122,
+          "std": 0.006
+        },
+        "diff_srv_rate": {
+          "mean": 0.0048,
+          "std": 0.001
+        },
+        "srv_diff_host_rate": {
+          "mean": -0.0049,
+          "std": 0.0009
+        },
+        "dst_host_count": {
+          "mean": -0.0002,
+          "std": 0.0007
+        },
+        "dst_host_srv_count": {
+          "mean": 0.0121,
+          "std": 0.0006
+        },
+        "dst_host_same_srv_rate": {
+          "mean": 0.0118,
+          "std": 0.0031
+        },
+        "dst_host_diff_srv_rate": {
+          "mean": 0.0068,
+          "std": 0.0015
+        },
+        "dst_host_same_src_port_rate": {
+          "mean": 0.0058,
+          "std": 0.001
+        },
+        "dst_host_srv_diff_host_rate": {
+          "mean": 0.0024,
+          "std": 0.0002
+        },
+        "dst_host_serror_rate": {
+          "mean": 0.0066,
+          "std": 0.0013
+        },
+        "dst_host_srv_serror_rate": {
+          "mean": 0.0064,
+          "std": 0.0019
+        },
+        "dst_host_rerror_rate": {
+          "mean": 0.015,
+          "std": 0.0033
+        },
+        "dst_host_srv_rerror_rate": {
+          "mean": 0.0132,
+          "std": 0.0024
+        }
+      },
+      "unseen": {
+        "duration": {
+          "mean": 0.0095,
+          "std": 0.0004
+        },
+        "src_bytes": {
+          "mean": 0.0052,
+          "std": 0.0005
+        },
+        "dst_bytes": {
+          "mean": -0.0042,
+          "std": 0.0007
+        },
+        "land": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "wrong_fragment": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "urgent": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "hot": {
+          "mean": 0.0001,
+          "std": 0.0001
+        },
+        "num_failed_logins": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "logged_in": {
+          "mean": 0.0451,
+          "std": 0.0031
+        },
+        "num_compromised": {
+          "mean": 0.0,
+          "std": 0.0001
+        },
+        "root_shell": {
+          "mean": 0.0001,
+          "std": 0.0
+        },
+        "su_attempted": {
+          "mean": -0.0,
+          "std": 0.0
+        },
+        "num_root": {
+          "mean": 0.0002,
+          "std": 0.0
+        },
+        "num_file_creations": {
+          "mean": 0.0002,
+          "std": 0.0
+        },
+        "num_shells": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "num_access_files": {
+          "mean": -0.0002,
+          "std": 0.0
+        },
+        "is_host_login": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "is_guest_login": {
+          "mean": -0.0002,
+          "std": 0.0
+        },
+        "count": {
+          "mean": 0.0009,
+          "std": 0.0014
+        },
+        "srv_count": {
+          "mean": 0.0004,
+          "std": 0.0018
+        },
+        "serror_rate": {
+          "mean": 0.0046,
+          "std": 0.0007
+        },
+        "srv_serror_rate": {
+          "mean": 0.0052,
+          "std": 0.0007
+        },
+        "rerror_rate": {
+          "mean": 0.0098,
+          "std": 0.0004
+        },
+        "srv_rerror_rate": {
+          "mean": 0.013,
+          "std": 0.0018
+        },
+        "same_srv_rate": {
+          "mean": 0.004,
+          "std": 0.0004
+        },
+        "diff_srv_rate": {
+          "mean": 0.0066,
+          "std": 0.0016
+        },
+        "srv_diff_host_rate": {
+          "mean": 0.0004,
+          "std": 0.0005
+        },
+        "dst_host_count": {
+          "mean": -0.0017,
+          "std": 0.0005
+        },
+        "dst_host_srv_count": {
+          "mean": 0.0098,
+          "std": 0.0011
+        },
+        "dst_host_same_srv_rate": {
+          "mean": 0.0106,
+          "std": 0.0005
+        },
+        "dst_host_diff_srv_rate": {
+          "mean": 0.0066,
+          "std": 0.0013
+        },
+        "dst_host_same_src_port_rate": {
+          "mean": -0.0016,
+          "std": 0.0006
+        },
+        "dst_host_srv_diff_host_rate": {
+          "mean": -0.0007,
+          "std": 0.001
+        },
+        "dst_host_serror_rate": {
+          "mean": 0.0071,
+          "std": 0.0002
+        },
+        "dst_host_srv_serror_rate": {
+          "mean": 0.0103,
+          "std": 0.0016
+        },
+        "dst_host_rerror_rate": {
+          "mean": 0.0214,
+          "std": 0.0021
+        },
+        "dst_host_srv_rerror_rate": {
+          "mean": 0.0108,
+          "std": 0.0025
+        }
+      }
+    }
+  },
+  "correlated_pairs_over_0.9": [
+    {
+      "a": "num_compromised",
+      "b": "num_root",
+      "r": 0.999
+    },
+    {
+      "a": "serror_rate",
+      "b": "srv_serror_rate",
+      "r": 0.993
+    },
+    {
+      "a": "rerror_rate",
+      "b": "srv_rerror_rate",
+      "r": 0.989
+    },
+    {
+      "a": "srv_serror_rate",
+      "b": "dst_host_srv_serror_rate",
+      "r": 0.986
+    },
+    {
+      "a": "dst_host_serror_rate",
+      "b": "dst_host_srv_serror_rate",
+      "r": 0.985
+    },
+    {
+      "a": "serror_rate",
+      "b": "dst_host_srv_serror_rate",
+      "r": 0.981
+    },
+    {
+      "a": "serror_rate",
+      "b": "dst_host_serror_rate",
+      "r": 0.979
+    },
+    {
+      "a": "srv_serror_rate",
+      "b": "dst_host_serror_rate",
+      "r": 0.978
+    },
+    {
+      "a": "srv_rerror_rate",
+      "b": "dst_host_srv_rerror_rate",
+      "r": 0.97
+    },
+    {
+      "a": "rerror_rate",
+      "b": "dst_host_srv_rerror_rate",
+      "r": 0.964
+    },
+    {
+      "a": "rerror_rate",
+      "b": "dst_host_rerror_rate",
+      "r": 0.927
+    },
+    {
+      "a": "dst_host_rerror_rate",
+      "b": "dst_host_srv_rerror_rate",
+      "r": 0.925
+    },
+    {
+      "a": "srv_rerror_rate",
+      "b": "dst_host_rerror_rate",
+      "r": 0.918
+    }
+  ]
+}
