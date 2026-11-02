@@ -8,6 +8,8 @@ A research project on network intrusion detection under novelty, supervised by D
 It is a work in progress: the results below are the ones the current code produces, and the open
 items are listed in Status.
 
+A short write-up is in [`paper/paper.pdf`](paper/paper.pdf) (LaTeX source in `paper/paper.tex`).
+
 ## Research question
 
 When does a network intrusion detector catch an attack type it has never seen during training, and can
@@ -285,6 +287,7 @@ tests/               pytest suite
 results/             JSON outputs and figures
 data/nslkdd/         NSL-KDD files
 notebooks/           results walkthrough (reads results/*.json, trains nothing)
+paper/               short paper, PDF and LaTeX source
 ```
 
 ## Acknowledgements
