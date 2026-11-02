@@ -274,7 +274,7 @@ tracked in git).
 The commands above have not been tested from a fresh clone yet.
 
 The NSL-KDD files are in `data/nslkdd/` (about 22 MB, tracked in git). The scripts download them if they
-are missing. Checksums are not checked yet.
+are missing. Their sha256 is pinned in `models/evaluate.py` and checked on load.
 
 ## Repository layout
 
