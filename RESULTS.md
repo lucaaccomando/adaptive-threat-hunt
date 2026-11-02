@@ -367,7 +367,7 @@ correlation collapses to a point, so the held-out rows say little.
 - CIC-IDS2017 is one lab capture from 2017. Its test days differ from the training days by new attack types and
   by the day itself, and I cannot separate the two. Row caps make each seed a subsample, and the web attack and
   infiltration types have 13 to 104 test flows, so their recall cells are coarse.
-- The CIC-IDS2017 features are CICFlowMeter columns, different again from the NSL-KDD columns and from the 8
+- The CIC-IDS2017 features are CICFlowMeter columns, different again from the NSL-KDD columns and from the 9
   pipeline features. The unsupervised results depend on the feature transform, and validation and test
   disagree about it.
 - Two datasets, one lab capture each.
